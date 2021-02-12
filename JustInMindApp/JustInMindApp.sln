@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30907.101
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JustInMindApp", "JustInMindApp\JustInMindApp.csproj", "{5D8BFCEC-5FA3-4E01-A4A9-9F13CDA26197}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JustInMindApp", "JustInMindApp\JustInMindApp.csproj", "{5D8BFCEC-5FA3-4E01-A4A9-9F13CDA26197}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lab20.UI", "Lab20.UI\Lab20.UI.csproj", "{0295CBCD-0240-424E-8E15-DA2261CBF2FD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{5D8BFCEC-5FA3-4E01-A4A9-9F13CDA26197}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5D8BFCEC-5FA3-4E01-A4A9-9F13CDA26197}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5D8BFCEC-5FA3-4E01-A4A9-9F13CDA26197}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0295CBCD-0240-424E-8E15-DA2261CBF2FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0295CBCD-0240-424E-8E15-DA2261CBF2FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0295CBCD-0240-424E-8E15-DA2261CBF2FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0295CBCD-0240-424E-8E15-DA2261CBF2FD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
