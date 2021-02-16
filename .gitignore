@@ -47,6 +47,7 @@ _ReSharper.*/
 bin/
 obj/
 .vs/
+JustInMindApp/.vs/
 
 # Visual studio code #
 ######################
