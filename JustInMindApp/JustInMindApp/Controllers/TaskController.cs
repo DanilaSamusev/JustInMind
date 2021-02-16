@@ -46,13 +46,27 @@ namespace JustInMindApp.Controllers
         }
        
         [HttpPost]
-        public void Post([FromBody] string value)
+        public IActionResult Post([FromBody] Task task)
         {
+            if (task != null)
+            {
+                dbContext.Tasks.Add(task);
+                return Ok();
+            }
+
+            else return BadRequest();
         }
        
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPut]
+        public IActionResult Put([FromBody] Task task)
         {
+            if (task != null)
+            {
+                dbContext.Tasks.Update(task);
+                return Ok();
+            }
+
+            else return BadRequest();
         }
        
         [HttpDelete("{id}")]
