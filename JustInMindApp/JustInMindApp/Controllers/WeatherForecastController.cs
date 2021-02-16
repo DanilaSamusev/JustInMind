@@ -6,12 +6,12 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace JustInMindApp.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [Produces("application/json")]
     public class WeatherForecastController : ControllerBase
     {
         private static readonly string[] Summaries = new[]
@@ -27,13 +27,27 @@ namespace JustInMindApp.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Role> Get()
+        public Models.Task Get()
+        {
+            Models.Task task = new Task()
+            {
+                Name = "FakeName",
+                Description = "FakeDescription",
+                StateId = 1,
+                CategoryId = 1
+            };
+
+            return task;
+        }
+
+        [HttpPost]
+        public IActionResult Post([FromBody] Models.Task task)
         {
             var rng = new Random();
 
             var context = new JustInMindContext();
 
-            return context.Roles.ToList();
+            return Ok();
         }
     }
 }
