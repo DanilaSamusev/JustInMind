@@ -1,31 +1,37 @@
 import React, { Component } from 'react';
-import { Route } from 'react-router';
+
 import { AddTask } from './components/AddTask';
 import { UpdateTask } from './components/UpdateTask';
 import { Home } from './components/Home';
+import { Board } from './components/Board';
 import { Login } from './components/Login';
 import { FetchData } from './components/FetchData';
 import { Counter } from './components/Counter';
-import { AddUser } from './components/AddUser';
-import { UpdateUser } from './components/UpdateUser';
+import Navbar from './components/Navbar';
+import { NavigationBar } from './components/NavigationBar';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
 
 import './custom.css'
 
 export default class App extends Component {
-	static displayName = App.name;
+    static displayName = App.name;
 
-	render() {
-		return (
-			<div>
-				<Route exact path='/' component={Home} />
-				<Route exact path='/addUser' component={AddUser} />
-				<Route exact path='/addTask' component={AddTask} />
-				<Route exact path='/updateUser' component={UpdateUser} />
-				<Route exact path='/updateTask' component={UpdateTask} />
-				<Route exact path='/login' component={Login} />
-				<Route path='/counter' component={Counter} />
-				<Route path='/fetch-data' component={FetchData} />
-			</div>
-		);
-	}
+    render() {
+        return (
+            <Router>
+                <Navbar />
+                <Switch>
+                    <Route path='/' exact component={Home} />
+                    <Route path='/addTask' exact component={AddTask} />
+                    <Route path='/updateTask' exact component={UpdateTask} />
+                    <Route path='/board' exact component={Board} />
+                </Switch>
+            </Router>
+        );
+    }
 }

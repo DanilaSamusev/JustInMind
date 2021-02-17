@@ -33,14 +33,14 @@ export class AddTask extends React.Component {
             body: JSON.stringify(this.state)
         }
 
-        fetch('https://localhost:44330/WeatherForecast', requestOptions)
+        fetch('https://localhost:44330/Task', requestOptions)
             .then(response => response.status)
             .then((r) => console.log(r))       
     }
 
     render() {
         return (
-            <form class="decor" onSubmit={this.submitTask} >
+            <form class="decor" onSubmit={this.submitTask}>
                 <div class="form-left-decoration"></div>
                 <div class="form-right-decoration"></div>
                 <div class="circle"></div>
@@ -49,7 +49,7 @@ export class AddTask extends React.Component {
                     <input type="text" placeholder="Name" onChange={this.onChange} />
                     <textarea placeholder="Description" onChange={this.onChange} />
                     <div class="dropdown">
-                        <select name="one" class="dropdown-select" onChange={this.onChange}>
+                        <select class="dropdown-select" onChange={this.onChange} value={this.state.urgencyId}>
                             <option value="1" defaultChecked>Low</option>
                             <option value="2">MediumLow</option>
                             <option value="3">Medium</option>
@@ -58,7 +58,7 @@ export class AddTask extends React.Component {
                         </select>
                     </div>
                     <div class="dropdown">
-                        <select name="one" class="dropdown-select" onChange={this.onChange}>
+                        <select class="dropdown-select" onChange={this.onChange} value={this.state.categoryId}>
                             <option value="1" defaultChecked>Bug</option>
                             <option value="2">Improvement</option>
                             <option value="3">Feature</option>
