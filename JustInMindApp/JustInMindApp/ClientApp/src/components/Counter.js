@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import '../tasksExplorer.css'
+import '../board.css'
 
 export const Counter = () => {
 
