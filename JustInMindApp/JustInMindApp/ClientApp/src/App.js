@@ -6,6 +6,8 @@ import { Home } from './components/Home';
 import { Login } from './components/Login';
 import { FetchData } from './components/FetchData';
 import { Counter } from './components/Counter';
+import { AddUser } from './components/AddUser';
+import { UpdateUser } from './components/UpdateUser';
 
 import './custom.css'
 
@@ -16,7 +18,9 @@ export default class App extends Component {
 		return (
 			<div>
 				<Route exact path='/' component={Home} />
+				<Route exact path='/addUser' component={AddUser} />
 				<Route exact path='/addTask' component={AddTask} />
+				<Route exact path='/updateUser' component={UpdateUser} />
 				<Route exact path='/updateTask' component={UpdateTask} />
 				<Route exact path='/login' component={Login} />
 				<Route path='/counter' component={Counter} />
