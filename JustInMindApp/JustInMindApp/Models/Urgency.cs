@@ -1,20 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-
-#nullable disable
+﻿using System.Collections.Generic;
 
 namespace JustInMindApp.Models
 {
     public partial class Urgency
     {
-        public Urgency()
-        {
-            Tasks = new HashSet<Task>();
-        }
-
         public int Id { get; set; }
         public string Name { get; set; }
-
-        public virtual ICollection<Task> Tasks { get; set; }
     }
 }
