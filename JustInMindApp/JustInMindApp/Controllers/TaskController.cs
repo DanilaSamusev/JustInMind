@@ -49,6 +49,7 @@ namespace JustInMindApp.Controllers
             if (task != null)
             {
                 dbContext.Tasks.Add(task);
+                dbContext.SaveChanges();
                 return Ok();
             }
 
@@ -61,6 +62,7 @@ namespace JustInMindApp.Controllers
             if (task != null)
             {
                 dbContext.Tasks.Update(task);
+                dbContext.SaveChanges();
                 return Ok();
             }
 
@@ -75,6 +77,7 @@ namespace JustInMindApp.Controllers
             if (task != null)
             {
                 dbContext.Tasks.Remove(task);
+                dbContext.SaveChanges();
                 return Ok();
             }
 
