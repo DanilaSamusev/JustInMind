@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-#nullable disable
-
-namespace JustInMindApp.Models
+﻿namespace JustInMindApp.Models
 {
     public partial class Task
     {        
