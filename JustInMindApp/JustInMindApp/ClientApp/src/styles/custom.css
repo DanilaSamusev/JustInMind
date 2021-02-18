@@ -1,4 +1,9 @@
 /* Provide sufficient contrast against white background */
+
+body {
+    background: #f5f5f5;
+}
+
 a {
   color: #0366d6;
 }

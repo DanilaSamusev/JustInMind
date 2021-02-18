@@ -1,5 +1,5 @@
-﻿import React, { Component } from 'react';
-import '../addTask.css'
+﻿import React from 'react';
+import '../styles/addTask.css'
 
 export class AddTask extends React.Component {
 
@@ -50,7 +50,7 @@ export class AddTask extends React.Component {
                     <textarea placeholder="Description" onChange={this.onChange} />
                     <div class="dropdown">
                         <select class="dropdown-select" onChange={this.onChange} value={this.state.urgencyId}>
-                            <option value="1" defaultChecked>Low</option>
+                            <option value="1">Low</option>
                             <option value="2">MediumLow</option>
                             <option value="3">Medium</option>
                             <option value="4">High</option>
