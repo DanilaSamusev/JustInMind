@@ -1,5 +1,5 @@
-﻿import React, { Component } from 'react';
-import '../addTask.css'
+﻿import React from 'react';
+import '../styles/addTask.css'
 
 export class UpdateTask extends React.Component {
 
@@ -69,7 +69,7 @@ export class UpdateTask extends React.Component {
                     <input type="text" placeholder="Name" onChange={this.onChange} value={this.state.name} />
                     <textarea placeholder="Description" onChange={this.onChange} value={this.state.description} />
                     <div class="dropdown">
-                        <select name="one" class="dropdown-select" onChange={this.onChange}>
+                        <select class="dropdown-select" onChange={this.onChange} value={this.state.urgencyId}>
                             <option value="1">Low</option>
                             <option value="2">MediumLow</option>
                             <option value="3">Medium</option>
@@ -78,7 +78,7 @@ export class UpdateTask extends React.Component {
                         </select>
                     </div>
                     <div class="dropdown">
-                        <select name="one" class="dropdown-select" onChange={this.onChange}>
+                        <select class="dropdown-select" onChange={this.onChange} value={this.state.categoryId}>
                             <option value="1">Bug</option>
                             <option value="2">Improvement</option>
                             <option value="3">Feature</option>
