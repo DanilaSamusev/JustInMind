@@ -18,20 +18,6 @@ namespace JustInMindApp.Controllers
             dbContext = new JustInMindContext();
         }
 
-        [HttpGet]
-        public Task Get()
-        {
-            Task task = new Task()
-            {
-                Name = "FakeName",
-                Description = "FakeDescription",
-                StateId = 1,
-                CategoryId = 1
-            };
-
-            return task;
-        }
-
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-#nullable disable
-
-namespace JustInMindApp.Models
+﻿namespace JustInMindApp.Models
 {
     public partial class Feedback
     {
@@ -12,7 +7,5 @@ namespace JustInMindApp.Models
         public string Text { get; set; }
         public int TaskId { get; set; }
         public int UserId { get; set; }
-
-        public virtual Task Task { get; set; }
     }
 }
