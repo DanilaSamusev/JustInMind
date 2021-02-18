@@ -37,6 +37,7 @@ namespace JustInMindApp.Controllers
 			if (user != null)
 			{
 				dbContext.Users.Add(user);
+				dbContext.SaveChanges();
 				return Ok();
 			}
 			
@@ -49,6 +50,7 @@ namespace JustInMindApp.Controllers
 			if (user != null)
 			{
 				dbContext.Users.Update(user);
+				dbContext.SaveChanges();
 				return Ok();
 			}
 
@@ -63,6 +65,7 @@ namespace JustInMindApp.Controllers
 			if (user != null)
 			{
 				dbContext.Users.Remove(user);
+				dbContext.SaveChanges();
 				return Ok();
 			}
 
