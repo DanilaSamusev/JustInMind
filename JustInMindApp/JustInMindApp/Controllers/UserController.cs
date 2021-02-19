@@ -2,6 +2,7 @@
 
 using Microsoft.AspNetCore.Mvc;
 
+using System.Collections.Generic;
 using System.Linq;
 
 namespace JustInMindApp.Controllers
@@ -16,6 +17,20 @@ namespace JustInMindApp.Controllers
 		public UserController()
 		{
 			dbContext = new JustInMindContext();
+		}
+
+		[HttpGet]
+		[Route("getAll")]
+		public IActionResult GetAll()
+		{
+			var users = dbContext.Users;
+
+			if (users != null)
+			{
+				return new ObjectResult(users);
+			}
+
+			return BadRequest();
 		}
 
 		[HttpGet("{id}")]
