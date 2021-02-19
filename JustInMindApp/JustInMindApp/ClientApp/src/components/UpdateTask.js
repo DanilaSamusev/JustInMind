@@ -53,7 +53,7 @@ export class UpdateTask extends React.Component {
             body: JSON.stringify(this.state)
         }
 
-        fetch('https://localhost:44330/WeatherForecast', requestOptions)
+        fetch('https://localhost:44330/Task', requestOptions)
             .then(response => response.status)
             .then((r) => console.log(r))
     }
