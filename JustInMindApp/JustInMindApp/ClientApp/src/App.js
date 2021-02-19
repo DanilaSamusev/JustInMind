@@ -9,6 +9,7 @@ import { AddTask } from './components/AddTask';
 import { UpdateTask } from './components/UpdateTask';
 import { AddUser } from './components/AddUser';
 import { UpdateUser } from './components/UpdateUser';
+import { Team } from './components/Team';
 
 import './styles/custom.css'
 
@@ -22,6 +23,7 @@ export default class App extends Component {
                 <Switch>
                     <Route path='/' exact component={Home} />
                     <Route path='/board' exact component={Board} />
+                    <Route path='/team' exact component={Team} />
 
                     //Just for test this components. Remove in release
                     <Route path='/addTask' exact component={AddTask} />
