@@ -39,9 +39,14 @@ $table-header-border: 1px solid #FFF;
 
         tr {
             border: $cell-border;
+            transition: .75s;
 
             &:nth-child(odd) { // highlight the odd rows with a color
                 background-color: $highlight-color;
+            }
+
+            &:hover {
+                background-color: #d5f9ffd4;
             }
         }
 

@@ -29,7 +29,7 @@ export default class App extends Component {
                     <Route path='/addTask' exact component={AddTask} />
                     <Route path='/updateTask' exact component={UpdateTask} />
                     <Route path='/addUser' exact component={AddUser} />
-                    <Route path='/updateUser' exact component={UpdateUser} />
+                    <Route path='/updateUser/:id' exact component={UpdateUser} />
                 </Switch>
             </Router>
         );
