@@ -13,13 +13,13 @@ export const SidebarData = [
     },
     {
         title: 'Board',
-        path: '/board',
+        path: '/boards',
         icon: <IoIcons.IoIosPaper />,
         cName: 'nav-text'
     },
     {
         title: 'Projects',
-        path: '/board',
+        path: '/boards',
         icon: <ImFolder />,
         cName: 'nav-text'
     },
