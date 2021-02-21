@@ -12,23 +12,23 @@ export class UpdateUser extends React.Component {
             roleId: 1,
         };
 
-        this.onSelectChange = this.onSelectChange.bind(this);
         this.onChange = this.onChange.bind(this);
+        this.onSelectChange = this.onSelectChange.bind(this);
         this.submitUser = this.submitUser.bind(this);
         this.getUser = this.getUser.bind(this);
-    }
-
-    onSelectChange(e) {
-        const { name, value } = e.target;
-        this.setState({
-            [name]: parseInt(value)
-        })
     }
 
     onChange(e) {
         const { name, value } = e.target;
         this.setState({
             [name]: value
+        })
+    }
+
+    onSelectChange(e) {
+        const { name, value } = e.target;
+        this.setState({
+            [name]: parseInt(value)
         })
     }
 
