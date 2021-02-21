@@ -20,7 +20,7 @@ export class UpdateUser extends React.Component {
     onChange(e) {
         const { name, value } = e.target;
         this.setState({
-            name: value
+            [name]: value
         })
     }
 
@@ -41,7 +41,7 @@ export class UpdateUser extends React.Component {
 
     submitUser() {
         const requestOptions = {
-            method: 'POST',
+            method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(this.state)
         }
@@ -59,10 +59,10 @@ export class UpdateUser extends React.Component {
                 <div class="circle"></div>
                 <div class="form-inner">
                     <h3>User info</h3>
-                    <input type="text" placeholder="UserName" onChange={this.onChange} value={this.state.userName} />
-                    <input type="text" placeholder="Password" onChange={this.onChange} value={this.state.password} />
+                    <input type="text" placeholder="UserName" name="userName" onChange={this.onChange} value={this.state.userName} />
+                    <input type="text" placeholder="Password" name="password" onChange={this.onChange} value={this.state.password} />
                     <div class="dropdown">
-                        <select name="one" class="dropdown-select" onChange={this.onChange} value={this.state.roleId}>
+                        <select name="roleId" class="dropdown-select" onChange={this.onChange} value={this.state.roleId}>
                             <option value="1">Guest</option>
                             <option value="2">Developer</option>
                             <option value="3">Manager</option>
