@@ -6,15 +6,23 @@ export class UpdateUser extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            id: props.match.params.id,
+            id: this.props.match.params.id,
             userName: '',
             password: '',
             roleId: 1,
         };
 
+        this.onSelectChange = this.onSelectChange.bind(this);
         this.onChange = this.onChange.bind(this);
         this.submitUser = this.submitUser.bind(this);
         this.getUser = this.getUser.bind(this);
+    }
+
+    onSelectChange(e) {
+        const { name, value } = e.target;
+        this.setState({
+            [name]: parseInt(value)
+        })
     }
 
     onChange(e) {
@@ -29,6 +37,7 @@ export class UpdateUser extends React.Component {
             .then(response => response.json())
             .then(data => this.setState(
                 {
+                    id: data.id,
                     userName: data.userName,
                     password: data.password,
                     roleId: data.roleId,
@@ -62,12 +71,12 @@ export class UpdateUser extends React.Component {
                     <input type="text" placeholder="UserName" name="userName" onChange={this.onChange} value={this.state.userName} />
                     <input type="text" placeholder="Password" name="password" onChange={this.onChange} value={this.state.password} />
                     <div class="dropdown">
-                        <select name="roleId" class="dropdown-select" onChange={this.onChange} value={this.state.roleId}>
-                            <option value="1">Guest</option>
-                            <option value="2">Developer</option>
-                            <option value="3">Manager</option>
-                            <option value="4">Tester</option>
-                            <option value="5">DevOps</option>
+                        <select name="roleId" class="dropdown-select" onChange={this.onSelectChange} value={this.state.roleId}>
+                            <option value='1'>Guest</option>
+                            <option value='2'>Developer</option>
+                            <option value='3'>Manager</option>
+                            <option value='4'>Tester</option>
+                            <option value='5'>DevOps</option>
                         </select>
                     </div>
                     <input type="submit" value="Submit" />
