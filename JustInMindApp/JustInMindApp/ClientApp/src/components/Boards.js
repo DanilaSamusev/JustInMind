@@ -1,27 +1,28 @@
 ﻿import React from 'react';
 import '../styles/board.css'
 
-export class Board extends React.Component {
+export class Boards extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
             boards: [
-                { id: 1, title: "New", items: [] },
-                { id: 2, title: "Investigation", items: [] },
-                { id: 3, title: "Active", items: [] },
-                { id: 4, title: "In Test", items: [] },
-                { id: 5, title: "Done", items: [] },
+                { id: 1, title: "New", tasks: [] },
+                { id: 2, title: "Investigation", tasks: [] },
+                { id: 3, title: "Active", tasks: [] },
+                { id: 4, title: "In Test", tasks: [] },
+                { id: 5, title: "Done", tasks: [] },
             ],
             currentBoard: [],
-            currentItem: null,
+            selectedTask: null,
         };
 
         this.dragStartHandler = this.dragStartHandler.bind(this);
         this.dragLeaveHandler = this.dragLeaveHandler.bind(this);
-        this.dragEndHandler = this.dragEndHandler.bind(this);
+        this.fetchUpdateTask = this.fetchUpdateTask.bind(this);
         this.dragOverHandler = this.dragOverHandler.bind(this);
         this.dropCardHandler = this.dropCardHandler.bind(this);
+        this.dragEndHandler = this.dragEndHandler.bind(this);
         this.setBoardTasks = this.setBoardTasks.bind(this);
         this.getTasks = this.getTasks.bind(this);
         this.get = this.get.bind(this);
@@ -31,40 +32,43 @@ export class Board extends React.Component {
         this.getTasks();
     }
 
-    dragStartHandler(e, board, item) {
+    dragStartHandler(event, board, task) {
         this.setState(
             {
                 currentBoard: board,
-                currentItem: item,
+                selectedTask: task,
             })
     }
 
-    dragLeaveHandler(e) {
-        e.target.style.boxShadow = 'none'
+    dragLeaveHandler(event) {
+        event.target.style.boxShadow = 'none'
     }
 
-    dragEndHandler(e) {
-        e.target.style.boxShadow = 'none'
+    dragEndHandler(event) {
+        event.target.style.boxShadow = 'none'
     }
 
-    dragOverHandler(e) {
-        e.preventDefault()
-        if (e.target.className == 'item') {
-            e.target.style.boxShadow = '0 2px 3px gray'
+    dragOverHandler(event) {
+        event.preventDefault();
+
+        if (event.target.className == 'task') {
+            event.target.style.boxShadow = '0 2px 3px gray'
         }
-
     }
 
-    dropCardHandler(e, board) {
-        board.items.push(this.state.currentItem)
+    dropCardHandler(event, board) {
+        board.tasks.push(this.state.selectedTask)
+        this.state.selectedTask.stateId = board.id;
 
-        const currentIndex = this.state.currentBoard.items.indexOf(this.state.currentItem)
-        this.state.currentBoard.items.splice(currentIndex, 1)
+        const currentIndex = this.state.currentBoard.tasks.indexOf(this.state.selectedTask)
+        this.state.currentBoard.tasks.splice(currentIndex, 1)
 
         this.setState(
             {
-                boards: this.get(board)
+                boards: this.get(board),
             })
+
+        this.fetchUpdateTask(this.state.selectedTask);
     }
 
     getTasks() {
@@ -74,9 +78,8 @@ export class Board extends React.Component {
     }
 
     setBoardTasks(tasks, boards) {
-
         tasks.forEach((task) => {
-            boards.find((element) => { return element.id == task.stateId }).items.push(task);
+            boards.find((board) => { return board.id == task.stateId }).tasks.push(task);
         });
 
         this.setState(
@@ -99,6 +102,18 @@ export class Board extends React.Component {
         return boards;
     }
 
+    fetchUpdateTask(task) {
+        const requestOptions = {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(task)
+        }
+
+        fetch('https://localhost:44330/Task', requestOptions)
+            .then(response => response.status)
+            .then((r) => console.log(r))
+    }
+
     render() {
         return (
             <div className='tasksExplorer'>
@@ -109,16 +124,16 @@ export class Board extends React.Component {
                         onDrop={(e) => this.dropCardHandler(e, board)}
                     >
                         <div className='board_title'>{board.title}</div>
-                        {board.items.map(item =>
+                        {board.tasks.map(task =>
                             <div
-                                className='item'
-                                onDragOver={(e) => this.dragOverHandler(e, board, item)}
+                                className='task'
+                                onDragOver={(e) => this.dragOverHandler(e, board, task)}
                                 onDragLeave={(e) => this.dragLeaveHandler(e)}
-                                onDragStart={(e) => this.dragStartHandler(e, board, item)}
+                                onDragStart={(e) => this.dragStartHandler(e, board, task)}
                                 onDragEnd={(e) => this.dragEndHandler(e)}
-                                key={item.id}
+                                key={task.id}
                                 draggable={true}
-                            >{item.name}</div>
+                            >{task.name}</div>
                         )}
                     </div>
                 )}
