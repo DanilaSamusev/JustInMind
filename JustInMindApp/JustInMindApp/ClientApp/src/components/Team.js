@@ -36,6 +36,8 @@ export class Team extends React.Component {
                         <th>UserName</th>
                         <th>Password</th>
                         <th>Role</th>
+                        <th></th>
+                        <th></th>
                     </tr>
                 </thead>
 
