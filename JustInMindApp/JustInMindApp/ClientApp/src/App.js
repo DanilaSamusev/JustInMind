@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import { Home } from './components/Home';
-import { Board } from './components/Board';
+import { Boards } from './components/Boards';
 import Navbar from './components/Navbar';
 import { BrowserRouter as Router, Switch, Route} from "react-router-dom";
 
@@ -22,8 +22,8 @@ export default class App extends Component {
                 <Navbar />
                 <Switch>
                     <Route path='/' exact component={Home} />
-                    <Route path='/board' exact component={Board} />
                     <Route path='/team' exact component={Team} />
+                    <Route path='/boards' exact component={Boards} />
 
                     //Just for test this components. Remove in release
                     <Route path='/addTask' exact component={AddTask} />

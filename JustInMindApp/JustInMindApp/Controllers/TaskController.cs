@@ -18,6 +18,20 @@ namespace JustInMindApp.Controllers
             dbContext = new JustInMindContext();
         }
 
+        [HttpGet]
+        [Route("getAll")]
+        public IActionResult GetAll()
+        {
+            var tasks = dbContext.Tasks;
+
+            if (tasks != null)
+            {
+                return new ObjectResult(tasks);
+            }
+
+            return BadRequest();
+        }
+
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {

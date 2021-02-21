@@ -23,7 +23,7 @@ export class UpdateTask extends React.Component {
     onChange(e) {
         const { name, value } = e.target;
         this.setState({
-            name: value
+            [name]: value
         })
     }
 
@@ -53,7 +53,7 @@ export class UpdateTask extends React.Component {
             body: JSON.stringify(this.state)
         }
 
-        fetch('https://localhost:44330/WeatherForecast', requestOptions)
+        fetch('https://localhost:44330/Task', requestOptions)
             .then(response => response.status)
             .then((r) => console.log(r))
     }
@@ -66,10 +66,10 @@ export class UpdateTask extends React.Component {
                 <div class="circle"></div>
                 <div class="form-inner">
                     <h3>Task info</h3>
-                    <input type="text" placeholder="Name" onChange={this.onChange} value={this.state.name} />
-                    <textarea placeholder="Description" onChange={this.onChange} value={this.state.description} />
+                    <input type="text" placeholder="Name" name="name" onChange={this.onChange} value={this.state.name} />
+                    <textarea placeholder="Description" name="description" onChange={this.onChange} value={this.state.description} />
                     <div class="dropdown">
-                        <select class="dropdown-select" onChange={this.onChange} value={this.state.urgencyId}>
+                        <select class="dropdown-select" name="urgencyId" onChange={this.onChange} value={this.state.urgencyId}>
                             <option value="1">Low</option>
                             <option value="2">MediumLow</option>
                             <option value="3">Medium</option>
@@ -78,7 +78,7 @@ export class UpdateTask extends React.Component {
                         </select>
                     </div>
                     <div class="dropdown">
-                        <select class="dropdown-select" onChange={this.onChange} value={this.state.categoryId}>
+                        <select class="dropdown-select" name="categoryId" onChange={this.onChange} value={this.state.categoryId}>
                             <option value="1">Bug</option>
                             <option value="2">Improvement</option>
                             <option value="3">Feature</option>
@@ -86,7 +86,7 @@ export class UpdateTask extends React.Component {
                             <option value="5">Other</option>
                         </select>
                     </div>
-                    <textarea placeholder="Attachement" onChange={this.onChange} value={this.state.attachement} />
+                    <textarea placeholder="Attachement" name="attachment" onChange={this.onChange} value={this.state.attachement} />
                     <input type="submit" value="Отправить" />
                 </div>
             </form>
