@@ -1,6 +1,7 @@
 ﻿using JustInMindApp.Models;
 
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 using System.Linq;
 
@@ -22,7 +23,7 @@ namespace JustInMindApp.Controllers
 		[Route("getAll")]
 		public IActionResult GetAll()
 		{
-			var users = dbContext.Users;
+			var users = dbContext.Users.Include(u => u.Role);
 
 			if (users != null)
 			{
@@ -35,7 +36,7 @@ namespace JustInMindApp.Controllers
 		[HttpGet("{id}")]
 		public IActionResult Get(int id)
 		{
-			var user = dbContext.Users.FirstOrDefault(u => u.Id == id);
+			var user = dbContext.Users.Include(u => u.Role).FirstOrDefault(u => u.Id == id);
 
 			if (user != null)
 			{

@@ -35,7 +35,7 @@ export class Team extends React.Component {
                         <th>Id</th>
                         <th>UserName</th>
                         <th>Password</th>
-                        <th>RoleId</th>
+                        <th>Role</th>
                     </tr>
                 </thead>
 
@@ -45,7 +45,7 @@ export class Team extends React.Component {
                             <td>{user.id}</td>
                             <td>{user.userName}</td>
                             <td>{user.password}</td>
-                            <td>{user.roleId}</td>
+                            <td>{user.role.name}</td>
                             <td>
                                 <Link to={'/updateUser/' + user.id}>
                                     Edit
