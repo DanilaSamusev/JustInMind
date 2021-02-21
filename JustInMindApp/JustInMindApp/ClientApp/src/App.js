@@ -9,6 +9,7 @@ import { AddTask } from './components/AddTask';
 import { UpdateTask } from './components/UpdateTask';
 import { AddUser } from './components/AddUser';
 import { UpdateUser } from './components/UpdateUser';
+import { Team } from './components/Team';
 
 import './styles/custom.css'
 
@@ -21,6 +22,7 @@ export default class App extends Component {
                 <Navbar />
                 <Switch>
                     <Route path='/' exact component={Home} />
+                    <Route path='/team' exact component={Team} />
                     <Route path='/boards' exact component={Boards} />
 
                     //Just for test this components. Remove in release
