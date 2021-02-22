@@ -12,13 +12,21 @@ export class AddUser extends React.Component {
         };
 
         this.onChange = this.onChange.bind(this);
+        this.onSelectChange = this.onSelectChange.bind(this);
         this.submitUser = this.submitUser.bind(this);
     }
 
     onChange(e) {
         const { name, value } = e.target;
         this.setState({
-            name: value
+            [name]: value
+        })
+    }
+
+    onSelectChange(e) {
+        const { name, value } = e.target;
+        this.setState({
+            [name]: parseInt(value)
         })
     }
 
@@ -41,12 +49,12 @@ export class AddUser extends React.Component {
                 <div class="form-right-decoration"></div>
                 <div class="circle"></div>
                 <div class="form-inner">
-                    <h3>User info</h3>
-                    <input type="text" placeholder="UserName" onChange={this.onChange} />
-                    <input type="text" placeholder="Password" onChange={this.onChange} />
+                    <h3>Add user</h3>
+                    <input type="text" placeholder="UserName" name="userName" onChange={this.onChange} />
+                    <input type="text" placeholder="Password" name="password" onChange={this.onChange} />
                     <div class="dropdown">
-                        <select name="one" class="dropdown-select" onChange={this.onChange}>
-                            <option value="1" defaultChecked>Guest</option>
+                        <select name="roleId" class="dropdown-select" onChange={this.onSelectChange}>
+                            <option value="1">Guest</option>
                             <option value="2">Developer</option>
                             <option value="3">Manager</option>
                             <option value="4">Tester</option>

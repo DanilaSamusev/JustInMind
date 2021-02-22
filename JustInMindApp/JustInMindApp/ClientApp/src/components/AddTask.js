@@ -16,14 +16,22 @@ export class AddTask extends React.Component {
         };
 
         this.onChange = this.onChange.bind(this);
+        this.onSelectChange = this.onSelectChange.bind(this);
         this.submitTask = this.submitTask.bind(this);
     }
 
     onChange(e){
         const { name, value } = e.target;
         this.setState({
-            name: value
+            [name]: value
         })        
+    }
+
+    onSelectChange(e) {
+        const { name, value } = e.target;
+        this.setState({
+            [name]: parseInt(value)
+        })
     }
 
     submitTask() {
@@ -45,11 +53,11 @@ export class AddTask extends React.Component {
                 <div class="form-right-decoration"></div>
                 <div class="circle"></div>
                 <div class="form-inner">
-                    <h3>Task info</h3>
-                    <input type="text" placeholder="Name" onChange={this.onChange} />
-                    <textarea placeholder="Description" onChange={this.onChange} />
+                    <h3>Add task</h3>
+                    <input type="text" placeholder="Name" name="name" onChange={this.onChange} />
+                    <textarea placeholder="Description" name="description" onChange={this.onChange} />
                     <div class="dropdown">
-                        <select class="dropdown-select" onChange={this.onChange} value={this.state.urgencyId}>
+                        <select class="dropdown-select" name="urgencyId" onChange={this.onSelectChange} value={this.state.urgencyId}>
                             <option value="1">Low</option>
                             <option value="2">MediumLow</option>
                             <option value="3">Medium</option>
@@ -58,8 +66,8 @@ export class AddTask extends React.Component {
                         </select>
                     </div>
                     <div class="dropdown">
-                        <select class="dropdown-select" onChange={this.onChange} value={this.state.categoryId}>
-                            <option value="1" defaultChecked>Bug</option>
+                        <select class="dropdown-select" name="categoryId" onChange={this.onSelectChange} value={this.state.categoryId}>
+                            <option value="1">Bug</option>
                             <option value="2">Improvement</option>
                             <option value="3">Feature</option>
                             <option value="4">Error</option>
@@ -67,7 +75,7 @@ export class AddTask extends React.Component {
                         </select>
                     </div>
                     <textarea placeholder="Attachement" onChange={this.onChange} />
-                    <input type="submit" value="Отправить" />
+                    <input type="submit" value="Submit" />
                 </div>
             </form>
         );

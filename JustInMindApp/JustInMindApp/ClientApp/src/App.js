@@ -27,7 +27,7 @@ export default class App extends Component {
 
                     //Just for test this components. Remove in release
                     <Route path='/addTask' exact component={AddTask} />
-                    <Route path='/updateTask' exact component={UpdateTask} />
+                    <Route path='/updateTask/:id' exact component={UpdateTask} />
                     <Route path='/addUser' exact component={AddUser} />
                     <Route path='/updateUser/:id' exact component={UpdateUser} />
                 </Switch>
