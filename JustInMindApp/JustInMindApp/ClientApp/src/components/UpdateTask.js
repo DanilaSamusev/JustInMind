@@ -6,6 +6,7 @@ export class UpdateTask extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            id: 1,
             name: '',
             description: '',
             urgencyId: 1,
@@ -36,10 +37,11 @@ export class UpdateTask extends React.Component {
     }
 
     getTask() {        
-        fetch('https://localhost:44330/Task/1')
+        fetch('https://localhost:44330/Task/' + this.props.match.params.id)
             .then(response => response.json())
             .then(data => this.setState(
                 {
+                    id: data.id,
                     name: data.name,                   
                     description: data.description,
                     urgencyId: data.urgencyId,
@@ -56,7 +58,7 @@ export class UpdateTask extends React.Component {
 
     submitTask() {
         const requestOptions = {
-            method: 'POST',
+            method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(this.state)
         }
@@ -73,7 +75,7 @@ export class UpdateTask extends React.Component {
                 <div class="form-right-decoration"></div>
                 <div class="circle"></div>
                 <div class="form-inner">
-                    <h3>Task info</h3>
+                    <h3>Edit task</h3>
                     <input type="text" placeholder="Name" name="name" onChange={this.onChange} value={this.state.name} />
                     <textarea placeholder="Description" name="description" onChange={this.onChange} value={this.state.description} />
                     <div class="dropdown">
@@ -95,7 +97,7 @@ export class UpdateTask extends React.Component {
                         </select>
                     </div>
                     <textarea placeholder="Attachement" name="attachment" onChange={this.onChange} value={this.state.attachement} />
-                    <input type="submit" value="Отправить" />
+                    <input type="submit" value="Submit" />
                 </div>
             </form>
         );

@@ -67,7 +67,7 @@ export class UpdateUser extends React.Component {
                 <div class="form-right-decoration"></div>
                 <div class="circle"></div>
                 <div class="form-inner">
-                    <h3>User info</h3>
+                    <h3>Edit user</h3>
                     <input type="text" placeholder="UserName" name="userName" onChange={this.onChange} value={this.state.userName} />
                     <input type="text" placeholder="Password" name="password" onChange={this.onChange} value={this.state.password} />
                     <div class="dropdown">
