@@ -36,7 +36,7 @@ export class UpdateTask extends React.Component {
     }
 
     getTask() {        
-        fetch('https://localhost:44330/Task/1')
+        fetch('https://localhost:44330/Task')
             .then(response => response.json())
             .then(data => this.setState(
                 {
