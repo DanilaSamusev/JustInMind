@@ -6,7 +6,7 @@ export class UpdateUser extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            id: this.props.match.params.id,
+            id: 1,
             userName: '',
             password: '',
             roleId: 1,
@@ -33,7 +33,7 @@ export class UpdateUser extends React.Component {
     }
 
     getUser() {
-        fetch('https://localhost:44330/User/' + this.state.id)
+        fetch('https://localhost:44330/User/' + this.props.match.params.id)
             .then(response => response.json())
             .then(data => this.setState(
                 {
