@@ -16,6 +16,7 @@ export class UpdateTask extends React.Component {
         };
 
         this.onChange = this.onChange.bind(this);
+        this.onSelectChange = this.onSelectChange.bind(this);
         this.submitTask = this.submitTask.bind(this);
         this.getTask = this.getTask.bind(this);
     }
@@ -24,6 +25,13 @@ export class UpdateTask extends React.Component {
         const { name, value } = e.target;
         this.setState({
             [name]: value
+        })
+    }
+
+    onSelectChange(e) {
+        const { name, value } = e.target;
+        this.setState({
+            [name]: parseInt(value)
         })
     }
 
@@ -69,7 +77,7 @@ export class UpdateTask extends React.Component {
                     <input type="text" placeholder="Name" name="name" onChange={this.onChange} value={this.state.name} />
                     <textarea placeholder="Description" name="description" onChange={this.onChange} value={this.state.description} />
                     <div class="dropdown">
-                        <select class="dropdown-select" name="urgencyId" onChange={this.onChange} value={this.state.urgencyId}>
+                        <select class="dropdown-select" name="urgencyId" onChange={this.onSelectChange} value={this.state.urgencyId}>
                             <option value="1">Low</option>
                             <option value="2">MediumLow</option>
                             <option value="3">Medium</option>
@@ -78,7 +86,7 @@ export class UpdateTask extends React.Component {
                         </select>
                     </div>
                     <div class="dropdown">
-                        <select class="dropdown-select" name="categoryId" onChange={this.onChange} value={this.state.categoryId}>
+                        <select class="dropdown-select" name="categoryId" onChange={this.onSelectChange} value={this.state.categoryId}>
                             <option value="1">Bug</option>
                             <option value="2">Improvement</option>
                             <option value="3">Feature</option>

@@ -1,4 +1,5 @@
 ﻿import React from 'react';
+import { Link } from 'react-router-dom';
 import '../styles/team.scss'
 
 export class Team extends React.Component {
@@ -34,17 +35,29 @@ export class Team extends React.Component {
                         <th>Id</th>
                         <th>UserName</th>
                         <th>Password</th>
-                        <th>RoleId</th>
+                        <th>Role</th>
+                        <th></th>
+                        <th></th>
                     </tr>
                 </thead>
 
                 <tbody>
-                    {this.state.users.map(item => (
-                        <tr key={item.id}>
-                            <td>{item.id}</td>
-                            <td>{item.userName}</td>
-                            <td>{item.password}</td>
-                            <td>{item.roleId}</td>
+                    {this.state.users.map(user => (
+                        <tr key={user.id}>
+                            <td>{user.id}</td>
+                            <td>{user.userName}</td>
+                            <td>{user.password}</td>
+                            <td>{user.role.name}</td>
+                            <td>
+                                <Link to={'/updateUser/' + user.id}>
+                                    Edit
+                                </Link>
+                            </td>
+                            <td>
+                                <Link to={'/deleteUser/' + user.id}>
+                                    Delete
+                                </Link>
+                            </td>
                         </tr>
                     ))}
                 </tbody>
