@@ -1,5 +1,8 @@
 ﻿import React from 'react';
 import '../styles/board.css'
+import { BsTrashFill } from "react-icons/bs";
+import { BsPencil } from "react-icons/bs";
+import { Link } from 'react-router-dom'
 
 export class Boards extends React.Component {
 
@@ -22,8 +25,10 @@ export class Boards extends React.Component {
         this.fetchUpdateTask = this.fetchUpdateTask.bind(this);
         this.dragOverHandler = this.dragOverHandler.bind(this);
         this.dropCardHandler = this.dropCardHandler.bind(this);
+        this.fetchDeleteTask = this.fetchDeleteTask.bind(this);
         this.dragEndHandler = this.dragEndHandler.bind(this);
         this.setBoardTasks = this.setBoardTasks.bind(this);
+        this.deleteTask = this.deleteTask.bind(this);
         this.getTasks = this.getTasks.bind(this);
         this.get = this.get.bind(this);
     }
@@ -33,6 +38,7 @@ export class Boards extends React.Component {
     }
 
     dragStartHandler(event, board, task) {
+
         this.setState(
             {
                 currentBoard: board,
@@ -93,6 +99,7 @@ export class Boards extends React.Component {
             if (b.id === board.id) {
                 return board
             }
+
             if (b.id === this.state.currentBoard.id) {
                 return this.state.currentBoard
             }
@@ -108,10 +115,34 @@ export class Boards extends React.Component {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(task)
         }
-
+            
         fetch('https://localhost:44330/Task', requestOptions)
             .then(response => response.status)
-            .then((r) => console.log(r))
+            .then((r) => console.log(r));
+    }
+
+    deleteTask(board, task) {
+
+        let index = board.tasks.indexOf(task)
+        board.tasks.splice(index, 1)
+
+        this.setState(
+            {
+                boards: this.get(board),
+            })
+
+        this.fetchDeleteTask(task.id);
+    }
+
+    fetchDeleteTask(taskId) {
+        const requestOptions = {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' }
+        }
+
+        fetch('https://localhost:44330/Task/' + taskId, requestOptions)
+            .then(response => response.status)
+            .then((r) => console.log(r));
     }
 
     render() {
@@ -124,7 +155,7 @@ export class Boards extends React.Component {
                         onDrop={(e) => this.dropCardHandler(e, board)}
                     >
                         <div className='board_title'>{board.title}</div>
-                        {board.tasks.map(task =>
+                        {board.tasks.map(task =>                           
                             <div
                                 className='task'
                                 onDragOver={(e) => this.dragOverHandler(e, board, task)}
@@ -132,8 +163,16 @@ export class Boards extends React.Component {
                                 onDragStart={(e) => this.dragStartHandler(e, board, task)}
                                 onDragEnd={(e) => this.dragEndHandler(e)}
                                 key={task.id}
-                                draggable={true}
-                            >{task.name}</div>
+                                draggable={true}                            
+                            >
+                                <div>{task.name}</div>
+                                <Link className='pencilIcon' to={'/updateTask/' + task.id}>
+                                    <BsPencil onMouseEnter={(event) => event.target.style.cursor = 'pointer'} />
+                                </Link>        
+                                <div className='trashIcon'>
+                                    <BsTrashFill onClick={() => this.deleteTask(board, task)} onMouseEnter={(event) => event.target.style.cursor = 'pointer'} />
+                                </div>
+                            </div>
                         )}
                     </div>
                 )}
