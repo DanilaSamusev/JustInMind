@@ -168,10 +168,12 @@ export class Boards extends React.Component {
                                 draggable={true}                            
                             >
                                 <div>{task.name}</div>
-                                <Link to={'/updateTask/' + task.id}>
-                                    <BsPencil className='pencilIcon' onMouseEnter={(event) => event.target.style.cursor = 'pointer'} />
+                                <Link className='pencilIcon' to={'/updateTask/' + task.id}>
+                                    <BsPencil onMouseEnter={(event) => event.target.style.cursor = 'pointer'} />
                                 </Link>        
-                                <BsTrashFill className='trashIcon' onClick={() => this.deleteTask(board, task)} onMouseEnter={(event) => event.target.style.cursor = 'pointer'} />
+                                <div>
+                                    <BsTrashFill className='trashIcon' onClick={() => this.deleteTask(board, task)} onMouseEnter={(event) => event.target.style.cursor = 'pointer'} />
+                                </div>
                             </div>
                         )}
                     </div>
