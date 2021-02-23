@@ -39,8 +39,6 @@ export class Boards extends React.Component {
 
     dragStartHandler(event, board, task) {
 
-        console.log(1);
-
         this.setState(
             {
                 currentBoard: board,
@@ -171,8 +169,8 @@ export class Boards extends React.Component {
                                 <Link className='pencilIcon' to={'/updateTask/' + task.id}>
                                     <BsPencil onMouseEnter={(event) => event.target.style.cursor = 'pointer'} />
                                 </Link>        
-                                <div>
-                                    <BsTrashFill className='trashIcon' onClick={() => this.deleteTask(board, task)} onMouseEnter={(event) => event.target.style.cursor = 'pointer'} />
+                                <div className='trashIcon'>
+                                    <BsTrashFill onClick={() => this.deleteTask(board, task)} onMouseEnter={(event) => event.target.style.cursor = 'pointer'} />
                                 </div>
                             </div>
                         )}

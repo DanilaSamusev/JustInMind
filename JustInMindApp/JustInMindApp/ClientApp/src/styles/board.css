@@ -43,3 +43,7 @@
     .task .pencilIcon {
         margin-left: auto;
     }
+
+    .task .trashIcon {
+        margin-left: 5%;
+    }
