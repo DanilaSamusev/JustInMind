@@ -1,5 +1,7 @@
 ﻿import React from 'react';
+import { LoadingPage } from './LoadingPage';
 import { Link } from 'react-router-dom';
+
 import '../styles/team.scss'
 
 export class Team extends React.Component {
@@ -27,42 +29,49 @@ export class Team extends React.Component {
     }
 
     render() {
-        return (
-            <table className="responstable">
+        if (this.state.users.length == 0) {
+            return (
+                <LoadingPage />
+            )
+        }
+        else {
+            return (
+                <table className="responstable">
 
-                <thead>
-                    <tr>
-                        <th>Id</th>
-                        <th>UserName</th>
-                        <th>Password</th>
-                        <th>Role</th>
-                        <th></th>
-                        <th></th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    {this.state.users.map(user => (
-                        <tr key={user.id}>
-                            <td>{user.id}</td>
-                            <td>{user.userName}</td>
-                            <td>{user.password}</td>
-                            <td>{user.role.name}</td>
-                            <td>
-                                <Link to={'/updateUser/' + user.id}>
-                                    Edit
-                                </Link>
-                            </td>
-                            <td>
-                                <Link to={'/deleteUser/' + user.id}>
-                                    Delete
-                                </Link>
-                            </td>
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>UserName</th>
+                            <th>Password</th>
+                            <th>Role</th>
+                            <th></th>
+                            <th></th>
                         </tr>
-                    ))}
-                </tbody>
+                    </thead>
 
-            </table>
-        );
+                    <tbody>
+                        {this.state.users.map(user => (
+                            <tr key={user.id}>
+                                <td>{user.id}</td>
+                                <td>{user.userName}</td>
+                                <td>{user.password}</td>
+                                <td>{user.role.name}</td>
+                                <td>
+                                    <Link to={'/updateUser/' + user.id}>
+                                        Edit
+                                </Link>
+                                </td>
+                                <td>
+                                    <Link to={'/deleteUser/' + user.id}>
+                                        Delete
+                                </Link>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+
+                </table>
+            );
+        }
     }
 }

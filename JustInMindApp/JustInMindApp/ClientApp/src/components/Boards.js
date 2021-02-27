@@ -1,9 +1,11 @@
 ﻿import React from 'react';
-import '../styles/board.css'
 import { BsTrashFill } from "react-icons/bs";
+import { LoadingPage } from './LoadingPage';
 import { BsPencil } from "react-icons/bs";
 import { Link } from 'react-router-dom'
 import { TaskColorData } from './TaskColorData';
+
+import '../styles/board.css'
 
 export class Boards extends React.Component {
 
@@ -147,39 +149,47 @@ export class Boards extends React.Component {
     }
 
     render() {
-        return (
-            <div className='tasksExplorer'>
-                {this.state.boards.map(board =>
-                    <div className='board'
-                        key={board.id}
-                        onDragOver={(e) => this.dragOverHandler(e)}
-                        onDrop={(e) => this.dropCardHandler(e, board)}
-                    >
-                        <div className='board_title'>{board.title}</div>
-                        {board.tasks.map(task =>                           
-                            <div
-                                className='task'
-                                onDragOver={(e) => this.dragOverHandler(e, board, task)}
-                                onDragLeave={(e) => this.dragLeaveHandler(e)}
-                                onDragStart={(e) => this.dragStartHandler(e, board, task)}
-                                onDragEnd={(e) => this.dragEndHandler(e)}
-                                key={task.id}
-                                draggable={true}
-                                style={{ border: '2px solid ' + TaskColorData.find((e) => e.category == task.category.name).color}}
-                            >
-                                <div>{task.name}</div>
-                                <Link className='pencilIcon' to={'/updateTask/' + task.id}>
-                                    <BsPencil onMouseEnter={(event) => event.target.style.cursor = 'pointer'} />
-                                </Link>        
-                                <div className='trashIcon'>
-                                    <BsTrashFill onClick={() => this.deleteTask(board, task)} onMouseEnter={(event) => event.target.style.cursor = 'pointer'} />
+       
+        if (this.state.boards[0].tasks.length == 0) {
+            return (
+                <LoadingPage />
+            )
+        }
+        else {
+            return (
+                <div className='tasksExplorer'>
+                    {this.state.boards.map(board =>
+                        <div className='board'
+                            key={board.id}
+                            onDragOver={(e) => this.dragOverHandler(e)}
+                            onDrop={(e) => this.dropCardHandler(e, board)}
+                        >
+                            <div className='board_title'>{board.title}</div>
+                            {board.tasks.map(task =>
+                                <div
+                                    className='task'
+                                    onDragOver={(e) => this.dragOverHandler(e, board, task)}
+                                    onDragLeave={(e) => this.dragLeaveHandler(e)}
+                                    onDragStart={(e) => this.dragStartHandler(e, board, task)}
+                                    onDragEnd={(e) => this.dragEndHandler(e)}
+                                    key={task.id}
+                                    draggable={true}
+                                    style={{ border: '2px solid ' + TaskColorData.find((e) => e.category == task.category.name).color }}
+                                >
+                                    <div>{task.name}</div>
+                                    <Link className='pencilIcon' to={'/updateTask/' + task.id}>
+                                        <BsPencil onMouseEnter={(event) => event.target.style.cursor = 'pointer'} />
+                                    </Link>
+                                    <div className='trashIcon'>
+                                        <BsTrashFill onClick={() => this.deleteTask(board, task)} onMouseEnter={(event) => event.target.style.cursor = 'pointer'} />
+                                    </div>
                                 </div>
-                            </div>
-                        )}
-                    </div>
-                )}
+                            )}
+                        </div>
+                    )}
 
-            </div>
-        );
+                </div>
+            );
+        }
     }
 }
