@@ -3,6 +3,7 @@ import '../styles/board.css'
 import { BsTrashFill } from "react-icons/bs";
 import { BsPencil } from "react-icons/bs";
 import { Link } from 'react-router-dom'
+import { TaskColorData } from './TaskColorData';
 
 export class Boards extends React.Component {
 
@@ -163,7 +164,8 @@ export class Boards extends React.Component {
                                 onDragStart={(e) => this.dragStartHandler(e, board, task)}
                                 onDragEnd={(e) => this.dragEndHandler(e)}
                                 key={task.id}
-                                draggable={true}                            
+                                draggable={true}
+                                style={{ border: '2px solid ' + TaskColorData.find((e) => e.category == task.category.name).color}}
                             >
                                 <div>{task.name}</div>
                                 <Link className='pencilIcon' to={'/updateTask/' + task.id}>
