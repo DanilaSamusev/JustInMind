@@ -29,6 +29,7 @@ export class Boards extends React.Component {
         this.dropCardHandler = this.dropCardHandler.bind(this);
         this.fetchDeleteTask = this.fetchDeleteTask.bind(this);
         this.dragEndHandler = this.dragEndHandler.bind(this);
+        this.isTaskPersist = this.isTaskPersist.bind(this);
         this.setBoardTasks = this.setBoardTasks.bind(this);
         this.deleteTask = this.deleteTask.bind(this);
         this.getTasks = this.getTasks.bind(this);
@@ -147,9 +148,19 @@ export class Boards extends React.Component {
             .then((r) => console.log(r));
     }
 
+    isTaskPersist() {     
+        for (let i = 0; i < this.state.boards.length; i++) {
+            if (this.state.boards[i].tasks.length !== 0) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     render() {
        
-        if (this.state.boards[0].tasks.length == 0) {
+        if (!this.isTaskPersist()) {
             return (
                 <LoadingPage />
             )
