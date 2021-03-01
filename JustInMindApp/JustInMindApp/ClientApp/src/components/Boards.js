@@ -5,6 +5,7 @@ import { BsPencil } from "react-icons/bs";
 import { Link } from 'react-router-dom';
 
 import '../styles/board.css'
+import { TaskView } from './TaskView';
 
 export class Boards extends React.Component {
 
@@ -20,8 +21,11 @@ export class Boards extends React.Component {
             ],
             currentBoard: [],
             selectedTask: null,
+            task: null,
+            isOpen: false,
         };
 
+        this.chooseTaskToModify = this.chooseTaskToModify.bind(this);
         this.dragStartHandler = this.dragStartHandler.bind(this);
         this.dragLeaveHandler = this.dragLeaveHandler.bind(this);
         this.fetchUpdateTask = this.fetchUpdateTask.bind(this);
@@ -30,6 +34,7 @@ export class Boards extends React.Component {
         this.fetchDeleteTask = this.fetchDeleteTask.bind(this);
         this.dragEndHandler = this.dragEndHandler.bind(this);
         this.setBoardTasks = this.setBoardTasks.bind(this);
+        this.changeOpen = this.changeOpen.bind(this);
         this.deleteTask = this.deleteTask.bind(this);
         this.getTasks = this.getTasks.bind(this);
         this.get = this.get.bind(this);
@@ -147,8 +152,36 @@ export class Boards extends React.Component {
             .then((r) => console.log(r));
     }
 
+    chooseTaskToModify(taskId, isOpen) {
+
+        
+
+        fetch('https://localhost:44330/Task/' + taskId)
+            .then(response => response.json())
+            .then(data => this.setState({
+                task: data
+            }))
+
+        
+
+        this.changeOpen(isOpen)
+    }
+
+    changeOpen(isOpen) {
+
+        if (isOpen === false) {
+            this.setState({
+                task: null
+            })
+        }
+
+        this.setState({
+            isOpen: isOpen
+        })
+    }
+
     render() {
-       
+
         if (this.state.boards[0].tasks.length == 0) {
             return (
                 <LoadingPage />
@@ -175,9 +208,9 @@ export class Boards extends React.Component {
                                     draggable={true}
                                 >
                                     <div>{task.name}</div>
-                                    <Link className='pencilIcon' to={'/updateTask/' + task.id}>
-                                        <BsPencil onMouseEnter={(event) => event.target.style.cursor = 'pointer'} />
-                                    </Link>
+                                    <div className='pencilIcon'>
+                                        <BsPencil onClick={() => this.chooseTaskToModify(task.id, true)} onMouseEnter={(event) => event.target.style.cursor = 'pointer'} />
+                                    </div>
                                     <div className='trashIcon'>
                                         <BsTrashFill onClick={() => this.deleteTask(board, task)} onMouseEnter={(event) => event.target.style.cursor = 'pointer'} />
                                     </div>
@@ -186,6 +219,7 @@ export class Boards extends React.Component {
                         </div>
                     )}
 
+                    <TaskView open={this.state.isOpen} task={this.state.task} changeOpen={this.changeOpen} />
                 </div>
             );
         }

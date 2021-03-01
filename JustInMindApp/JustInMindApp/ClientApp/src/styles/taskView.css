@@ -12,12 +12,6 @@
     margin-top: 10px;
 }
 
-.closeButton {
-    position: absolute;
-    right: 0;
-    top: 0;
-}
-
 .stateLabel {
     margin-left: 20px;
     color: #5e6c84;
