@@ -6,7 +6,6 @@ import Navbar from './components/Navbar';
 import { BrowserRouter as Router, Switch, Route} from "react-router-dom";
 
 import { AddTask } from './components/AddTask';
-import { UpdateTask } from './components/UpdateTask';
 import { AddUser } from './components/AddUser';
 import { UpdateUser } from './components/UpdateUser';
 import { Team } from './components/Team';
@@ -27,8 +26,7 @@ export default class App extends Component {
                     <Route path='/boards' exact component={Boards} />
 
                     //Just for test this components. Remove in release
-                    <Route path='/addTask' exact component={AddTask} />
-                    <Route path='/updateTask/:id' exact component={UpdateTask} />
+                    <Route path='/addTask' exact component={AddTask} />                    
                     <Route path='/addUser' exact component={AddUser} />
                     <Route path='/updateUser/:id' exact component={UpdateUser} />
                     <Route path='/taskView' exact component={TaskView} />

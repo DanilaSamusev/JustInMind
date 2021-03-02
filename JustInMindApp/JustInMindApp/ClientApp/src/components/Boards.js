@@ -1,11 +1,11 @@
 ﻿import React from 'react';
-import { BsTrashFill } from "react-icons/bs";
-import { LoadingPage } from './LoadingPage';
+
+import { TaskView } from './TaskView';
 import { BsPencil } from "react-icons/bs";
-import { Link } from 'react-router-dom';
+import { LoadingPage } from './LoadingPage';
+import { BsTrashFill } from "react-icons/bs";
 
 import '../styles/board.css'
-import { TaskView } from './TaskView';
 
 export class Boards extends React.Component {
 
@@ -23,28 +23,14 @@ export class Boards extends React.Component {
             selectedTask: null,
             task: null,
             isOpen: false,
-        };
-
-        this.chooseTaskToModify = this.chooseTaskToModify.bind(this);
-        this.dragStartHandler = this.dragStartHandler.bind(this);
-        this.dragLeaveHandler = this.dragLeaveHandler.bind(this);
-        this.fetchUpdateTask = this.fetchUpdateTask.bind(this);
-        this.dragOverHandler = this.dragOverHandler.bind(this);
-        this.dropCardHandler = this.dropCardHandler.bind(this);
-        this.fetchDeleteTask = this.fetchDeleteTask.bind(this);
-        this.dragEndHandler = this.dragEndHandler.bind(this);
-        this.setBoardTasks = this.setBoardTasks.bind(this);
-        this.changeOpen = this.changeOpen.bind(this);
-        this.deleteTask = this.deleteTask.bind(this);
-        this.getTasks = this.getTasks.bind(this);
-        this.get = this.get.bind(this);
+        };      
     }
 
     componentDidMount() {
         this.getTasks();
     }
 
-    dragStartHandler(event, board, task) {
+    dragStartHandler = (event, board, task) => {
 
         this.setState(
             {
@@ -53,15 +39,15 @@ export class Boards extends React.Component {
             })
     }
 
-    dragLeaveHandler(event) {
+    dragLeaveHandler = (event) => {
         event.target.style.boxShadow = 'none'
     }
 
-    dragEndHandler(event) {
+    dragEndHandler = (event) => {
         event.target.style.boxShadow = 'none'
     }
 
-    dragOverHandler(event) {
+    dragOverHandler = (event) => {
         event.preventDefault();
 
         if (event.target.className == 'task') {
@@ -69,7 +55,7 @@ export class Boards extends React.Component {
         }
     }
 
-    dropCardHandler(event, board) {
+    dropCardHandler = (event, board) => {
         board.tasks.push(this.state.selectedTask)
         this.state.selectedTask.stateId = board.id;
 
@@ -84,13 +70,13 @@ export class Boards extends React.Component {
         this.fetchUpdateTask(this.state.selectedTask);
     }
 
-    getTasks() {
+    getTasks = () => {
         fetch('https://localhost:44330/Task/getAll')
             .then(response => response.json())
             .then(data => this.setBoardTasks(data, this.state.boards))
     }
 
-    setBoardTasks(tasks, boards) {
+    setBoardTasks = (tasks, boards) => {
         tasks.forEach((task) => {
             boards.find((board) => { return board.id == task.stateId }).tasks.push(task);
         });
@@ -101,7 +87,7 @@ export class Boards extends React.Component {
             })
     }
 
-    get(board) {
+    get = (board) => {
         let boards = this.state.boards.map(b => {
             if (b.id === board.id) {
                 return board
@@ -116,7 +102,7 @@ export class Boards extends React.Component {
         return boards;
     }
 
-    fetchUpdateTask(task) {
+    fetchUpdateTask = (task) => {
         const requestOptions = {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
@@ -128,7 +114,7 @@ export class Boards extends React.Component {
             .then((r) => console.log(r));
     }
 
-    deleteTask(board, task) {
+    deleteTask = (board, task) => {
 
         let index = board.tasks.indexOf(task)
         board.tasks.splice(index, 1)
@@ -141,7 +127,7 @@ export class Boards extends React.Component {
         this.fetchDeleteTask(task.id);
     }
 
-    fetchDeleteTask(taskId) {
+    fetchDeleteTask = (taskId) => {
         const requestOptions = {
             method: 'DELETE',
             headers: { 'Content-Type': 'application/json' }
@@ -152,22 +138,17 @@ export class Boards extends React.Component {
             .then((r) => console.log(r));
     }
 
-    chooseTaskToModify(taskId, isOpen) {
-
-        
-
+    chooseTaskToModify = (taskId, isOpen) => {
         fetch('https://localhost:44330/Task/' + taskId)
             .then(response => response.json())
             .then(data => this.setState({
                 task: data
             }))
 
-        
-
         this.changeOpen(isOpen)
     }
 
-    changeOpen(isOpen) {
+    changeOpen = (isOpen) => {
 
         if (isOpen === false) {
             this.setState({
