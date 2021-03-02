@@ -194,6 +194,11 @@ export class Boards extends React.Component {
                                     </div>
                                 </div>
                             )}
+
+                            <Link to={'/addTask/' + board.id}>
+                                Add task
+                            </Link>
+
                         </div>
                     )}
 
