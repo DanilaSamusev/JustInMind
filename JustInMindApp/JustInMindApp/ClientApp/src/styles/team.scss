@@ -39,7 +39,7 @@ $table-header-border: 1px solid #FFF;
 
         tr {
             border: $cell-border;
-            transition: .75s;
+            transition: .5s;
 
             &:nth-child(odd) { // highlight the odd rows with a color
                 background-color: $highlight-color;
@@ -121,13 +121,6 @@ $table-header-border: 1px solid #FFF;
 
 // General styles
 
-/*body {
-    padding: 0 2em;
-    font-family: Arial, sans-serif;
-    color: #024457;
-    background: #f2f2f2;
-}*/
-
 h1 {
     font-family: Verdana;
     font-weight: normal;
@@ -136,4 +129,18 @@ h1 {
     span {
         color: #167F92;
     }
+}
+
+.add_user_button {
+    font-size: 18px;
+    font-weight: bold;
+    position: fixed;
+    padding: 10px;
+    padding-right: 25px;
+    bottom: 30px;
+    right: 30px;
+    border: 5px solid transparent;
+    border-image: linear-gradient(to left, transparent 0%, #167f92 100%);
+    border-image-slice: 1;
+    transition: all .5s ease;
 }
