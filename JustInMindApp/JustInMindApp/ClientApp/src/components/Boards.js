@@ -64,7 +64,7 @@ export class Boards extends React.Component {
 
     dropCardHandler = (event, board) => {
         board.tasks.push(this.state.selectedTask)
-        this.state.selectedTask.stateId = board.id;
+        this.state.selectedTask.state.id = board.id;
 
         const currentIndex = this.state.currentBoard.tasks.indexOf(this.state.selectedTask)
         this.state.currentBoard.tasks.splice(currentIndex, 1)
