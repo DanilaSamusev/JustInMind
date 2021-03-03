@@ -79,7 +79,7 @@ export class Boards extends React.Component {
 
     setTasksToBoards = (tasks, boards) => {
         tasks.forEach((task) => {
-            boards.find((board) => { return board.id == task.stateId }).tasks.push(task);
+            boards.find((board) => { return board.id == task.state.id }).tasks.push(task);
         });
 
         this.setState(
@@ -110,9 +110,7 @@ export class Boards extends React.Component {
             body: JSON.stringify(task)
         }
 
-        fetch('https://localhost:44330/Task', requestOptions)
-            .then(response => response.status)
-            .then((r) => console.log(r));
+        fetch('https://localhost:44330/Task', requestOptions);
     }
 
     deleteTask = (board, task) => {
@@ -178,6 +176,17 @@ export class Boards extends React.Component {
         this.submitTask();
     }
 
+    changeTaskComments = (comment) => {
+        let task = this.state.task
+        task.comments.push({ taskId: this.state.task.id, text: comment, userId: 11});
+
+        this.setState({
+            task: task
+        })
+
+        this.submitTask();
+    }
+    
     render() {
 
         if (this.state.boards[0].tasks.length == 0) {
@@ -217,7 +226,7 @@ export class Boards extends React.Component {
                         </div>
                     )}
 
-                    <TaskView open={this.state.isOpen} task={this.state.task} changeOpen={this.changeOpen} changeTaskData={this.changeTaskData}/>
+                    <TaskView open={this.state.isOpen} task={this.state.task} changeOpen={this.changeOpen} changeTaskData={this.changeTaskData} changeTaskComments={this.changeTaskComments}/>
                 </div>
             );
         }

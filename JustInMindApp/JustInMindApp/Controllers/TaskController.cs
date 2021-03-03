@@ -24,6 +24,7 @@ namespace JustInMindApp.Controllers
         public IActionResult GetAll()
         {
             var tasks = dbContext.Tasks
+                .Include(t => t.User)
                 .Include(t => t.Urgency)
                 .Include(t => t.Category)
                 .Include(t => t.Comments)

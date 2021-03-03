@@ -2,6 +2,7 @@
 import { deepOrange } from '@material-ui/core/colors';
 
 import React, { useEffect, useState } from 'react';
+import Tooltip from '@material-ui/core/Tooltip';
 import Avatar from '@material-ui/core/Avatar'
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
@@ -15,10 +16,12 @@ export function TaskView(props) {
     const classes = useStyles();
     const [taskName, setTaskName] = useState(null);
     const [taskDescription, setTaskDescription] = useState(null);
+    const [taskComment, setTaskComment] = useState(null);
 
     const handleClose = () => {
         setTaskName(null);
         setTaskDescription(null);
+        setTaskComment(null);
 
         props.changeOpen(false);
     };
@@ -50,13 +53,15 @@ export function TaskView(props) {
                                 onChange={(e) =>  setTaskName(e.target.value)}
                             />
                         </div>
-
                         <div className='stateLabel'>
                             in {props.task.state.name} state
 					</div>
                         <div className='ownerContainer'>
                             <div className='ownerLabel'>Owner:</div>
-                            <Avatar className={classes.orange}>OP</Avatar>
+                            <Tooltip title={props.task.user.userName} interactive arrow>
+                                <Avatar className={classes.orange} >{props.task.user.userName.substring(0, 1)}</Avatar>
+                            </Tooltip>
+                            
                         </div>
                         <TextField
                             className={classes.descriptionField}
@@ -75,12 +80,12 @@ export function TaskView(props) {
                             placeholder="Placeholder"
                             multiline
                             variant="outlined"
-                            
+                            onChange={(e) => setTaskComment(e.target.value)}
                         />
-                        <Button className={classes.leaveCommentButton} variant="contained" onClick={() => props.changeTaskData(taskName, taskDescription)} >Leave comment</Button>
+                        <Button className={classes.leaveCommentButton} variant="contained" onClick={() => props.changeTaskComments(taskComment)} >Leave comment</Button>
                         <div className={classes.taskCommentsContainer}>
                             {props.task.comments.map((comment) => {
-                                return <div>-{comment.text}</div>
+                                return <div key={comment.id}>{comment.text}</div>
                             })}
                         </div>
                     </div>
