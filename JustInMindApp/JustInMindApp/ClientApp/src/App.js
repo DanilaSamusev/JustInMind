@@ -10,6 +10,7 @@ import { AddUser } from './components/AddUser';
 import { UpdateUser } from './components/UpdateUser';
 import { Team } from './components/Team';
 import { TaskView } from './components/TaskView';
+import { TestContainer } from './components/TestContainer';
 
 import './styles/custom.css'
 
@@ -30,6 +31,7 @@ export default class App extends Component {
                     <Route path='/addUser' exact component={AddUser} />
                     <Route path='/updateUser/:id' exact component={UpdateUser} />
                     <Route path='/taskView' exact component={TaskView} />
+                    <Route path='/test' exact component={TestContainer} />
                 </Switch>
             </Router>
         );

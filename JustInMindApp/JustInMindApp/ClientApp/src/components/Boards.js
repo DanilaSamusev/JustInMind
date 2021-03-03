@@ -23,11 +23,18 @@ export class Boards extends React.Component {
             selectedTask: null,
             task: null,
             isOpen: false,
+            num: 1,
         };      
     }
 
     componentDidMount() {
-        this.getTasks();
+        this.fetchTasks();
+    }
+
+    fetchTasks = () => {
+        fetch('https://localhost:44330/Task/getAll')
+            .then(response => response.json())
+            .then(data => this.setTasksToBoards(data, this.state.boards))
     }
 
     dragStartHandler = (event, board, task) => {
@@ -70,13 +77,7 @@ export class Boards extends React.Component {
         this.fetchUpdateTask(this.state.selectedTask);
     }
 
-    getTasks = () => {
-        fetch('https://localhost:44330/Task/getAll')
-            .then(response => response.json())
-            .then(data => this.setBoardTasks(data, this.state.boards))
-    }
-
-    setBoardTasks = (tasks, boards) => {
+    setTasksToBoards = (tasks, boards) => {
         tasks.forEach((task) => {
             boards.find((board) => { return board.id == task.stateId }).tasks.push(task);
         });
@@ -138,12 +139,10 @@ export class Boards extends React.Component {
             .then((r) => console.log(r));
     }
 
-    chooseTaskToModify = (taskId, isOpen) => {
-        fetch('https://localhost:44330/Task/' + taskId)
-            .then(response => response.json())
-            .then(data => this.setState({
-                task: data
-            }))
+    chooseTaskToModify = (task, isOpen) => {
+        this.setState({
+            task: task
+        });
 
         this.changeOpen(isOpen)
     }
@@ -159,6 +158,24 @@ export class Boards extends React.Component {
         this.setState({
             isOpen: isOpen
         })
+    }
+
+    submitTask() {
+        const requestOptions = {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(this.state.task)
+        }
+
+        fetch('https://localhost:44330/Task', requestOptions)
+            .then(response => response.status)
+    }
+
+    changeTaskData = (taskName, taskDescription) => {
+        this.state.task.name = taskName;
+        this.state.task.description = taskDescription;
+
+        this.submitTask();
     }
 
     render() {
@@ -190,7 +207,7 @@ export class Boards extends React.Component {
                                 >
                                     <div>{task.name}</div>
                                     <div className='pencilIcon'>
-                                        <BsPencil onClick={() => this.chooseTaskToModify(task.id, true)} onMouseEnter={(event) => event.target.style.cursor = 'pointer'} />
+                                        <BsPencil onClick={() => this.chooseTaskToModify(task, true)} onMouseEnter={(event) => event.target.style.cursor = 'pointer'} />
                                     </div>
                                     <div className='trashIcon'>
                                         <BsTrashFill onClick={() => this.deleteTask(board, task)} onMouseEnter={(event) => event.target.style.cursor = 'pointer'} />
@@ -200,7 +217,7 @@ export class Boards extends React.Component {
                         </div>
                     )}
 
-                    <TaskView open={this.state.isOpen} task={this.state.task} changeOpen={this.changeOpen} />
+                    <TaskView open={this.state.isOpen} task={this.state.task} changeOpen={this.changeOpen} changeTaskData={this.changeTaskData}/>
                 </div>
             );
         }

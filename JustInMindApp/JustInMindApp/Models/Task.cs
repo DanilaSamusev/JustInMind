@@ -1,4 +1,6 @@
-﻿namespace JustInMindApp.Models
+﻿using System.Collections.Generic;
+
+namespace JustInMindApp.Models
 {
     public partial class Task
     {        
@@ -8,6 +10,10 @@
         public int UrgencyId { get; set; }
         public int CategoryId { get; set; }
         public int UserId { get; set; }
-        public int StateId { get; set; }    
+        public int StateId { get; set; }   
+        public State State { get; set; }
+        public Urgency Urgency { get; set; }
+        public List<Comment> Comments { get; set; }
+        public Category Category { get; set; }
     }
 }

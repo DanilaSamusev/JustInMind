@@ -1,28 +1,41 @@
 ﻿import { makeStyles } from '@material-ui/core/styles';
-import Avatar from '@material-ui/core/Avatar'
-import { deepOrange, deepPurple, red } from '@material-ui/core/colors';
+import { deepOrange } from '@material-ui/core/colors';
 
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
+import Avatar from '@material-ui/core/Avatar'
 import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
+import TextField from '@material-ui/core/TextField';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import { LoadingPage } from './LoadingPage';
 
 import '../styles/taskView.css';
 
 export function TaskView(props) {
     const classes = useStyles();
+    const [taskName, setTaskName] = useState(null);
+    const [taskDescription, setTaskDescription] = useState(null);
 
     const handleClose = () => {
+        setTaskName(null);
+        setTaskDescription(null);
+
         props.changeOpen(false);
     };
 
-    if (props.task === null) {     
+    if (props.task === null) {
         return (
             <div />
         )
+    }
+    else {
+        if (taskName === null) {
+            setTaskName(props.task.name);
+        }
+
+        if (taskDescription === null) {
+            setTaskDescription(props.task.description);
+        }
     }
 
     return (
@@ -31,11 +44,15 @@ export function TaskView(props) {
                 <DialogContent>
                     <div className={classes.taskView}>
                         <div>
-                            <textarea className='taskName'>{props.task.name}</textarea>
+                            <textarea
+                                className='taskName'
+                                value={taskName}
+                                onChange={(e) =>  setTaskName(e.target.value)}
+                            />
                         </div>
 
                         <div className='stateLabel'>
-                            in {'New'} state
+                            in {props.task.state.name} state
 					</div>
                         <div className='ownerContainer'>
                             <div className='ownerLabel'>Owner:</div>
@@ -47,8 +64,9 @@ export function TaskView(props) {
                             label="Description"
                             multiline
                             rowsMax={4}
-                            value={'Explain this ticket more infromative'}
                             variant="outlined"
+                            value={taskDescription}
+                            onChange={(e) => setTaskDescription(e.target.value)}
                         />
                         <TextField
                             className={classes.commentField}
@@ -57,12 +75,13 @@ export function TaskView(props) {
                             placeholder="Placeholder"
                             multiline
                             variant="outlined"
+                            
                         />
+                        <Button className={classes.leaveCommentButton} variant="contained" onClick={() => props.changeTaskData(taskName, taskDescription)} >Leave comment</Button>
                         <div className={classes.taskCommentsContainer}>
-                            <div>Test comment!!!</div>
-                            <div>Test comment!!!</div>
-                            <div>Test comment!!!</div>
-                            <div>Test comment!!!</div>
+                            {props.task.comments.map((comment) => {
+                                return <div>-{comment.text}</div>
+                            })}
                         </div>
                     </div>
                 </DialogContent>
@@ -70,7 +89,7 @@ export function TaskView(props) {
                     <Button onClick={handleClose} color="primary">
                         Cancel
                     </Button>
-                    <Button onClick={handleClose} color="primary">
+                    <Button onClick={() => props.changeTaskData(taskName, taskDescription)} color="primary">
                         Save
                     </Button>
                 </DialogActions>
@@ -92,13 +111,17 @@ const useStyles = makeStyles((theme) => ({
 
         '& .MuiOutlinedInput-multiline': {
             width: '300px',
-            height: '20px',
         },
     },
 
     orange: {
         color: theme.palette.getContrastText(deepOrange[500]),
         backgroundColor: deepOrange[500],
+    },
+
+    leaveCommentButton: {
+        marginLeft: '20px',
+        marginTop: '10px',
     },
 
     taskView: {

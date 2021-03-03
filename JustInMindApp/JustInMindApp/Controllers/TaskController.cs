@@ -1,6 +1,7 @@
 ﻿using JustInMindApp.Models;
 
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 using System.Linq;
 
@@ -22,7 +23,11 @@ namespace JustInMindApp.Controllers
         [Route("getAll")]
         public IActionResult GetAll()
         {
-            var tasks = dbContext.Tasks;
+            var tasks = dbContext.Tasks
+                .Include(t => t.Urgency)
+                .Include(t => t.Category)
+                .Include(t => t.Comments)
+                .Include(t => t.State);
 
             if (tasks != null)
             {
