@@ -2,6 +2,8 @@
 
 import { TaskView } from './TaskView';
 import { BsPencil } from "react-icons/bs";
+import { Link } from 'react-router-dom'
+import { TaskColorData } from './TaskColorData';
 import { LoadingPage } from './LoadingPage';
 import { BsTrashFill } from "react-icons/bs";
 
@@ -211,6 +213,7 @@ export class Boards extends React.Component {
                                     onDragEnd={(e) => this.dragEndHandler(e)}
                                     key={task.id}
                                     draggable={true}
+                                    style={{ border: '2px solid ' + TaskColorData.find((e) => e.category == task.category.name).color }}
                                 >
                                     <div>{task.name}</div>
                                     <div className='pencilIcon'>
