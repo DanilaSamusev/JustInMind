@@ -2,7 +2,6 @@
 
 import { TaskView } from './TaskView';
 import { BsPencil } from "react-icons/bs";
-import { Link } from 'react-router-dom'
 import { TaskColorData } from './TaskColorData';
 import { LoadingPage } from './LoadingPage';
 import { BsTrashFill } from "react-icons/bs";
