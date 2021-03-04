@@ -34,6 +34,12 @@ export class AddTask extends React.Component {
         })
     }
 
+    componentDidMount() {
+        this.setState({
+            stateId: parseInt(this.props.match.params.stateId)
+        })
+    }
+
     submitTask() {
         const requestOptions = {
             method: 'POST',
