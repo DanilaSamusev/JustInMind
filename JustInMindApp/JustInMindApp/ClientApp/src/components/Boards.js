@@ -19,19 +19,18 @@ export class Boards extends React.Component {
                 { id: 4, title: "In Test", tasks: [] },
                 { id: 5, title: "Done", tasks: [] },
             ],
-            currentBoard: [],
-            selectedTask: null,
-            task: null,
-            isOpen: false,
-            num: 1,
+            boardForTaskPut: [],
+            draggedTask: null,
+            taskToView: null,
+            isTaskViewOpen: false,
         };      
     }
 
     componentDidMount() {
-        this.fetchTasks();
+        this.fetchGetAllTasks();
     }
 
-    fetchTasks = () => {
+    fetchGetAllTasks = () => {
         fetch('https://localhost:44330/Task/getAll')
             .then(response => response.json())
             .then(data => this.setTasksToBoards(data, this.state.boards))
@@ -41,8 +40,8 @@ export class Boards extends React.Component {
 
         this.setState(
             {
-                currentBoard: board,
-                selectedTask: task,
+                boardForTaskPut: board,
+                draggedTask: task,
             })
     }
 
@@ -63,18 +62,18 @@ export class Boards extends React.Component {
     }
 
     dropCardHandler = (event, board) => {
-        board.tasks.push(this.state.selectedTask)
-        this.state.selectedTask.state.id = board.id;
+        board.tasks.push(this.state.draggedTask)
+        this.state.draggedTask.state.id = board.id;
 
-        const currentIndex = this.state.currentBoard.tasks.indexOf(this.state.selectedTask)
-        this.state.currentBoard.tasks.splice(currentIndex, 1)
+        const currentIndex = this.state.boardForTaskPut.tasks.indexOf(this.state.draggedTask)
+        this.state.boardForTaskPut.tasks.splice(currentIndex, 1)
 
         this.setState(
             {
-                boards: this.get(board),
+                boards: this.refreshBoard(board),
             })
 
-        this.fetchUpdateTask(this.state.selectedTask);
+        this.fetchUpdateTask(this.state.draggedTask);
     }
 
     setTasksToBoards = (tasks, boards) => {
@@ -88,16 +87,17 @@ export class Boards extends React.Component {
             })
     }
 
-    get = (board) => {
-        let boards = this.state.boards.map(b => {
-            if (b.id === board.id) {
+    refreshBoard = (board) => {
+        let boards = this.state.boards.map(item => {
+            if (item.id === board.id) {
                 return board
             }
 
-            if (b.id === this.state.currentBoard.id) {
-                return this.state.currentBoard
+            if (item.id === this.state.boardForTaskPut.id) {
+                return this.state.boardForTaskPut
             }
-            return b
+
+            return item
         })
 
         return boards;
@@ -120,7 +120,7 @@ export class Boards extends React.Component {
 
         this.setState(
             {
-                boards: this.get(board),
+                boards: this.refreshBoard(board),
             })
 
         this.fetchDeleteTask(task.id);
@@ -132,20 +132,18 @@ export class Boards extends React.Component {
             headers: { 'Content-Type': 'application/json' }
         }
 
-        fetch('https://localhost:44330/Task/' + taskId, requestOptions)
-            .then(response => response.status)
-            .then((r) => console.log(r));
+        fetch('https://localhost:44330/Task/' + taskId, requestOptions);
     }
 
     chooseTaskToModify = (task, isOpen) => {
         this.setState({
-            task: task
+            taskToView: task
         });
 
-        this.changeOpen(isOpen)
+        this.changeIsTaskViewOpen(isOpen);
     }
 
-    changeOpen = (isOpen) => {
+    changeIsTaskViewOpen = (isOpen) => {
 
         if (isOpen === false) {
             this.setState({
@@ -154,7 +152,7 @@ export class Boards extends React.Component {
         }
 
         this.setState({
-            isOpen: isOpen
+            isTaskViewOpen: isOpen
         })
     }
 
@@ -162,7 +160,7 @@ export class Boards extends React.Component {
         const requestOptions = {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(this.state.task)
+            body: JSON.stringify(this.state.taskToView)
         }
 
         fetch('https://localhost:44330/Task', requestOptions)
@@ -170,18 +168,18 @@ export class Boards extends React.Component {
     }
 
     changeTaskData = (taskName, taskDescription) => {
-        this.state.task.name = taskName;
-        this.state.task.description = taskDescription;
+        this.state.taskToView.name = taskName;
+        this.state.taskToView.description = taskDescription;
 
         this.submitTask();
     }
 
     changeTaskComments = (comment) => {
-        let task = this.state.task
-        task.comments.push({ taskId: this.state.task.id, text: comment, userId: 11});
+        let task = this.state.taskToView
+        task.comments.push({ taskId: this.state.taskToView.id, text: comment, userId: 11});
 
         this.setState({
-            task: task
+            taskToView: task
         })
 
         this.submitTask();
@@ -189,7 +187,7 @@ export class Boards extends React.Component {
     
     render() {
 
-        if (this.state.boards[0].tasks.length == 0) {
+        if (this.state.boards[1].tasks.length == 0) {
             return (
                 <LoadingPage />
             )
@@ -226,7 +224,7 @@ export class Boards extends React.Component {
                         </div>
                     )}
 
-                    <TaskView open={this.state.isOpen} task={this.state.task} changeOpen={this.changeOpen} changeTaskData={this.changeTaskData} changeTaskComments={this.changeTaskComments}/>
+                    <TaskView open={this.state.isTaskViewOpen} task={this.state.taskToView} changeOpen={this.changeIsTaskViewOpen} changeTaskData={this.changeTaskData} changeTaskComments={this.changeTaskComments}/>
                 </div>
             );
         }

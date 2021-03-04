@@ -58,7 +58,7 @@ export function TaskView(props) {
 					</div>
                         <div className='ownerContainer'>
                             <div className='ownerLabel'>Owner:</div>
-                            <Tooltip title={props.task.user.userName} interactive arrow>
+                            <Tooltip title={props.task.user.userName} interactive arrow placement="right-start">
                                 <Avatar className={classes.orange} >{props.task.user.userName.substring(0, 1)}</Avatar>
                             </Tooltip>
                             
@@ -132,7 +132,7 @@ const useStyles = makeStyles((theme) => ({
     taskView: {
         color: '#172b4d',
         position: 'relative',
-        height: '420px',
+        height: '480px',
         width: '400px',
     },
 
