@@ -9,7 +9,6 @@ import { BsTrashFill } from "react-icons/bs";
 import '../styles/board.css'
 
 export class Boards extends React.Component {
-
     constructor(props) {
         super(props);
         this.state = {
@@ -24,6 +23,7 @@ export class Boards extends React.Component {
             draggedTask: null,
             taskToView: null,
             isTaskViewOpen: false,
+            isPageLoaded: false,
         };      
     }
 
@@ -78,13 +78,15 @@ export class Boards extends React.Component {
     }
 
     setTasksToBoards = (tasks, boards) => {
+
         tasks.forEach((task) => {
             boards.find((board) => { return board.id == task.state.id }).tasks.push(task);
         });
 
         this.setState(
             {
-                boards: boards
+                boards: boards,
+                isPageLoaded: true
             })
     }
 
@@ -148,7 +150,7 @@ export class Boards extends React.Component {
 
         if (isOpen === false) {
             this.setState({
-                task: null
+                taskToView: null
             })
         }
 
@@ -188,7 +190,7 @@ export class Boards extends React.Component {
     
     render() {
 
-        if (this.state.boards[1].tasks.length == 0) {
+        if (!this.state.isPageLoaded) {
             return (
                 <LoadingPage />
             )
