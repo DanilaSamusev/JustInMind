@@ -27,7 +27,8 @@ export default class App extends Component {
                     <Route path='/boards' exact component={Boards} />
 
                     //Just for test this components. Remove in release
-                    <Route path='/addTask' exact component={AddTask} />                    
+                    <Route path='/addTask/:stateId?' exact component={AddTask} />
+                    <Route path='/updateTask/:id' exact component={UpdateTask} />
                     <Route path='/addUser' exact component={AddUser} />
                     <Route path='/updateUser/:id' exact component={UpdateUser} />
                     <Route path='/taskView' exact component={TaskView} />
