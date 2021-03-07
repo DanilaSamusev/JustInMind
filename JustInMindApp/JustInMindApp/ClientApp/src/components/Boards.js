@@ -5,6 +5,7 @@ import { BsPencil } from "react-icons/bs";
 import { Link } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
+import AddTaskField from './AddTaskField';
 
 import '../styles/board.css'
 
@@ -22,6 +23,7 @@ export class Boards extends React.Component {
             ],
             currentBoard: [],
             selectedTask: null,
+            isFieldSeen: [],
         };
 
         this.dragStartHandler = this.dragStartHandler.bind(this);
@@ -160,6 +162,22 @@ export class Boards extends React.Component {
         return false;
     }
 
+    onAddTaskFieldBlur = (boardId) => {
+        this.changeFieldVisibility(boardId);
+    }
+
+    addTask = (boardId) => {
+        this.changeFieldVisibility(boardId);
+    }
+
+    changeFieldVisibility = (boardId) => {
+        let isCurrentFieldSeen = this.state.isFieldSeen;
+        isCurrentFieldSeen[boardId] = !isCurrentFieldSeen[boardId];
+        this.setState({
+            isFieldSeen: isCurrentFieldSeen,
+        });
+    }
+
     render() {
        
         if (!this.isTaskPersist()) {
@@ -197,10 +215,20 @@ export class Boards extends React.Component {
                                 </div>
                             )}
 
-                            <Link to={'/addTask/' + board.id}>
-                                Add task
-                            </Link>
-
+                            {this.state.isFieldSeen[board.id]
+                                ?
+                                <AddTaskField changeFieldVisibility={this.changeFieldVisibility} boardId={board.id} />
+                                :
+                                <Button
+                                    className="add-button"
+                                    color="primary"
+                                    fullWidth
+                                    startIcon={<AddIcon />}
+                                    onClick={() => this.addTask(board.id)}
+                                >
+                                    Add task
+                                </Button>
+                            }
                         </div>
                     )}
 
