@@ -3,6 +3,8 @@ import { BsTrashFill } from "react-icons/bs";
 import { LoadingPage } from './LoadingPage';
 import { BsPencil } from "react-icons/bs";
 import { Link } from 'react-router-dom';
+import Button from '@material-ui/core/Button';
+import AddIcon from '@material-ui/icons/Add';
 
 import '../styles/board.css'
 
