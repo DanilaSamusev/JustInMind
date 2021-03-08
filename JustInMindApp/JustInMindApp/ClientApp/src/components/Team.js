@@ -17,7 +17,7 @@ export class Team extends React.Component {
     }
 
     getUsers() {
-        fetch('https://localhost:44330/User/getAll')
+        fetch('User/getAll')
             .then(response => response.json())
             .then(data => this.setState(
                 {

@@ -32,7 +32,7 @@ export class Boards extends React.Component {
     }
 
     fetchGetAllTasks = () => {
-        fetch('https://localhost:44330/Task/getAll')
+        fetch('task/getAll')
             .then(response => response.json())
             .then(data => this.setTasksToBoards(data, this.state.boards))
     }
@@ -113,7 +113,7 @@ export class Boards extends React.Component {
             body: JSON.stringify(task)
         }
 
-        fetch('https://localhost:44330/Task', requestOptions);
+        fetch('Task', requestOptions);
     }
 
     deleteTask = (board, task) => {
@@ -135,7 +135,7 @@ export class Boards extends React.Component {
             headers: { 'Content-Type': 'application/json' }
         }
 
-        fetch('https://localhost:44330/Task/' + taskId, requestOptions);
+        fetch('Task/' + taskId, requestOptions);
     }
 
     chooseTaskToModify = (task, isOpen) => {
@@ -166,7 +166,7 @@ export class Boards extends React.Component {
             body: JSON.stringify(this.state.taskToView)
         }
 
-        fetch('https://localhost:44330/Task', requestOptions)
+        fetch('Task', requestOptions)
             .then(response => response.status)
     }
 
@@ -226,9 +226,7 @@ export class Boards extends React.Component {
                                 </div>
                             )}
 
-                            <Link to={'/addTask/' + board.id}>
-                                Add task
-                            </Link>
+                            
 
                         </div>
                     )}
