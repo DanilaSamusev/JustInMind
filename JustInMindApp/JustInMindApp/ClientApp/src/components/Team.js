@@ -58,7 +58,7 @@ export class Team extends React.Component {
                             {this.state.users.map(user => (
                                 <tr key={user.id}>
                                     <td>{user.id}</td>
-                                    <td>{user.userName}</td>
+                                    <td>{user.name}</td>
                                     <td>{user.password}</td>
                                     <td>{user.role.name}</td>
                                     <td>
