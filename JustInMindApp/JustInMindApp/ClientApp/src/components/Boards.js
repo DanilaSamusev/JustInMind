@@ -166,7 +166,12 @@ export class Boards extends React.Component {
         this.changeFieldVisibility(boardId);
     }
 
-    addTask = (boardId) => {
+    addTaskToBoard = (boardId, task) => {
+        let newBoards = this.state.boards;
+        newBoards[boardId - 1].tasks.push(task);
+        this.setState({
+            boards: newBoards,
+        });
         this.changeFieldVisibility(boardId);
     }
 
@@ -217,14 +222,14 @@ export class Boards extends React.Component {
 
                             {this.state.isFieldSeen[board.id]
                                 ?
-                                <AddTaskField changeFieldVisibility={this.changeFieldVisibility} boardId={board.id} />
+                                <AddTaskField changeFieldVisibility={this.changeFieldVisibility} addTaskToBoard={this.addTaskToBoard} boardId={board.id} />
                                 :
                                 <Button
                                     className="add-button"
                                     color="primary"
                                     fullWidth
                                     startIcon={<AddIcon />}
-                                    onClick={() => this.addTask(board.id)}
+                                    onClick={() => this.changeFieldVisibility(board.id)}
                                 >
                                     Add task
                                 </Button>

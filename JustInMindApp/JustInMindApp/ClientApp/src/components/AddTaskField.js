@@ -44,17 +44,12 @@ export default function AddTaskField(props) {
 
         fetch('https://localhost:44330/Task', requestOptions)
             .then(response => response.status)
-            .then((r) => console.log(r));
-
-        onClickAway();
-    };
-
-    const onClickAway = () => {
-        props.changeFieldVisibility(props.boardId);
+            .then((r) => console.log(r))
+            .then(props.addTaskToBoard(task.stateId, task));
     };
 
     return (
-        <ClickAwayListener onClickAway={onClickAway}>
+        <ClickAwayListener onClickAway={() => props.changeFieldVisibility(props.boardId)}>
             <FormControl
                 className={classes.root}
                 noValidate
