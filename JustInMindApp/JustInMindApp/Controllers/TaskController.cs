@@ -52,7 +52,7 @@ namespace JustInMindApp.Controllers
             {
                 dbContext.Tasks.Add(task);
                 dbContext.SaveChanges();
-                return Ok();
+                return Ok(task.Id);
             }
 
             else return BadRequest();

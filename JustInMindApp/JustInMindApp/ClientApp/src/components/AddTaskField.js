@@ -22,20 +22,21 @@ export default function AddTaskField(props) {
     const [categoryId, setCategoryId] = useState(1);
     const [attachement, setAttachement] = useState('');
 
+    let task = {};
+
     const handleChange = (event) => {
         setName(event.target.value);
     };
 
     const onSubmit = () => {
-        const task = {
-            name: name,
-            stateId: stateId,
-            userId: userId,
-            description: description,
-            urgencyId: urgencyId,
-            categoryId: categoryId,
-            attachement: attachement,
-        };
+        task.name = name;
+        task.stateId = stateId;
+        task.userId = userId;
+        task.description = description;
+        task.urgencyId = urgencyId;
+        task.categoryId = categoryId;
+        task.attachement = attachement;
+
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -43,10 +44,14 @@ export default function AddTaskField(props) {
         }
 
         fetch('https://localhost:44330/Task', requestOptions)
-            .then(response => response.status)
-            .then((r) => console.log(r))
-            .then(props.addTaskToBoard(task.stateId, task));
+            .then(response => response.json())
+            .then(taskId => pushToBoard(taskId));
     };
+
+    const pushToBoard = (taskId) => {
+        task.id = taskId;
+        props.addTaskToBoard(task.stateId, task)
+    }
 
     return (
         <ClickAwayListener onClickAway={() => props.changeFieldVisibility(props.boardId)}>
