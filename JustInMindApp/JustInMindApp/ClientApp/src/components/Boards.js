@@ -1,13 +1,14 @@
 ﻿import React from 'react';
-import { BsTrashFill } from "react-icons/bs";
-import { LoadingPage } from './LoadingPage';
+
+import { TaskView } from './TaskView';
 import { BsPencil } from "react-icons/bs";
-import { Link } from 'react-router-dom';
+import { TaskColorData } from './TaskColorData';
+import { LoadingPage } from './LoadingPage';
+import { BsTrashFill } from "react-icons/bs";
 
 import '../styles/board.css'
 
 export class Boards extends React.Component {
-
     constructor(props) {
         super(props);
         this.state = {
@@ -18,46 +19,42 @@ export class Boards extends React.Component {
                 { id: 4, title: "In Test", tasks: [] },
                 { id: 5, title: "Done", tasks: [] },
             ],
-            currentBoard: [],
-            selectedTask: null,
-        };
-
-        this.dragStartHandler = this.dragStartHandler.bind(this);
-        this.dragLeaveHandler = this.dragLeaveHandler.bind(this);
-        this.fetchUpdateTask = this.fetchUpdateTask.bind(this);
-        this.dragOverHandler = this.dragOverHandler.bind(this);
-        this.dropCardHandler = this.dropCardHandler.bind(this);
-        this.fetchDeleteTask = this.fetchDeleteTask.bind(this);
-        this.dragEndHandler = this.dragEndHandler.bind(this);
-        this.isTaskPersist = this.isTaskPersist.bind(this);
-        this.setBoardTasks = this.setBoardTasks.bind(this);
-        this.deleteTask = this.deleteTask.bind(this);
-        this.getTasks = this.getTasks.bind(this);
-        this.get = this.get.bind(this);
+            boardForTaskPut: [],
+            draggedTask: null,
+            taskToView: null,
+            isTaskViewOpen: false,
+            isPageLoaded: false,
+        };      
     }
 
     componentDidMount() {
-        this.getTasks();
+        this.fetchGetAllTasks();
     }
 
-    dragStartHandler(event, board, task) {
+    fetchGetAllTasks = () => {
+        fetch('task/getAll')
+            .then(response => response.json())
+            .then(data => this.setTasksToBoards(data, this.state.boards))
+    }
+
+    dragStartHandler = (event, board, task) => {
 
         this.setState(
             {
-                currentBoard: board,
-                selectedTask: task,
+                boardForTaskPut: board,
+                draggedTask: task,
             })
     }
 
-    dragLeaveHandler(event) {
+    dragLeaveHandler = (event) => {
         event.target.style.boxShadow = 'none'
     }
 
-    dragEndHandler(event) {
+    dragEndHandler = (event) => {
         event.target.style.boxShadow = 'none'
     }
 
-    dragOverHandler(event) {
+    dragOverHandler = (event) => {
         event.preventDefault();
 
         if (event.target.className == 'task') {
@@ -65,102 +62,135 @@ export class Boards extends React.Component {
         }
     }
 
-    dropCardHandler(event, board) {
-        board.tasks.push(this.state.selectedTask)
-        this.state.selectedTask.stateId = board.id;
+    dropCardHandler = (event, board) => {
+        board.tasks.push(this.state.draggedTask)
+        this.state.draggedTask.state.id = board.id;
 
-        const currentIndex = this.state.currentBoard.tasks.indexOf(this.state.selectedTask)
-        this.state.currentBoard.tasks.splice(currentIndex, 1)
+        const currentIndex = this.state.boardForTaskPut.tasks.indexOf(this.state.draggedTask)
+        this.state.boardForTaskPut.tasks.splice(currentIndex, 1)
 
         this.setState(
             {
-                boards: this.get(board),
+                boards: this.refreshBoard(board),
             })
 
-        this.fetchUpdateTask(this.state.selectedTask);
+        this.fetchUpdateTask(this.state.draggedTask);
     }
 
-    getTasks() {
-        fetch('https://localhost:44330/Task/getAll')
-            .then(response => response.json())
-            .then(data => this.setBoardTasks(data, this.state.boards))
-    }
+    setTasksToBoards = (tasks, boards) => {
 
-    setBoardTasks(tasks, boards) {
         tasks.forEach((task) => {
-            boards.find((board) => { return board.id == task.stateId }).tasks.push(task);
+            boards.find((board) => { return board.id == task.state.id }).tasks.push(task);
         });
 
         this.setState(
             {
-                boards: boards
+                boards: boards,
+                isPageLoaded: true
             })
     }
 
-    get(board) {
-        let boards = this.state.boards.map(b => {
-            if (b.id === board.id) {
+    refreshBoard = (board) => {
+        let boards = this.state.boards.map(item => {
+            if (item.id === board.id) {
                 return board
             }
 
-            if (b.id === this.state.currentBoard.id) {
-                return this.state.currentBoard
+            if (item.id === this.state.boardForTaskPut.id) {
+                return this.state.boardForTaskPut
             }
-            return b
+
+            return item
         })
 
         return boards;
     }
 
-    fetchUpdateTask(task) {
+    fetchUpdateTask = (task) => {
         const requestOptions = {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(task)
         }
 
-        fetch('https://localhost:44330/Task', requestOptions)
-            .then(response => response.status)
-            .then((r) => console.log(r));
+        fetch('Task', requestOptions);
     }
 
-    deleteTask(board, task) {
+    deleteTask = (board, task) => {
 
         let index = board.tasks.indexOf(task)
         board.tasks.splice(index, 1)
 
         this.setState(
             {
-                boards: this.get(board),
+                boards: this.refreshBoard(board),
             })
 
         this.fetchDeleteTask(task.id);
     }
 
-    fetchDeleteTask(taskId) {
+    fetchDeleteTask = (taskId) => {
         const requestOptions = {
             method: 'DELETE',
             headers: { 'Content-Type': 'application/json' }
         }
 
-        fetch('https://localhost:44330/Task/' + taskId, requestOptions)
-            .then(response => response.status)
-            .then((r) => console.log(r));
+        fetch('Task/' + taskId, requestOptions);
     }
 
-    isTaskPersist() {     
-        for (let i = 0; i < this.state.boards.length; i++) {
-            if (this.state.boards[i].tasks.length !== 0) {
-                return true;
-            }
+    chooseTaskToModify = (task, isOpen) => {
+        this.setState({
+            taskToView: task
+        });
+
+        this.changeIsTaskViewOpen(isOpen);
+    }
+
+    changeIsTaskViewOpen = (isOpen) => {
+
+        if (isOpen === false) {
+            this.setState({
+                taskToView: null
+            })
         }
 
-        return false;
+        this.setState({
+            isTaskViewOpen: isOpen
+        })
     }
 
+    submitTask() {
+        const requestOptions = {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(this.state.taskToView)
+        }
+
+        fetch('Task', requestOptions)
+            .then(response => response.status)
+    }
+
+    changeTaskData = (taskName, taskDescription) => {
+        this.state.taskToView.name = taskName;
+        this.state.taskToView.description = taskDescription;
+
+        this.submitTask();
+    }
+
+    changeTaskComments = (comment) => {
+        let task = this.state.taskToView
+        task.comments.push({ taskId: this.state.taskToView.id, text: comment, userId: 11});
+
+        this.setState({
+            taskToView: task
+        })
+
+        this.submitTask();
+    }
+    
     render() {
-       
-        if (!this.isTaskPersist()) {
+
+        if (!this.state.isPageLoaded) {
             return (
                 <LoadingPage />
             )
@@ -184,24 +214,24 @@ export class Boards extends React.Component {
                                     onDragEnd={(e) => this.dragEndHandler(e)}
                                     key={task.id}
                                     draggable={true}
+                                    style={{ border: '2px solid ' + TaskColorData.find((e) => e.category == task.category.name).color }}
                                 >
                                     <div>{task.name}</div>
-                                    <Link className='pencilIcon' to={'/updateTask/' + task.id}>
-                                        <BsPencil onMouseEnter={(event) => event.target.style.cursor = 'pointer'} />
-                                    </Link>
+                                    <div className='pencilIcon'>
+                                        <BsPencil onClick={() => this.chooseTaskToModify(task, true)} onMouseEnter={(event) => event.target.style.cursor = 'pointer'} />
+                                    </div>
                                     <div className='trashIcon'>
                                         <BsTrashFill onClick={() => this.deleteTask(board, task)} onMouseEnter={(event) => event.target.style.cursor = 'pointer'} />
                                     </div>
                                 </div>
                             )}
 
-                            <Link to={'/addTask/' + board.id}>
-                                Add task
-                            </Link>
+                            
 
                         </div>
                     )}
 
+                    <TaskView open={this.state.isTaskViewOpen} task={this.state.taskToView} changeOpen={this.changeIsTaskViewOpen} changeTaskData={this.changeTaskData} changeTaskComments={this.changeTaskComments}/>
                 </div>
             );
         }

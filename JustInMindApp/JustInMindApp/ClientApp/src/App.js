@@ -6,10 +6,11 @@ import Navbar from './components/Navbar';
 import { BrowserRouter as Router, Switch, Route} from "react-router-dom";
 
 import { AddTask } from './components/AddTask';
-import { UpdateTask } from './components/UpdateTask';
 import { AddUser } from './components/AddUser';
 import { UpdateUser } from './components/UpdateUser';
 import { Team } from './components/Team';
+import { TaskView } from './components/TaskView';
+import { TestContainer } from './components/TestContainer';
 
 import './styles/custom.css'
 
@@ -27,9 +28,11 @@ export default class App extends Component {
 
                     //Just for test this components. Remove in release
                     <Route path='/addTask/:stateId?' exact component={AddTask} />
-                    <Route path='/updateTask/:id' exact component={UpdateTask} />
+                    
                     <Route path='/addUser' exact component={AddUser} />
                     <Route path='/updateUser/:id' exact component={UpdateUser} />
+                    <Route path='/taskView' exact component={TaskView} />
+                    <Route path='/test' exact component={TestContainer} />
                 </Switch>
             </Router>
         );
