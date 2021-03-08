@@ -10,17 +10,19 @@ export class Team extends React.Component {
         super(props);
         this.state = {
             users: [],
+            isPageLoaded: false,
         };
 
         this.getUsers = this.getUsers.bind(this);
     }
 
     getUsers() {
-        fetch('https://localhost:44330/User/getAll')
+        fetch('User/getAll')
             .then(response => response.json())
             .then(data => this.setState(
                 {
-                    users: data
+                    users: data,
+                    isPageLoaded: true
                 }))
     }
 
@@ -29,7 +31,7 @@ export class Team extends React.Component {
     }
 
     render() {
-        if (this.state.users.length == 0) {
+        if (this.state.isPageLoaded == 0) {
             return (
                 <LoadingPage />
             )
@@ -56,7 +58,7 @@ export class Team extends React.Component {
                             {this.state.users.map(user => (
                                 <tr key={user.id}>
                                     <td>{user.id}</td>
-                                    <td>{user.userName}</td>
+                                    <td>{user.name}</td>
                                     <td>{user.password}</td>
                                     <td>{user.role.name}</td>
                                     <td>
