@@ -13,11 +13,11 @@ export class Boards extends React.Component {
         super(props);
         this.state = {
             boards: [
-                { id: 1, title: "New", tasks: [] },
-                { id: 2, title: "Investigation", tasks: [] },
-                { id: 3, title: "Active", tasks: [] },
-                { id: 4, title: "In Test", tasks: [] },
-                { id: 5, title: "Done", tasks: [] },
+                { id: 0, title: "New", tasks: [] },
+                { id: 1, title: "Investigation", tasks: [] },
+                { id: 2, title: "Active", tasks: [] },
+                { id: 3, title: "In Test", tasks: [] },
+                { id: 4, title: "Done", tasks: [] },
             ],
             boardForTaskPut: [],
             draggedTask: null,
