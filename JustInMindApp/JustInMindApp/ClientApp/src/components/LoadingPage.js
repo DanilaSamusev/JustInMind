@@ -1,4 +1,5 @@
-﻿import React from 'react';
+﻿import { React } from 'react';
+
 import '../styles/loadingPage.css'
 
 export class LoadingPage extends React.Component {

@@ -1,6 +1,8 @@
-﻿import React from 'react';
-import { LoadingPage } from './LoadingPage';
+﻿import { React } from 'react';
+
+import { Navbar } from './Navbar';
 import { Link } from 'react-router-dom';
+import { LoadingPage } from './LoadingPage';
 
 import '../styles/team.scss'
 
@@ -33,12 +35,17 @@ export class Team extends React.Component {
     render() {
         if (this.state.isPageLoaded == 0) {
             return (
-                <LoadingPage />
+                <div>
+                    <Navbar />
+                    <LoadingPage />
+                </div>
             )
         }
         else {
             return (
                 <div>
+                    <Navbar />
+
                     <Link className='add_user_button' to={'/addUser'}>Add user</Link>
 
                     <table className="responstable">
