@@ -31,7 +31,7 @@ namespace JustInMindApp.Controllers
 
             if (identity == null)
             {
-                return BadRequest(new { ErrorMessage = "Invalid username or password." });
+                return BadRequest(new { ErrorMessage = "Invalid username or password!" });
             }
 
             var currentDate = DateTime.UtcNow;

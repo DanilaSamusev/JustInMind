@@ -2,6 +2,7 @@
 
 import Navbar from './Navbar';
 import { Link } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import { LoadingPage } from './LoadingPage';
 
 import '../styles/team.scss'
@@ -13,19 +14,33 @@ export class Team extends React.Component {
         this.state = {
             users: [],
             isPageLoaded: false,
+            isAuthorized: true,
         };
 
         this.getUsers = this.getUsers.bind(this);
     }
 
     getUsers() {
-        fetch('User/getAll')
-            .then(response => response.json())
-            .then(data => this.setState(
-                {
-                    users: data,
-                    isPageLoaded: true
-                }))
+        fetch('user/getAll')
+            .then(response => {
+                if (response.status == 401) {
+                    alert('You are not authorized!');
+
+                    this.setState({
+                        isAuthorized: false,
+                    });
+                }
+                else {
+                    response
+                        .json()
+                        .then(data => this.setState(
+                            {
+                                users: data,
+                                isPageLoaded: true,
+                                isAuthorized: true,
+                            }))
+                }
+            })
     }
 
     componentDidMount() {
@@ -33,7 +48,14 @@ export class Team extends React.Component {
     }
 
     render() {
-        if (this.state.isPageLoaded == 0) {
+
+        if (!this.state.isAuthorized) {
+            return (
+                <Redirect to='/login' />
+            )
+        }
+
+        if (!this.state.isPageLoaded) {
             return (
                 <div>
                     <Navbar />
