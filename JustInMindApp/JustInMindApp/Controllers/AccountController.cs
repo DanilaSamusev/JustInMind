@@ -1,7 +1,5 @@
 ﻿using JustInMindApp.Models;
 
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -11,7 +9,6 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
-using System.Threading.Tasks;
 
 namespace JustInMindApp.Controllers
 {
@@ -28,7 +25,7 @@ namespace JustInMindApp.Controllers
         }
 
         [HttpPost("token")]
-        public IActionResult Token(UserLogin userLogin)
+        public IActionResult Token([FromBody] UserLogin userLogin)
         {
             var identity = GetIdentity(userLogin);
 
@@ -68,7 +65,7 @@ namespace JustInMindApp.Controllers
             {
                 return null;
             }
-            
+
             var claims = new List<Claim>
                 {
                     new Claim(ClaimsIdentity.DefaultNameClaimType, user.Name),
@@ -83,6 +80,6 @@ namespace JustInMindApp.Controllers
                 );
 
             return claimsIdentity;
-        }       
+        }
     }
 }

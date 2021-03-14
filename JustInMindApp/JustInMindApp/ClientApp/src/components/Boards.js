@@ -1,6 +1,6 @@
-﻿import { React } from 'react';
+﻿import React from 'react';
 
-import { Navbar } from './Navbar';
+import Navbar from './Navbar';
 import { TaskView } from './TaskView';
 import { BsPencil } from "react-icons/bs";
 import { Redirect } from 'react-router-dom';
