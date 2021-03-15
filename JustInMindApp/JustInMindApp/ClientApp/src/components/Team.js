@@ -21,7 +21,16 @@ export class Team extends React.Component {
     }
 
     getUsers() {
-        fetch('user/getAll')
+
+        const requestOptions = {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                "Authorization": "Bearer " + localStorage.getItem('token')
+            },
+        }
+
+        fetch('user/getAll', requestOptions)
             .then(response => {
                 if (response.status == 401) {
                     alert('You are not authorized!');
