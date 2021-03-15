@@ -15,12 +15,26 @@ const useStyles = makeStyles((theme) => ({
 export default function AddTaskField(props) {
     const classes = useStyles();
     const [name, setName] = useState('');
-    const [stateId, setStateId] = useState(parseInt(props.boardId));
-    const [userId, setUserId] = useState(1);
     const [description, setDescription] = useState('');
-    const [urgencyId, setUrgencyId] = useState(1);
-    const [categoryId, setCategoryId] = useState(1);
-    const [attachement, setAttachement] = useState('');
+    const [user, serUser] = useState({
+        id: 1,
+        name: "Danila",
+        password: "1",
+        roleId: 1,
+    });
+    const [state, setState] = useState({
+        id: parseInt(props.board.id),
+        name: props.board.title,
+    });
+    const [urgency, setUrgency] = useState({
+        id: 0,
+        name: "Low"
+    });
+    const [comments, setComments] = useState([]);
+    const [category, setCategory] = useState({
+        id: 1,
+        name: "Improvement",
+    });
 
     let task = {};
 
@@ -30,12 +44,12 @@ export default function AddTaskField(props) {
 
     const onSubmit = () => {
         task.name = name;
-        task.stateId = stateId;
-        task.userId = userId;
         task.description = description;
-        task.urgencyId = urgencyId;
-        task.categoryId = categoryId;
-        task.attachement = attachement;
+        task.user = user;
+        task.state = state;
+        task.urgency = urgency;
+        task.comments = comments;
+        task.category = category;
 
         const requestOptions = {
             method: 'POST',
@@ -50,11 +64,11 @@ export default function AddTaskField(props) {
 
     const pushToBoard = (taskId) => {
         task.id = taskId;
-        props.addTaskToBoard(task.stateId, task)
+        props.addTaskToBoard(task.state.id, task)
     }
 
     return (
-        <ClickAwayListener onClickAway={() => props.changeFieldVisibility(props.boardId)}>
+        <ClickAwayListener onClickAway={() => props.changeFieldVisibility(props.board.id)}>
             <FormControl
                 className={classes.root}
                 noValidate

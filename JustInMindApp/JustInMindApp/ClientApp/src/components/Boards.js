@@ -180,7 +180,7 @@ export class Boards extends React.Component {
 
     addTaskToBoard = (boardId, task) => {
         let newBoards = this.state.boards;
-        newBoards[boardId - 1].tasks.push(task);
+        newBoards[boardId].tasks.push(task);
         this.setState({
             boards: newBoards,
         });
@@ -253,7 +253,7 @@ export class Boards extends React.Component {
 
                             {this.state.isFieldSeen[board.id]
                                 ?
-                                <AddTaskField changeFieldVisibility={this.changeFieldVisibility} addTaskToBoard={this.addTaskToBoard} boardId={board.id} />
+                                <AddTaskField changeFieldVisibility={this.changeFieldVisibility} addTaskToBoard={this.addTaskToBoard} board={board} />
                                 :
                                 <Button
                                     className="add-button"
