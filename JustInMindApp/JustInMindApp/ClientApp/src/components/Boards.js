@@ -9,6 +9,7 @@ import { BsTrashFill } from "react-icons/bs";
 import { TaskColorData } from './TaskColorData';
 
 import '../styles/board.css'
+import { Logout } from './Logout';
 
 export class Boards extends React.Component {
     constructor(props) {
@@ -250,6 +251,12 @@ export class Boards extends React.Component {
         this.submitTask();
     }
 
+    logout = () => {
+        this.setState({
+            isAuthorized: false,
+        })
+    }
+
     render() {
         if (!this.state.isAuthorized) {
             return (
@@ -295,11 +302,10 @@ export class Boards extends React.Component {
                                         </div>
                                     </div>
                                 )}
-
-
-
                             </div>
                         )}
+
+                        <Logout props={this.props} logout={this.logout}/>
 
                         <TaskView open={this.state.isTaskViewOpen} task={this.state.taskToView} changeOpen={this.changeIsTaskViewOpen} changeTaskData={this.changeTaskData} changeTaskComments={this.changeTaskComments} />
                     </div>

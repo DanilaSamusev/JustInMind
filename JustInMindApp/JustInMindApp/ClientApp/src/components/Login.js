@@ -76,7 +76,11 @@ export function Login(props) {
                 else {
                     return response
                         .json()
-                        .then(json => localStorage.setItem('token', json.token))
+                        .then(json => {
+                            localStorage.setItem('token', json.token);
+                            localStorage.setItem('userName', json.userName);
+                            localStorage.setItem('userRole', json.userRole);
+                        })
                         .then(() => props.history.push('/'));
                 }
             })

@@ -1,5 +1,6 @@
 ﻿using JustInMindApp.Models;
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -49,10 +50,18 @@ namespace JustInMindApp.Controllers
             var response = new
             {
                 token = encodedToken,
-                userName = identity.Name,
+                userName = token.Claims.ToList()[0].Value,
+                userRole = token.Claims.ToList()[1].Value,
             };
 
             return new ObjectResult(response);
+        }
+
+        [HttpGet()]
+        [Authorize]
+        public IActionResult Authorized()
+        {
+            return Ok();
         }
 
         private ClaimsIdentity GetIdentity(UserLogin userLogin)
