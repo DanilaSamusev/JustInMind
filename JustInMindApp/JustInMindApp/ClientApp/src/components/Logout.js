@@ -1,8 +1,6 @@
 ﻿import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar'
-import Tooltip from '@material-ui/core/Tooltip';
-import IconButton from '@material-ui/core/IconButton';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -50,11 +48,11 @@ export function Logout(props) {
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        position: 'relative',
+        position: 'absolute',
+        marginTop: theme.spacing(-7.9),
+        marginLeft: theme.spacing(230),
         display: 'flex',
         alignItems: 'center',
-        marginLeft: '240px',
-        marginTop: '5px',
     },
 
     logoutButton: {

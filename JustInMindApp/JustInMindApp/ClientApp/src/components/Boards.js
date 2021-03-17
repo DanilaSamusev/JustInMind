@@ -1,6 +1,7 @@
 ﻿import React from 'react';
 
 import Navbar from './Navbar';
+import { Logout } from './Logout';
 import { TaskView } from './TaskView';
 import { BsPencil } from "react-icons/bs";
 import { Redirect } from 'react-router-dom';
@@ -9,7 +10,6 @@ import { BsTrashFill } from "react-icons/bs";
 import { TaskColorData } from './TaskColorData';
 
 import '../styles/board.css'
-import { Logout } from './Logout';
 
 export class Boards extends React.Component {
     constructor(props) {
@@ -272,6 +272,7 @@ export class Boards extends React.Component {
         else {
             return (
                 <div>
+                    
                     <Navbar />
 
                     <div className='tasksExplorer'>
@@ -305,7 +306,7 @@ export class Boards extends React.Component {
                             </div>
                         )}
 
-                        <Logout props={this.props} logout={this.logout}/>
+                        <Logout logout={this.logout} />
 
                         <TaskView open={this.state.isTaskViewOpen} task={this.state.taskToView} changeOpen={this.changeIsTaskViewOpen} changeTaskData={this.changeTaskData} changeTaskComments={this.changeTaskComments} />
                     </div>

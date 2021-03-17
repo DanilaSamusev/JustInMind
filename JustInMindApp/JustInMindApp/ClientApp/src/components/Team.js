@@ -1,6 +1,7 @@
 ﻿import React from 'react';
 
 import Navbar from './Navbar';
+import { Logout } from './Logout';
 import { Link } from 'react-router-dom';
 import { Redirect } from 'react-router-dom';
 import { LoadingPage } from './LoadingPage';
@@ -52,6 +53,12 @@ export class Team extends React.Component {
             })
     }
 
+    logout = () => {
+        this.setState({
+            isAuthorized: false,
+        })
+    }
+
     componentDidMount() {
         this.getUsers();
     }
@@ -76,6 +83,8 @@ export class Team extends React.Component {
             return (
                 <div>
                     <Navbar />
+
+                    <Logout logout={this.logout} />
 
                     <Link className='add_user_button' to={'/addUser'}>Add user</Link>
 
