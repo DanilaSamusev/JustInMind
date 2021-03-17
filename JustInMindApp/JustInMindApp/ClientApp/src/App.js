@@ -1,15 +1,12 @@
 import React, { Component } from 'react';
-
-import { Home } from './components/Home';
-import { Boards } from './components/Boards';
-import Navbar from './components/Navbar';
 import { BrowserRouter as Router, Switch, Route} from "react-router-dom";
 
+import { Team } from './components/Team';
+import { Login } from './components/Login';
+import { Boards } from './components/Boards';
 import { AddTask } from './components/AddTask';
 import { AddUser } from './components/AddUser';
 import { UpdateUser } from './components/UpdateUser';
-import { Team } from './components/Team';
-import { TaskView } from './components/TaskView';
 
 import './styles/custom.css'
 
@@ -19,11 +16,12 @@ export default class App extends Component {
     render() {
         return (
             <Router>
-                <Navbar />
+                
                 <Switch>
-                    <Route path='/' exact component={Home} />
+                    <Route path='/' exact component={Boards} />
                     <Route path='/team' exact component={Team} />
                     <Route path='/boards' exact component={Boards} />
+                    <Route path='/login' exact component={Login} />
 
                     //Just for test this components. Remove in release
                     <Route path='/addTask/:stateId?' exact component={AddTask} /> 

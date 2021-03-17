@@ -1,6 +1,10 @@
 ﻿import React from 'react';
-import { LoadingPage } from './LoadingPage';
+
+import Navbar from './Navbar';
+import { Logout } from './Logout';
 import { Link } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
+import { LoadingPage } from './LoadingPage';
 
 import '../styles/team.scss'
 
@@ -11,19 +15,48 @@ export class Team extends React.Component {
         this.state = {
             users: [],
             isPageLoaded: false,
+            isAuthorized: true,
         };
 
         this.getUsers = this.getUsers.bind(this);
     }
 
     getUsers() {
-        fetch('User/getAll')
-            .then(response => response.json())
-            .then(data => this.setState(
-                {
-                    users: data,
-                    isPageLoaded: true
-                }))
+
+        const requestOptions = {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                "Authorization": "Bearer " + localStorage.getItem('token')
+            },
+        }
+
+        fetch('user/getAll', requestOptions)
+            .then(response => {
+                if (response.status == 401) {
+                    alert('You are not authorized!');
+
+                    this.setState({
+                        isAuthorized: false,
+                    });
+                }
+                else {
+                    response
+                        .json()
+                        .then(data => this.setState(
+                            {
+                                users: data,
+                                isPageLoaded: true,
+                                isAuthorized: true,
+                            }))
+                }
+            })
+    }
+
+    logout = () => {
+        this.setState({
+            isAuthorized: false,
+        })
     }
 
     componentDidMount() {
@@ -31,14 +64,28 @@ export class Team extends React.Component {
     }
 
     render() {
-        if (this.state.isPageLoaded == 0) {
+
+        if (!this.state.isAuthorized) {
             return (
-                <LoadingPage />
+                <Redirect to='/login' />
+            )
+        }
+
+        if (!this.state.isPageLoaded) {
+            return (
+                <div>
+                    <Navbar />
+                    <LoadingPage />
+                </div>
             )
         }
         else {
             return (
                 <div>
+                    <Navbar />
+
+                    <Logout logout={this.logout} />
+
                     <Link className='add_user_button' to={'/addUser'}>Add user</Link>
 
                     <table className="responstable">

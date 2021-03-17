@@ -2,6 +2,7 @@
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 using System.Linq;
 
@@ -10,6 +11,7 @@ namespace JustInMindApp.Controllers
     [Route("[controller]")]
     [Produces("application/json")]
     [ApiController]
+    [Authorize]
     public class TaskController : ControllerBase
     {
         private readonly JustInMindContext dbContext;
