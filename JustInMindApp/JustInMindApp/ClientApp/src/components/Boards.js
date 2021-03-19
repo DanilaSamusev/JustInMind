@@ -251,6 +251,15 @@ export class Boards extends React.Component {
         this.submitTask();
     }
 
+    getTaskId = () => {
+        if (this.state.taskToView == null) {
+            return null
+        }
+        else {
+            return this.state.taskToView.id
+        }
+    }
+
     logout = () => {
         this.setState({
             isAuthorized: false,
@@ -272,7 +281,7 @@ export class Boards extends React.Component {
         else {
             return (
                 <div>
-                    
+
                     <Navbar />
 
                     <div className='tasksExplorer'>
@@ -308,7 +317,7 @@ export class Boards extends React.Component {
 
                         <Logout logout={this.logout} />
 
-                        <TaskView open={this.state.isTaskViewOpen} task={this.state.taskToView} changeOpen={this.changeIsTaskViewOpen} changeTaskData={this.changeTaskData} changeTaskComments={this.changeTaskComments} />
+                        <TaskView taskId={this.getTaskId()} open={this.state.isTaskViewOpen} task={this.state.taskToView} changeOpen={this.changeIsTaskViewOpen} changeTaskData={this.changeTaskData} changeTaskComments={this.changeTaskComments} />
                     </div>
                 </div>
             );

@@ -14,31 +14,96 @@ import '../styles/taskView.css';
 
 export function TaskView(props) {
     const classes = useStyles();
-    const [taskName, setTaskName] = useState(null);
+    const [taskName, setTaskName] = useState('1111');
     const [taskDescription, setTaskDescription] = useState(null);
     const [taskComment, setTaskComment] = useState(null);
+
+    const [task, setTask] = useState(null);
 
     const handleClose = () => {
         setTaskName(null);
         setTaskDescription(null);
         setTaskComment(null);
-
+        setTask(null);
         props.changeOpen(false);
     };
 
-    if (props.task === null) {
+    const changeTaskName = (value) => {
+        const changedTask = { ...task };
+        changedTask.name = value;
+        setTask(changedTask);
+    };
+
+    const changeTaskDescription = (value) => {
+        const changedTask = { ...task };
+        changedTask.description = value;
+        setTask(changedTask);
+    }
+
+    const changeTaskComment = (value) => {
+        if (value === null && value === '') {
+            return;
+        }
+
+        setTaskComment(value);
+    }
+
+    const addTaskComment = (value) => {
+        const changedTask = { ...task };
+        changedTask.comments.push({ taskId: changedTask.id, text: value, userId: localStorage.getItem('userIs') });
+        setTask(changedTask);
+    }
+
+    const submitTask = () => {
+        const requestOptions = {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                "Authorization": "Bearer " + localStorage.getItem('token')
+            },
+            body: JSON.stringify(task)
+        }
+
+        fetch('task', requestOptions)
+            .then(response => {
+                if (response.status == 401) {
+                    alert('You are not authorized!');
+                }
+            });
+    }
+
+    useEffect(() => {
+
+        if (props.taskId == null) {
+            return
+        }
+
+        const requestOptions = {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                "Authorization": "Bearer " + localStorage.getItem('token')
+            }
+        }
+
+        fetch('task/' + props.taskId, requestOptions)
+            .then(response => {
+                if (response.status == 401) {
+                    alert('You are not authorized!');
+                }
+                else {
+                    response
+                        .json()
+                        .then(json => setTask(json))
+
+                }
+            });
+    }, [props.taskId]);
+
+    if (task === null) {
         return (
             <div />
         )
-    }
-    else {
-        if (taskName === null) {
-            setTaskName(props.task.name);
-        }
-
-        if (taskDescription === null) {
-            setTaskDescription(props.task.description);
-        }
     }
 
     return (
@@ -49,19 +114,19 @@ export function TaskView(props) {
                         <div>
                             <textarea
                                 className='taskName'
-                                value={taskName}
-                                onChange={(e) => setTaskName(e.target.value)}
+                                value={task.name}
+                                onChange={(e) => changeTaskName(e.target.value)}
                             />
                         </div>
                         <div className='stateLabel'>
-                            in {props.task.state.name} state
-					</div>
+                            in {task.state.name} state
+					    </div>
                         <div className='ownerContainer'>
                             <div className='ownerLabel'>Owner:</div>
-                            <Tooltip title={props.task.user.name} interactive arrow placement="right-start">
-                                <Avatar className={classes.orange} >{props.task.user.name.substring(0, 1)}</Avatar>
+                            <Tooltip title={task.user.name} interactive arrow placement="right-start">
+                                <Avatar className={classes.orange} >{task.user.name.substring(0, 1)}</Avatar>
                             </Tooltip>
-                            
+
                         </div>
                         <TextField
                             className={classes.descriptionField}
@@ -71,20 +136,19 @@ export function TaskView(props) {
                             rowsMax={4}
                             variant="outlined"
                             value={taskDescription}
-                            onChange={(e) => setTaskDescription(e.target.value)}
+                            onChange={(e) => changeTaskDescription(e.target.value)}
                         />
                         <TextField
                             className={classes.commentField}
                             id="outlined-textarea"
                             label="Add your comment"
-                            placeholder="Placeholder"
                             multiline
                             variant="outlined"
-                            onChange={(e) => setTaskComment(e.target.value)}
+                            onChange={(e) => changeTaskComment(e.target.value)}
                         />
-                        <Button className={classes.leaveCommentButton} variant="contained" onClick={() => props.changeTaskComments(taskComment)} >Leave comment</Button>
+                        <Button className={classes.leaveCommentButton} variant="contained" onClick={() => addTaskComment(taskComment)} >Leave comment</Button>
                         <div className={classes.taskCommentsContainer}>
-                            {props.task.comments.map((comment) => {
+                            {task.comments.map((comment) => {
                                 return <div key={comment.id}>{comment.text}</div>
                             })}
                         </div>
@@ -94,7 +158,7 @@ export function TaskView(props) {
                     <Button onClick={handleClose} color="primary">
                         Cancel
                     </Button>
-                    <Button onClick={() => props.changeTaskData(taskName, taskDescription)} color="primary">
+                    <Button onClick={() => submitTask()} color="primary">
                         Save
                     </Button>
                 </DialogActions>
