@@ -9,19 +9,22 @@ import Dialog from '@material-ui/core/Dialog';
 import TextField from '@material-ui/core/TextField';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
 
 import '../styles/taskView.css';
+import { TaskStatesData } from '../ComponentsData/TaskStatesData';
+import { TaskCategoriesData } from '../ComponentsData/TaskCategoriesData';
 
 export function TaskView(props) {
     const classes = useStyles();
-    const [taskName, setTaskName] = useState('1111');
     const [taskDescription, setTaskDescription] = useState(null);
     const [taskComment, setTaskComment] = useState(null);
 
     const [task, setTask] = useState(null);
 
     const handleClose = () => {
-        setTaskName(null);
         setTaskDescription(null);
         setTaskComment(null);
         setTask(null);
@@ -46,6 +49,18 @@ export function TaskView(props) {
         }
 
         setTaskComment(value);
+    }
+
+    const changeTaskState = (value) => {
+        const changedTask = { ...task };
+        changedTask.state.id = value;
+        setTask(changedTask);
+    }
+
+    const changeTaskCategory = (value) => {
+        const changedTask = { ...task };
+        changedTask.category.id = value;
+        setTask(changedTask);
     }
 
     const addTaskComment = (value) => {
@@ -111,6 +126,7 @@ export function TaskView(props) {
             <Dialog open={props.open} onClose={handleClose} aria-labelledby="form-dialog-title">
                 <DialogContent>
                     <div className={classes.taskView}>
+
                         <div>
                             <textarea
                                 className='taskName'
@@ -118,9 +134,26 @@ export function TaskView(props) {
                                 onChange={(e) => changeTaskName(e.target.value)}
                             />
                         </div>
-                        <div className='stateLabel'>
-                            in {task.state.name} state
+
+                        <div className={classes.stateContainer}>
+                            in <FormControl className={classes.formControl}>
+                                <Select
+                                    value={task.state.id}
+                                    onChange={(e) => changeTaskState(e.target.value)}
+                                    className={classes.selectEmpty}
+                                    inputProps={{ 'aria-label': 'Without label' }}
+                                >
+                                    {TaskStatesData.map((data, index) => {
+                                        return (
+                                            <MenuItem key={index} value={data.id}>{data.name}</MenuItem>
+                                        );
+                                    })}
+                                </Select>
+
+                            </FormControl>
+                            state
 					    </div>
+
                         <div className='ownerContainer'>
                             <div className='ownerLabel'>Owner:</div>
                             <Tooltip title={task.user.name} interactive arrow placement="right-start">
@@ -152,6 +185,28 @@ export function TaskView(props) {
                                 return <div key={comment.id}>{comment.text}</div>
                             })}
                         </div>
+
+                        <div className={classes.categoryContainer}>
+                            <FormControl className={classes.categorySelect}>
+                                <Select
+                                    value={task.category.id}
+                                    onChange={(e) => changeTaskCategory(e.target.value)}
+                                    className={classes.selectEmpty}
+                                    inputProps={{ 'aria-label': 'Without label' }}
+                                >
+                                    {TaskCategoriesData.map((data, index) => {
+                                        return (
+                                            <MenuItem key={index} value={data.id}>
+                                                <Tooltip title={data.name}>
+                                                    <div className={ classes.categoryImage}>{data.image}</div>
+                                                </Tooltip>
+                                            </MenuItem>
+                                        );
+                                    })}
+                                </Select>
+                            </FormControl>
+                        </div>
+
                     </div>
                 </DialogContent>
                 <DialogActions>
@@ -215,4 +270,35 @@ const useStyles = makeStyles((theme) => ({
         marginLeft: '20px',
         marginTop: '20px',
     },
+
+    formControl: {
+        minWidth: '30px',
+        width: '80px',
+    },
+
+    categorySelect: {
+        minWidth: '10px',
+        width: '50px',
+    },
+
+    categoryImage: {
+        marginLeft: '5px',
+    },
+
+    stateContainer: {
+        display: 'flex',
+        marginLeft: '20px',
+        color: '#5e6c84',
+        fontSize: '12px',
+        fontWeight: '500',
+        lineHeight: '16px',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        width: '130px',
+    },
+
+    categoryContainer: {
+        marginLeft: '270px',
+    }
+
 }));
