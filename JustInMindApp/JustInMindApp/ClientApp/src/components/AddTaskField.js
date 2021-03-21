@@ -14,42 +14,22 @@ const useStyles = makeStyles((theme) => ({
 
 export default function AddTaskField(props) {
     const classes = useStyles();
-    const [name, setName] = useState('');
-    const [description, setDescription] = useState('');
-    const [user, serUser] = useState({
-        id: 1,
-        name: "Danila",
-        password: "1",
-        roleId: 1,
-    });
-    const [state, setState] = useState({
-        id: parseInt(props.board.id),
-        name: props.board.title,
-    });
-    const [urgency, setUrgency] = useState({
-        id: 0,
-        name: "Low"
-    });
-    const [comments, setComments] = useState([]);
-    const [category, setCategory] = useState({
-        id: 1,
-        name: "Improvement",
-    });
+    const [taskName, setTaskName] = useState('');
 
     let task = {};
+    let addedTask = {};
 
     const handleChange = (event) => {
-        setName(event.target.value);
+        setTaskName(event.target.value);
     };
 
     const onSubmit = () => {
-        task.name = name;
-        task.description = description;
-        task.user = user;
-        task.state = state;
-        task.urgency = urgency;
-        task.comments = comments;
-        task.category = category;
+        task.name = taskName;
+        task.description = '';
+        task.urgencyId = 0;
+        task.categoryId = 0;
+        task.userId = 0;
+        task.stateId = props.board.id;
 
         const requestOptions = {
             method: 'POST',
@@ -63,9 +43,23 @@ export default function AddTaskField(props) {
     };
 
     const pushToBoard = (taskId) => {
-        task.id = taskId;
-        props.addTaskToBoard(task.state.id, task)
+        fetch('https://localhost:44330/Task/' + taskId)
+            .then(response => response.json())
+            .then(data => setAddedTask(data));
     }
+
+    const setAddedTask = (data) => {
+        addedTask.id = data.id;
+        addedTask.name = data.name;
+        addedTask.description = data.description;
+        addedTask.user = data.user;
+        addedTask.state = data.state;
+        addedTask.urgency = data.urgency;
+        addedTask.category = data.category;
+
+        console.log(addedTask);
+        props.addTaskToBoard(addedTask.state.id, addedTask);
+    };
 
     return (
         <ClickAwayListener onClickAway={() => props.changeFieldVisibility(props.board.id)}>
@@ -79,7 +73,7 @@ export default function AddTaskField(props) {
                     label="Task name"
                     multiline
                     rowsMax={4}
-                    value={name}
+                    value={taskName}
                     onChange={handleChange}
                     size="small"
                 />

@@ -41,7 +41,13 @@ namespace JustInMindApp.Controllers
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
-            var task = dbContext.Tasks.FirstOrDefault(t => t.Id == id);
+            var task = dbContext.Tasks
+                .Include(t => t.User)
+                .Include(t => t.Urgency)
+                .Include(t => t.Category)
+                .Include(t => t.Comments)
+                .Include(t => t.State)
+                .FirstOrDefault(t => t.Id == id);
 
             if (task != null)
             {
