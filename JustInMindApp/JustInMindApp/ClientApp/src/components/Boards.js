@@ -300,6 +300,8 @@ export class Boards extends React.Component {
                     
                     <Navbar />
 
+                    <Logout logout={this.logout} />
+
                     <div className='tasksExplorer'>
                         {this.state.boards.map(board =>
                             <div className='board'
@@ -345,8 +347,6 @@ export class Boards extends React.Component {
                                 }
                             </div>
                         )}
-
-                        <Logout logout={this.logout} />
 
                         <TaskView open={this.state.isTaskViewOpen} task={this.state.taskToView} changeOpen={this.changeIsTaskViewOpen} changeTaskData={this.changeTaskData} changeTaskComments={this.changeTaskComments} />
                     </div>

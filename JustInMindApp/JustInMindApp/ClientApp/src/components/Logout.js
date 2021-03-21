@@ -49,8 +49,8 @@ export function Logout(props) {
 const useStyles = makeStyles((theme) => ({
     root: {
         position: 'absolute',
-        marginTop: theme.spacing(-7.9),
-        marginLeft: theme.spacing(230),
+        marginTop: theme.spacing(-8),
+        right: theme.spacing(2),
         display: 'flex',
         alignItems: 'center',
     },
