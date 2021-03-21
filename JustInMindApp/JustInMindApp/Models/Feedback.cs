@@ -1,6 +1,6 @@
 ﻿namespace JustInMindApp.Models
 {
-    public partial class Feedback
+    public class Feedback
     {
         public int Id { get; set; }
         public int? Rate { get; set; }

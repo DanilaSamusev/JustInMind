@@ -45,7 +45,10 @@ namespace JustInMindApp.Controllers
         {
             var task = dbContext.Tasks
                 .Include(t => t.User)
+                .Include(t => t.Urgency)
+                .Include(t => t.Category)
                 .Include(t => t.Comments)
+                .Include(t => t.State)
                 .FirstOrDefault(t => t.Id == id);
 
             if (task != null)
@@ -63,7 +66,7 @@ namespace JustInMindApp.Controllers
             {
                 dbContext.Tasks.Add(task);
                 dbContext.SaveChanges();
-                return Ok();
+                return Ok(task.Id);
             }
 
             else return BadRequest();

@@ -5,10 +5,10 @@
 }
 
 .tasksExplorer {
-    width: 100vw;
-    height: 100vh;
+    margin-top: 10px;
     display: flex;
     align-items: flex-start;
+    justify-content: center;
 }
 
 .board {

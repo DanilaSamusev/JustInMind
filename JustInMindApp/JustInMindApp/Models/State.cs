@@ -2,7 +2,7 @@
 
 namespace JustInMindApp.Models
 {
-    public partial class State
+    public class State
     {
         public int Id { get; set; }
         public string Name { get; set; }
