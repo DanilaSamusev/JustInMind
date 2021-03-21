@@ -33,7 +33,10 @@ export default function AddTaskField(props) {
 
         const requestOptions = {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'application/json',
+                "Authorization": "Bearer " + localStorage.getItem('token')
+            },
             body: JSON.stringify(task)
         }
 
@@ -43,7 +46,15 @@ export default function AddTaskField(props) {
     };
 
     const pushToBoard = (taskId) => {
-        fetch('https://localhost:44330/Task/' + taskId)
+        const requestOptions = {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                "Authorization": "Bearer " + localStorage.getItem('token')
+            },
+        };
+
+        fetch('https://localhost:44330/Task/' + taskId, requestOptions)
             .then(response => response.json())
             .then(data => setAddedTask(data));
     }
@@ -57,7 +68,6 @@ export default function AddTaskField(props) {
         addedTask.urgency = data.urgency;
         addedTask.category = data.category;
 
-        console.log(addedTask);
         props.addTaskToBoard(addedTask.state.id, addedTask);
     };
 

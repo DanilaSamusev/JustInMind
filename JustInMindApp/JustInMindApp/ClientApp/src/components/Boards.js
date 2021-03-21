@@ -11,7 +11,6 @@ import { TaskColorData } from './TaskColorData';
 import { Redirect } from 'react-router-dom';
 import { LoadingPage } from './LoadingPage';
 import { BsTrashFill } from "react-icons/bs";
-import { TaskColorData } from './TaskColorData';
 
 import '../styles/board.css'
 
@@ -253,9 +252,9 @@ export class Boards extends React.Component {
 
     changeFieldVisibility = (boardId) => {
         let isCurrentFieldVisible = this.state.isFieldVisible;
-        isCurrentFieldSeen[boardId] = !isCurrentFieldSeen[boardId];
+        isCurrentFieldVisible[boardId] = !isCurrentFieldVisible[boardId];
         this.setState({
-            isFieldVisible: isCurrentFieldSeen,
+            isFieldVisible: isCurrentFieldVisible,
         });
     }
 
