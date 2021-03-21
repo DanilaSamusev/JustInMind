@@ -80,6 +80,7 @@ export function Login(props) {
                             localStorage.setItem('token', json.token);
                             localStorage.setItem('userName', json.userName);
                             localStorage.setItem('userRole', json.userRole);
+                            localStorage.setItem('userId', json.userId);
                         })
                         .then(() => props.history.push('/'));
                 }

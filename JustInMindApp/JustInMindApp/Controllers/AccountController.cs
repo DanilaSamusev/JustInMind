@@ -52,6 +52,7 @@ namespace JustInMindApp.Controllers
                 token = encodedToken,
                 userName = token.Claims.ToList()[0].Value,
                 userRole = token.Claims.ToList()[1].Value,
+                userId = token.Claims.ToList()[2].Value,
             };
 
             return new ObjectResult(response);
@@ -78,7 +79,8 @@ namespace JustInMindApp.Controllers
             var claims = new List<Claim>
                 {
                     new Claim(ClaimsIdentity.DefaultNameClaimType, user.Name),
-                    new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role.Name)
+                    new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role.Name),
+                    new Claim("userId", user.Id.ToString()),
                 };
 
             var claimsIdentity = new ClaimsIdentity(

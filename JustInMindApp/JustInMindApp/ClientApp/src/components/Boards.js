@@ -15,13 +15,7 @@ export class Boards extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            boards: [
-                { id: 0, title: "New", tasks: [] },
-                { id: 1, title: "Investigation", tasks: [] },
-                { id: 2, title: "Active", tasks: [] },
-                { id: 3, title: "In Test", tasks: [] },
-                { id: 4, title: "Done", tasks: [] },
-            ],
+            boards: null,
             boardForTaskPut: [],
             draggedTask: null,
             taskToView: null,
@@ -36,6 +30,16 @@ export class Boards extends React.Component {
     }
 
     fetchGetAllTasks = () => {
+
+        this.setState({
+            boards: [
+                { id: 0, title: "New", tasks: [] },
+                { id: 1, title: "Investigation", tasks: [] },
+                { id: 2, title: "Active", tasks: [] },
+                { id: 3, title: "In Test", tasks: [] },
+                { id: 4, title: "Done", tasks: [] },
+            ],
+        })
 
         const requestOptions = {
             method: 'GET',
@@ -233,13 +237,6 @@ export class Boards extends React.Component {
             });
     }
 
-    changeTaskData = (taskName, taskDescription) => {
-        this.state.taskToView.name = taskName;
-        this.state.taskToView.description = taskDescription;
-
-        this.submitTask();
-    }
-
     changeTaskComments = (comment) => {
         let task = this.state.taskToView
         task.comments.push({ taskId: this.state.taskToView.id, text: comment, userId: 11 });
@@ -317,7 +314,7 @@ export class Boards extends React.Component {
 
                         <Logout logout={this.logout} />
 
-                        <TaskView taskId={this.getTaskId()} open={this.state.isTaskViewOpen} task={this.state.taskToView} changeOpen={this.changeIsTaskViewOpen} changeTaskData={this.changeTaskData} changeTaskComments={this.changeTaskComments} />
+                        <TaskView taskId={this.getTaskId()} open={this.state.isTaskViewOpen} changeOpen={this.changeIsTaskViewOpen} reloadBoard={this.fetchGetAllTasks}/>
                     </div>
                 </div>
             );

@@ -12,10 +12,10 @@ import DialogContent from '@material-ui/core/DialogContent';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-
-import '../styles/taskView.css';
 import { TaskStatesData } from '../ComponentsData/TaskStatesData';
 import { TaskCategoriesData } from '../ComponentsData/TaskCategoriesData';
+
+import '../styles/taskView.css';
 
 export function TaskView(props) {
     const classes = useStyles();
@@ -53,19 +53,19 @@ export function TaskView(props) {
 
     const changeTaskState = (value) => {
         const changedTask = { ...task };
-        changedTask.state.id = value;
+        changedTask.stateId = value;
         setTask(changedTask);
     }
 
     const changeTaskCategory = (value) => {
         const changedTask = { ...task };
-        changedTask.category.id = value;
+        changedTask.categoryId = value;
         setTask(changedTask);
     }
 
     const addTaskComment = (value) => {
         const changedTask = { ...task };
-        changedTask.comments.push({ taskId: changedTask.id, text: value, userId: localStorage.getItem('userIs') });
+        changedTask.comments.push({ taskId: changedTask.id, text: value, userId: Number(localStorage.getItem('userId'))});
         setTask(changedTask);
     }
 
@@ -84,7 +84,8 @@ export function TaskView(props) {
                 if (response.status == 401) {
                     alert('You are not authorized!');
                 }
-            });
+            })
+            .then(props.reloadBoard);
     }
 
     useEffect(() => {
@@ -123,8 +124,8 @@ export function TaskView(props) {
 
     return (
         <div>
-            <Dialog open={props.open} onClose={handleClose} aria-labelledby="form-dialog-title">
-                <DialogContent>
+            <Dialog className={classes.taskViewDialog} open={props.open} onClose={handleClose} aria-labelledby="form-dialog-title">
+                <DialogContent >
                     <div className={classes.taskView}>
 
                         <div>
@@ -138,7 +139,7 @@ export function TaskView(props) {
                         <div className={classes.stateContainer}>
                             in <FormControl className={classes.formControl}>
                                 <Select
-                                    value={task.state.id}
+                                    value={task.stateId}
                                     onChange={(e) => changeTaskState(e.target.value)}
                                     className={classes.selectEmpty}
                                     inputProps={{ 'aria-label': 'Without label' }}
@@ -189,7 +190,7 @@ export function TaskView(props) {
                         <div className={classes.categoryContainer}>
                             <FormControl className={classes.categorySelect}>
                                 <Select
-                                    value={task.category.id}
+                                    value={task.categoryId}
                                     onChange={(e) => changeTaskCategory(e.target.value)}
                                     className={classes.selectEmpty}
                                     inputProps={{ 'aria-label': 'Without label' }}
@@ -224,8 +225,11 @@ export function TaskView(props) {
 
 const useStyles = makeStyles((theme) => ({
 
-    '.MuiOutlinedInput-multiline': {
-        width: '300px',
+    taskViewDialog: {
+
+        '& .MuiDialogContent-root': {
+            height: '520px',
+        },
     },
 
     commentField: {

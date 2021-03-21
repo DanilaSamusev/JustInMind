@@ -9,7 +9,7 @@ namespace JustInMindApp
         public const string Issuer = "MyAuthServer";
         public const string Audience = "MyAuthClient";
         const string Key = "mysupersecret_secretkey!123";
-        public const int LifeTime = 10;
+        public const int LifeTime = 30;
 
         public static SymmetricSecurityKey GetSymmetricSecurityKey()
         {
