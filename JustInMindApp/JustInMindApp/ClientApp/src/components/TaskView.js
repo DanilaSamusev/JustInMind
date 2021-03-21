@@ -50,7 +50,7 @@ export function TaskView(props) {
                             <textarea
                                 className='taskName'
                                 value={taskName}
-                                onChange={(e) =>  setTaskName(e.target.value)}
+                                onChange={(e) => setTaskName(e.target.value)}
                             />
                         </div>
                         <div className='stateLabel'>

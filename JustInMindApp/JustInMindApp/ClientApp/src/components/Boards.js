@@ -1,13 +1,17 @@
 ﻿import React from 'react';
 
+import Navbar from './Navbar';
+import { Logout } from './Logout';
 import { TaskView } from './TaskView';
 import { BsPencil } from "react-icons/bs";
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
 import AddTaskField from './AddTaskField';
 import { TaskColorData } from './TaskColorData';
+import { Redirect } from 'react-router-dom';
 import { LoadingPage } from './LoadingPage';
 import { BsTrashFill } from "react-icons/bs";
+import { TaskColorData } from './TaskColorData';
 
 import '../styles/board.css'
 
@@ -27,8 +31,9 @@ export class Boards extends React.Component {
             taskToView: null,
             isTaskViewOpen: false,
             isPageLoaded: false,
-            isFieldSeen: [],
-        };      
+            isFieldVisible: [],
+            isAuthorized: true,
+        };
     }
 
     componentDidMount() {
@@ -36,13 +41,38 @@ export class Boards extends React.Component {
     }
 
     fetchGetAllTasks = () => {
-        fetch('task/getAll')
-            .then(response => response.json())
-            .then(data => this.setTasksToBoards(data, this.state.boards))
+
+        const requestOptions = {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                "Authorization": "Bearer " + localStorage.getItem('token')
+            },
+        }
+
+        fetch('task/getAll', requestOptions)
+            .then(response => {
+                if (response.status == 401) {
+                    alert('You are not authorized!');
+
+                    this.setState({
+                        isAuthorized: false,
+                    });
+                }
+                else {
+                    response.json().
+                        then(data => {
+
+                            this.setState({
+                                isAuthorized: true,
+                            })
+                            this.setTasksToBoards(data, this.state.boards);
+                        });
+                }
+            })
     }
 
     dragStartHandler = (event, board, task) => {
-
         this.setState(
             {
                 boardForTaskPut: board,
@@ -82,7 +112,6 @@ export class Boards extends React.Component {
     }
 
     setTasksToBoards = (tasks, boards) => {
-
         tasks.forEach((task) => {
             boards.find((board) => { return board.id == task.state.id }).tasks.push(task);
         });
@@ -113,11 +142,23 @@ export class Boards extends React.Component {
     fetchUpdateTask = (task) => {
         const requestOptions = {
             method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'application/json',
+                "Authorization": "Bearer " + localStorage.getItem('token')
+            },
             body: JSON.stringify(task)
         }
 
-        fetch('Task', requestOptions);
+        fetch('task', requestOptions)
+            .then(response => {
+                if (response.status == 401) {
+                    alert('You are not authorized!');
+
+                    this.setState({
+                        isAuthorized: false,
+                    });
+                }
+            });
     }
 
     deleteTask = (board, task) => {
@@ -136,10 +177,22 @@ export class Boards extends React.Component {
     fetchDeleteTask = (taskId) => {
         const requestOptions = {
             method: 'DELETE',
-            headers: { 'Content-Type': 'application/json' }
+            headers: {
+                'Content-Type': 'application/json',
+                "Authorization": "Bearer " + localStorage.getItem('token')
+            }
         }
 
-        fetch('Task/' + taskId, requestOptions);
+        fetch('task/' + taskId, requestOptions)
+            .then(response => {
+                if (response.status == 401) {
+                    alert('You are not authorized!');
+
+                    this.setState({
+                        isAuthorized: false,
+                    });
+                }
+            });;
     }
 
     chooseTaskToModify = (task, isOpen) => {
@@ -166,12 +219,23 @@ export class Boards extends React.Component {
     submitTask() {
         const requestOptions = {
             method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'application/json',
+                "Authorization": "Bearer " + localStorage.getItem('token')
+            },
             body: JSON.stringify(this.state.taskToView)
         }
 
-        fetch('Task', requestOptions)
-            .then(response => response.status)
+        fetch('task', requestOptions)
+            .then(response => {
+                if (response.status == 401) {
+                    alert('You are not authorized!');
+
+                    this.setState({
+                        isAuthorized: false,
+                    });
+                }
+            });
     }
 
     onAddTaskFieldBlur = (boardId) => {
@@ -188,10 +252,10 @@ export class Boards extends React.Component {
     }
 
     changeFieldVisibility = (boardId) => {
-        let isCurrentFieldSeen = this.state.isFieldSeen;
+        let isCurrentFieldVisible = this.state.isFieldVisible;
         isCurrentFieldSeen[boardId] = !isCurrentFieldSeen[boardId];
         this.setState({
-            isFieldSeen: isCurrentFieldSeen,
+            isFieldVisible: isCurrentFieldSeen,
         });
     }
 
@@ -204,7 +268,7 @@ export class Boards extends React.Component {
 
     changeTaskComments = (comment) => {
         let task = this.state.taskToView
-        task.comments.push({ taskId: this.state.taskToView.id, text: comment, userId: 11});
+        task.comments.push({ taskId: this.state.taskToView.id, text: comment, userId: 11 });
 
         this.setState({
             taskToView: task
@@ -212,8 +276,19 @@ export class Boards extends React.Component {
 
         this.submitTask();
     }
-    
+
+    logout = () => {
+        this.setState({
+            isAuthorized: false,
+        })
+    }
+
     render() {
+        if (!this.state.isAuthorized) {
+            return (
+                <Redirect to='/login' />
+            )
+        }
 
         if (!this.state.isPageLoaded) {
             return (
@@ -222,53 +297,60 @@ export class Boards extends React.Component {
         }
         else {
             return (
-                <div className='tasksExplorer'>
-                    {this.state.boards.map(board =>
-                        <div className='board'
-                            key={board.id}
-                            onDragOver={(e) => this.dragOverHandler(e)}
-                            onDrop={(e) => this.dropCardHandler(e, board)}
-                        >
-                            <div className='board_title'>{board.title}</div>
-                            {board.tasks.map(task =>
-                                <div
-                                    className='task'
-                                    onDragOver={(e) => this.dragOverHandler(e, board, task)}
-                                    onDragLeave={(e) => this.dragLeaveHandler(e)}
-                                    onDragStart={(e) => this.dragStartHandler(e, board, task)}
-                                    onDragEnd={(e) => this.dragEndHandler(e)}
-                                    key={task.id}
-                                    draggable={true}
-                                    style={{ border: '2px solid ' + TaskColorData.find((e) => e.category == task.category.name).color }}
-                                >
-                                    <div>{task.name}</div>
-                                    <div className='pencilIcon'>
-                                        <BsPencil onClick={() => this.chooseTaskToModify(task, true)} onMouseEnter={(event) => event.target.style.cursor = 'pointer'} />
-                                    </div>
-                                    <div className='trashIcon'>
-                                        <BsTrashFill onClick={() => this.deleteTask(board, task)} onMouseEnter={(event) => event.target.style.cursor = 'pointer'} />
-                                    </div>
-                                </div>
-                            )}
+                <div>
+                    
+                    <Navbar />
 
-                            {this.state.isFieldSeen[board.id]
-                                ?
-                                <AddTaskField changeFieldVisibility={this.changeFieldVisibility} addTaskToBoard={this.addTaskToBoard} board={board} />
-                                :
-                                <Button
-                                    className="add-button"
-                                    color="primary"
-                                    fullWidth
-                                    startIcon={<AddIcon />}
-                                    onClick={() => this.changeFieldVisibility(board.id)}
-                                >
-                                    Add task
-                                </Button>
-                            }
-                        </div>
-                    )}
+                    <div className='tasksExplorer'>
+                        {this.state.boards.map(board =>
+                            <div className='board'
+                                key={board.id}
+                                onDragOver={(e) => this.dragOverHandler(e)}
+                                onDrop={(e) => this.dropCardHandler(e, board)}
+                            >
+                                <div className='board_title'>{board.title}</div>
+                                {board.tasks.map(task =>
+                                    <div
+                                        className='task'
+                                        onDragOver={(e) => this.dragOverHandler(e, board, task)}
+                                        onDragLeave={(e) => this.dragLeaveHandler(e)}
+                                        onDragStart={(e) => this.dragStartHandler(e, board, task)}
+                                        onDragEnd={(e) => this.dragEndHandler(e)}
+                                        key={task.id}
+                                        draggable={true}
+                                        style={{ border: '2px solid ' + TaskColorData.find((e) => e.category == task.category.name).color }}
+                                    >
+                                        <div>{task.name}</div>
+                                        <div className='pencilIcon'>
+                                            <BsPencil onClick={() => this.chooseTaskToModify(task, true)} onMouseEnter={(event) => event.target.style.cursor = 'pointer'} />
+                                        </div>
+                                        <div className='trashIcon'>
+                                            <BsTrashFill onClick={() => this.deleteTask(board, task)} onMouseEnter={(event) => event.target.style.cursor = 'pointer'} />
+                                        </div>
+                                    </div>
+                                )}
 
-                    <TaskView open={this.state.isTaskViewOpen} task={this.state.taskToView} changeOpen={this.changeIsTaskViewOpen} changeTaskData={this.changeTaskData} changeTaskComments={this.changeTaskComments}/>
+                                {this.state.isFieldVisible[board.id]
+                                    ?
+                                    <AddTaskField changeFieldVisibility={this.changeFieldVisibility} addTaskToBoard={this.addTaskToBoard} board={board} />
+                                    :
+                                    <Button
+                                        className="add-button"
+                                        color="primary"
+                                        fullWidth
+                                        startIcon={<AddIcon />}
+                                        onClick={() => this.changeFieldVisibility(board.id)}
+                                    >
+                                        Add task
+                                    </Button>
+                                }
+                            </div>
+                        )}
+
+                        <Logout logout={this.logout} />
+
+                        <TaskView open={this.state.isTaskViewOpen} task={this.state.taskToView} changeOpen={this.changeIsTaskViewOpen} changeTaskData={this.changeTaskData} changeTaskComments={this.changeTaskComments} />
+                    </div>
                 </div>
             );
         }

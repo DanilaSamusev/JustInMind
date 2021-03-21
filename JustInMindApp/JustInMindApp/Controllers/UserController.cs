@@ -1,5 +1,6 @@
 ﻿using JustInMindApp.Models;
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,6 +11,7 @@ namespace JustInMindApp.Controllers
 	[Route("[controller]")]
 	[Produces("application/json")]
 	[ApiController]
+	[Authorize]
 	public class UserController : ControllerBase
 	{
 		private readonly JustInMindContext dbContext;

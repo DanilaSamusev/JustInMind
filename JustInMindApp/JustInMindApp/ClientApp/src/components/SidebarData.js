@@ -6,12 +6,6 @@ import { ImFolder } from "react-icons/im";
 
 export const SidebarData = [
     {
-        title: 'Home',
-        path: '/',
-        icon: <AiIcons.AiFillHome />,
-        cName: 'nav-text'
-    },
-    {
         title: 'Board',
         path: '/boards',
         icon: <IoIcons.IoIosPaper />,
