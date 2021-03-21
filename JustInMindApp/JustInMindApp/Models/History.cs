@@ -1,6 +1,6 @@
 ﻿namespace JustInMindApp.Models
 {
-    public partial class History
+    public class History
     {
         public int Id { get; set; }
         public string Action { get; set; }

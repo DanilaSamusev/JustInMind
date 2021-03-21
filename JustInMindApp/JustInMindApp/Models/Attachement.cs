@@ -1,6 +1,6 @@
 ﻿namespace JustInMindApp.Models
 {
-    public partial class Attachement
+    public class Attachement
     {
         public int Id { get; set; }
         public string Reference { get; set; }

@@ -4,10 +4,13 @@ import Navbar from './Navbar';
 import { Logout } from './Logout';
 import { TaskView } from './TaskView';
 import { BsPencil } from "react-icons/bs";
+import Button from '@material-ui/core/Button';
+import AddIcon from '@material-ui/icons/Add';
+import AddTaskField from './AddTaskField';
+import { TaskColorData } from './TaskColorData';
 import { Redirect } from 'react-router-dom';
 import { LoadingPage } from './LoadingPage';
 import { BsTrashFill } from "react-icons/bs";
-import { TaskColorData } from './TaskColorData';
 
 import '../styles/board.css'
 
@@ -27,6 +30,7 @@ export class Boards extends React.Component {
             taskToView: null,
             isTaskViewOpen: false,
             isPageLoaded: false,
+            isFieldVisible: [],
             isAuthorized: true,
         };
     }
@@ -233,6 +237,27 @@ export class Boards extends React.Component {
             });
     }
 
+    onAddTaskFieldBlur = (boardId) => {
+        this.changeFieldVisibility(boardId);
+    }
+
+    addTaskToBoard = (boardId, task) => {
+        let newBoards = this.state.boards;
+        newBoards[boardId].tasks.push(task);
+        this.setState({
+            boards: newBoards,
+        });
+        this.changeFieldVisibility(boardId);
+    }
+
+    changeFieldVisibility = (boardId) => {
+        let isCurrentFieldVisible = this.state.isFieldVisible;
+        isCurrentFieldVisible[boardId] = !isCurrentFieldVisible[boardId];
+        this.setState({
+            isFieldVisible: isCurrentFieldVisible,
+        });
+    }
+
     changeTaskData = (taskName, taskDescription) => {
         this.state.taskToView.name = taskName;
         this.state.taskToView.description = taskDescription;
@@ -275,6 +300,8 @@ export class Boards extends React.Component {
                     
                     <Navbar />
 
+                    <Logout logout={this.logout} />
+
                     <div className='tasksExplorer'>
                         {this.state.boards.map(board =>
                             <div className='board'
@@ -303,10 +330,23 @@ export class Boards extends React.Component {
                                         </div>
                                     </div>
                                 )}
+
+                                {this.state.isFieldVisible[board.id]
+                                    ?
+                                    <AddTaskField changeFieldVisibility={this.changeFieldVisibility} addTaskToBoard={this.addTaskToBoard} board={board} />
+                                    :
+                                    <Button
+                                        className="add-button"
+                                        color="primary"
+                                        fullWidth
+                                        startIcon={<AddIcon />}
+                                        onClick={() => this.changeFieldVisibility(board.id)}
+                                    >
+                                        Add task
+                                    </Button>
+                                }
                             </div>
                         )}
-
-                        <Logout logout={this.logout} />
 
                         <TaskView open={this.state.isTaskViewOpen} task={this.state.taskToView} changeOpen={this.changeIsTaskViewOpen} changeTaskData={this.changeTaskData} changeTaskComments={this.changeTaskComments} />
                     </div>
