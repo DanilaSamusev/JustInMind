@@ -101,7 +101,7 @@ export class Boards extends React.Component {
 
     dropCardHandler = (event, board) => {
         board.tasks.push(this.state.draggedTask)
-        this.state.draggedTask.state.id = board.id;
+        this.state.draggedTask.stateId = board.id;
 
         const currentIndex = this.state.boardForTaskPut.tasks.indexOf(this.state.draggedTask)
         this.state.boardForTaskPut.tasks.splice(currentIndex, 1)
@@ -116,7 +116,7 @@ export class Boards extends React.Component {
 
     setTasksToBoards = (tasks, boards) => {
         tasks.forEach((task) => {
-            boards.find((board) => { return board.id == task.state.id }).tasks.push(task);
+            boards.find((board) => { return board.id == task.stateId }).tasks.push(task);
         });
 
         this.setState(
@@ -325,7 +325,7 @@ export class Boards extends React.Component {
                                         onDragEnd={(e) => this.dragEndHandler(e)}
                                         key={task.id}
                                         draggable={true}
-                                        style={{ border: '2px solid ' + TaskColorData.find((e) => e.category == task.category.name).color }}
+                                        style={{ border: '2px solid ' + TaskColorData.find((e) => e.id == task.categoryId).color }}
                                     >
                                         <div>{task.name}</div>
                                         <div className='pencilIcon'>

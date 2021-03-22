@@ -25,12 +25,7 @@ namespace JustInMindApp.Controllers
         [Route("getAll")]
         public IActionResult GetAll()
         {
-            var tasks = dbContext.Tasks
-                .Include(t => t.User)
-                .Include(t => t.Urgency)
-                .Include(t => t.Category)
-                .Include(t => t.Comments)
-                .Include(t => t.State);
+            var tasks = dbContext.Tasks;
 
             if (tasks != null)
             {
@@ -45,10 +40,7 @@ namespace JustInMindApp.Controllers
         {
             var task = dbContext.Tasks
                 .Include(t => t.User)
-                .Include(t => t.Urgency)
-                .Include(t => t.Category)
                 .Include(t => t.Comments)
-                .Include(t => t.State)
                 .FirstOrDefault(t => t.Id == id);
 
             if (task != null)
