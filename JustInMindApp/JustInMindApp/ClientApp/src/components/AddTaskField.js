@@ -40,7 +40,7 @@ export default function AddTaskField(props) {
             body: JSON.stringify(task)
         }
 
-        fetch('https://localhost:44330/Task', requestOptions)
+        fetch('Task', requestOptions)
             .then(response => response.json())
             .then(taskId => pushToBoard(taskId));
     };
@@ -54,7 +54,7 @@ export default function AddTaskField(props) {
             },
         };
 
-        fetch('https://localhost:44330/Task/' + taskId, requestOptions)
+        fetch('Task/' + taskId, requestOptions)
             .then(response => response.json())
             .then(data => setAddedTask(data));
     }
