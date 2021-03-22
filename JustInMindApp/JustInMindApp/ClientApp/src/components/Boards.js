@@ -325,7 +325,7 @@ export class Boards extends React.Component {
                                         onDragEnd={(e) => this.dragEndHandler(e)}
                                         key={task.id}
                                         draggable={true}
-                                        style={{ border: '2px solid ' + TaskColorData.find((e) => e.category == task.category.name).color }}
+                                        style={{ border: '2px solid ' + TaskColorData.find((e) => e.id == task.categoryId).color }}
                                     >
                                         <div>{task.name}</div>
                                         <div className='pencilIcon'>

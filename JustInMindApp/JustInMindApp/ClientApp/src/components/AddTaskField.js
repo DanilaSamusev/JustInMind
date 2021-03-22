@@ -63,12 +63,13 @@ export default function AddTaskField(props) {
         addedTask.id = data.id;
         addedTask.name = data.name;
         addedTask.description = data.description;
+        addedTask.urgencyId = data.urgencyId;
+        addedTask.categoryId = data.categoryId;
+        addedTask.userId = data.userId;
+        addedTask.stateId = data.stateId;
         addedTask.user = data.user;
-        addedTask.state = data.state;
-        addedTask.urgency = data.urgency;
-        addedTask.category = data.category;
 
-        props.addTaskToBoard(addedTask.state.id, addedTask);
+        props.addTaskToBoard(addedTask.stateId, addedTask);
     };
 
     return (
