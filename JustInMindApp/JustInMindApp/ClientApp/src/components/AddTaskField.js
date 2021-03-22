@@ -28,7 +28,7 @@ export default function AddTaskField(props) {
         task.description = '';
         task.urgencyId = 0;
         task.categoryId = 0;
-        task.userId = 0;
+        task.userId = Number(localStorage.getItem('userId'));
         task.stateId = props.board.id;
 
         const requestOptions = {
