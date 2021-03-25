@@ -74,7 +74,7 @@ namespace JustInMindApp.Controllers
 			return BadRequest();
 		}
 
-		[HttpDelete]
+		[HttpDelete("{id}")]
 		public IActionResult Delete(int id)
 		{
 			var user = dbContext.Users.FirstOrDefault(u => u.Id == id);

@@ -53,6 +53,41 @@ export class Team extends React.Component {
             })
     }
 
+    deleteUser = (user) => {
+        let index = this.state.users.indexOf(user);
+        let users = this.state.users;
+
+        users.splice(index, 1)
+
+        this.setState(
+            {
+                users: users,
+            })
+
+        this.fetchDeleteUser(user.id);
+	}
+
+    fetchDeleteUser = (userId) => {
+        const requestOptions = {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                "Authorization": "Bearer " + localStorage.getItem('token')
+            }
+        }
+
+        fetch('user/' + userId, requestOptions)
+            .then(response => {
+                if (response.status == 401) {
+                    alert('You are not authorized!');
+
+                    this.setState({
+                        isAuthorized: false,
+                    });
+                }
+            });;
+	}
+
     logout = () => {
         this.setState({
             isAuthorized: false,
@@ -67,7 +102,7 @@ export class Team extends React.Component {
 
         if (!this.state.isAuthorized) {
             return (
-                <Redirect to='/login' />
+                <Redirect to='login' />
             )
         }
 
@@ -86,7 +121,7 @@ export class Team extends React.Component {
 
                     <Logout logout={this.logout} />
 
-                    <Link className='add_user_button' to={'/addUser'}>Add user</Link>
+                    <Link className='add_user_button' to={'addUser'}>Add user</Link>
 
                     <table className="responstable">
 
@@ -109,14 +144,14 @@ export class Team extends React.Component {
                                     <td>{user.password}</td>
                                     <td>{user.role.name}</td>
                                     <td>
-                                        <Link to={'/updateUser/' + user.id}>
+                                        <Link to={'updateUser/' + user.id}>
                                             Edit
                                     </Link>
                                     </td>
                                     <td>
-                                        <Link to={'/deleteUser/' + user.id}>
+                                        <Link onClick={() => this.deleteUser(user)}>
                                             Delete
-                                    </Link>
+                                        </Link>
                                     </td>
                                 </tr>
                             ))}

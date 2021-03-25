@@ -195,7 +195,7 @@ export class Boards extends React.Component {
                         isAuthorized: false,
                     });
                 }
-            });;
+            });
     }
 
     chooseTaskToModify = (task, isOpen) => {

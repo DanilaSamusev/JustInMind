@@ -7,7 +7,7 @@ export class UpdateUser extends React.Component {
         super(props);
         this.state = {
             id: 1,
-            userName: '',
+            name: '',
             password: '',
             roleId: 1,
         };
@@ -33,12 +33,20 @@ export class UpdateUser extends React.Component {
     }
 
     getUser() {
-        fetch('https://localhost:44330/User/' + this.props.match.params.id)
+        const requestOptions = {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                "Authorization": "Bearer " + localStorage.getItem('token')
+            }
+        }
+
+        fetch('user/' + this.props.match.params.id, requestOptions)
             .then(response => response.json())
             .then(data => this.setState(
                 {
                     id: data.id,
-                    userName: data.userName,
+                    name: data.name,
                     password: data.password,
                     roleId: data.roleId,
                 }))
@@ -51,11 +59,14 @@ export class UpdateUser extends React.Component {
     submitUser() {
         const requestOptions = {
             method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'application/json',
+                "Authorization": "Bearer " + localStorage.getItem('token')
+            },
             body: JSON.stringify(this.state)
         }
 
-        fetch('https://localhost:44330/User', requestOptions)
+        fetch('user', requestOptions)
             .then(response => response.status)
             .then((r) => console.log(r))
     }
@@ -68,7 +79,7 @@ export class UpdateUser extends React.Component {
                 <div class="circle"></div>
                 <div class="form-inner">
                     <h3>Edit user</h3>
-                    <input type="text" placeholder="UserName" name="userName" onChange={this.onChange} value={this.state.userName} />
+                    <input type="text" placeholder="User Name" name="name" onChange={this.onChange} value={this.state.name} />
                     <input type="text" placeholder="Password" name="password" onChange={this.onChange} value={this.state.password} />
                     <div class="dropdown">
                         <select name="roleId" class="dropdown-select" onChange={this.onSelectChange} value={this.state.roleId}>

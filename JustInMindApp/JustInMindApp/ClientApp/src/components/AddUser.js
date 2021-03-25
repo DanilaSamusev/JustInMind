@@ -6,7 +6,7 @@ export class AddUser extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            userName: '',
+            name: '',
             password: '',
             roleId: 1,
         };
@@ -33,37 +33,37 @@ export class AddUser extends React.Component {
     submitUser() {
         const requestOptions = {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'application/json',
+                "Authorization": "Bearer " + localStorage.getItem('token')
+            },
             body: JSON.stringify(this.state)
         }
 
-        fetch('https://localhost:44330/User', requestOptions)
-            .then(response => response.status)
-            .then((r) => console.log(r))  
+        fetch('user', requestOptions);  
     }
 
     render() {
         return (
-            <form class="decor" onSubmit={this.submitUser} >
+            <div class="decor" onSubmit={this.submitUser} >
                 <div class="form-left-decoration"></div>
                 <div class="form-right-decoration"></div>
                 <div class="circle"></div>
                 <div class="form-inner">
                     <h3>Add user</h3>
-                    <input type="text" placeholder="UserName" name="userName" onChange={this.onChange} />
+                    <input type="text" placeholder="User Name" name="name" onChange={this.onChange} />
                     <input type="text" placeholder="Password" name="password" onChange={this.onChange} />
                     <div class="dropdown">
                         <select name="roleId" class="dropdown-select" onChange={this.onSelectChange}>
                             <option value="1">Guest</option>
                             <option value="2">Developer</option>
-                            <option value="3">Manager</option>
                             <option value="4">Tester</option>
                             <option value="5">DevOps</option>
                         </select>
                     </div>
-                    <input type="submit" value="Submit" />
+                    <input type="submit" value="Submit" onClick={this.submitUser}/>
                 </div>
-            </form>
+            </div>
         );
     }
 }
