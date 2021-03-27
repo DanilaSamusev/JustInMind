@@ -23,9 +23,9 @@ namespace JustInMindApp.Controllers
 
         [HttpGet]
         [Route("getAll")]
-        public IActionResult GetAll()
+        public IActionResult GetAll([FromQuery]int id)
         {
-            var tasks = dbContext.Tasks;
+            var tasks = dbContext.Tasks.Where(t => t.ProjectId == id);
 
             if (tasks != null)
             {

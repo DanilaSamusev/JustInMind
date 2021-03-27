@@ -20,6 +20,7 @@ export default function AddTaskField(props) {
     let addedTask = {};
 
     const handleChange = (event) => {
+        
         setTaskName(event.target.value);
     };
 
