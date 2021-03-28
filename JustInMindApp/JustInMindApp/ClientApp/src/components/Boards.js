@@ -321,11 +321,11 @@ export class Boards extends React.Component {
 
                     <Logout logout={this.logout} />
 
-                    <ProjectSelection selectProject={this.selectProject} />
+                    <ProjectSelection selectProject={this.selectProject}/>
 
                     <div>
-                        No project selected
-                        </div>
+                        <h1 align="center" >No project selected</h1>
+                    </div>
                 </div>
 
             )
@@ -370,7 +370,7 @@ export class Boards extends React.Component {
 
                             {this.state.isFieldVisible[board.id]
                                 ?
-                                <AddTaskField changeFieldVisibility={this.changeFieldVisibility} addTaskToBoard={this.addTaskToBoard} board={board} />
+                                <AddTaskField changeFieldVisibility={this.changeFieldVisibility} addTaskToBoard={this.addTaskToBoard} board={board} projectId={ this.state.projectId}/>
                                 :
                                 <Button
                                     className="add-button"

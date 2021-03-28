@@ -1,10 +1,10 @@
 ﻿import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import ListSubheader from '@material-ui/core/ListSubheader';
 
 const useStyles = makeStyles((theme) => ({
     formControl: {
@@ -14,15 +14,18 @@ const useStyles = makeStyles((theme) => ({
     selectEmpty: {
         marginTop: theme.spacing(2),
     },
+    projectSelectionContainer: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+    }
 }));
 
 export default function ProjectSelection(props) {
     const classes = useStyles();
+    const [projectId, setProjectId] = React.useState(null);
     const [projects, setProjects] = React.useState(null);
-
-    const handleChange = (event) => {
-        props.selectProject(Number(event.target.value));
-    };
+    const [collaborationProjects, setCollaborationProjects] = React.useState(null);
 
     useEffect(() => {
 
@@ -34,7 +37,7 @@ export default function ProjectSelection(props) {
             }
         }
 
-        fetch('project/getAll', requestOptions)
+        fetch('project/getAllUserOwn', requestOptions)
             .then(response => {
                 if (response.status == 401) {
                     alert('You are not authorized!');
@@ -48,28 +51,68 @@ export default function ProjectSelection(props) {
             });
     }, [projects]);
 
-    if (projects == null) {
+    useEffect(() => {
+
+        const requestOptions = {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                "Authorization": "Bearer " + localStorage.getItem('token')
+            }
+        }
+
+        fetch('project/getAllUserCollaborate', requestOptions)
+            .then(response => {
+                if (response.status == 401) {
+                    alert('You are not authorized!');
+                }
+                else {
+                    response
+                        .json()
+                        .then(json => setCollaborationProjects(json))
+
+                }
+            });
+    }, [collaborationProjects]);
+
+    if (projects == null || collaborationProjects == null) {
         return (
             <div>Loading...</div>
         )
     }
 
     return (
-        <div>
+        <div className={classes.projectSelectionContainer}>
             <FormControl className={classes.formControl}>
                 <Select
-                    onChange={handleChange}
+                    value={projectId}
+                    onChange={(event) => {
+                        //Do it to fix the bug when ListSubheader element is selected. It is clickable. I don't know how to fix that for now
+                        if (isNaN(Number(event.target.value))) {                           
+                            return
+                        }
+                        setProjectId(Number(event.target.value))
+                        props.selectProject(Number(event.target.value))
+                    }}
                     className={classes.selectEmpty}
                 >
+                    <ListSubheader>My Projects</ListSubheader>
                     {projects.map((data, index) => {
                         return (
                             <MenuItem key={index} value={data.id}>{data.name}</MenuItem>
                         );
                     })} 
-                </Select>
-                <FormHelperText>Project</FormHelperText>
-            </FormControl>
 
+                    <ListSubheader>My Collaborations</ListSubheader>
+
+                    {collaborationProjects.map((data, index) => {
+                        return (
+                            <MenuItem key={index} value={data.id}>{data.name}</MenuItem>
+                        );
+                    })}
+                </Select>
+                <FormHelperText>Projects</FormHelperText>
+            </FormControl>
         </div>
     );
 }

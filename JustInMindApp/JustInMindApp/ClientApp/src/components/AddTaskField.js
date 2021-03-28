@@ -31,6 +31,7 @@ export default function AddTaskField(props) {
         task.categoryId = 0;
         task.userId = Number(localStorage.getItem('userId'));
         task.stateId = props.board.id;
+        task.projectId = props.projectId;
 
         const requestOptions = {
             method: 'POST',
