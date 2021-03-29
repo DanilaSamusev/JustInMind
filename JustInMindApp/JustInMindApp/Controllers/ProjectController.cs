@@ -44,5 +44,13 @@ namespace JustInMindApp.Controllers
 
             return new ObjectResult(projects);
         }
+
+        [HttpPost]
+        public IActionResult Post([FromBody]Project project)
+        {
+
+
+            return Ok();
+        }
     }
 }

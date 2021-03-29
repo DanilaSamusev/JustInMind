@@ -1,10 +1,11 @@
-﻿import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import ListSubheader from '@material-ui/core/ListSubheader';
+import AddProject from './AddProject'
 
 const useStyles = makeStyles((theme) => ({
     formControl: {
@@ -18,7 +19,9 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'flex-end',
-    }
+        minHeight: '100px',
+    },
+    
 }));
 
 export default function ProjectSelection(props) {
@@ -28,7 +31,11 @@ export default function ProjectSelection(props) {
     const [collaborationProjects, setCollaborationProjects] = React.useState(null);
 
     useEffect(() => {
+        fetchGetUserOwnProjects();
+        fetchGetUserColoborationProjects();
+    }, []);
 
+    const fetchGetUserOwnProjects = () => {
         const requestOptions = {
             method: 'GET',
             headers: {
@@ -49,10 +56,9 @@ export default function ProjectSelection(props) {
 
                 }
             });
-    }, [projects]);
+    }
 
-    useEffect(() => {
-
+    const fetchGetUserColoborationProjects = () => {
         const requestOptions = {
             method: 'GET',
             headers: {
@@ -73,7 +79,7 @@ export default function ProjectSelection(props) {
 
                 }
             });
-    }, [collaborationProjects]);
+    }
 
     if (projects == null || collaborationProjects == null) {
         return (
@@ -83,6 +89,12 @@ export default function ProjectSelection(props) {
 
     return (
         <div className={classes.projectSelectionContainer}>
+
+            <AddProject reloadProjects={() => {
+                fetchGetUserOwnProjects();
+                fetchGetUserColoborationProjects();
+            }}/>
+
             <FormControl className={classes.formControl}>
                 <Select
                     value={projectId}

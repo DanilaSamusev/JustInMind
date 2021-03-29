@@ -4,7 +4,6 @@ import { BrowserRouter as Router, Switch, Route} from "react-router-dom";
 import { Team } from './components/Team';
 import { Login } from './components/Login';
 import { Boards } from './components/Boards';
-import { AddTask } from './components/AddTask';
 import { AddUser } from './components/AddUser';
 import { UpdateUser } from './components/UpdateUser';
 
@@ -24,7 +23,6 @@ export default class App extends Component {
                     <Route path='/login' exact component={Login} />
 
                     //Just for test this components. Remove in release
-                    <Route path='/addTask/:stateId?' exact component={AddTask} /> 
                     <Route path='/addUser' exact component={AddUser} />
                     <Route path='/updateUser/:id' exact component={UpdateUser} />
                     
