@@ -17,32 +17,37 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export default function AddProject() {
+export default function AddProject(props) {
     const classes = useStyles();
     const [isClicked, setIsClicked] = useState(false);
     const [projectName, setProjectName] = useState('');
     
-    const handleAddProjectButtonClick = (props) => {
+    const handleAddProjectButtonClick = () => {
         setIsClicked(false);
         fetchAddNewProject();
-        props.reloadProjects();
     }
 
     const fetchAddNewProject = () => {
 
         const requestOptions = {
             method: 'POST',
-            header: {
+            headers: {
                 'Content-Type': 'application/json',
                 "Authorization": "Bearer " + localStorage.getItem('token')
-            }
+            },
+            body: JSON.stringify({
+                'name': projectName
+            })
         }
 
         fetch('project', requestOptions)
             .then(response => {
-            if (response.status == 401) {
-                alert('You are not authorized!');
-            } 
+                if (response.status == 401) {
+                    alert('You are not authorized!');
+                }
+                else {
+                    props.reloadProjects();
+                }
         });
     }
 

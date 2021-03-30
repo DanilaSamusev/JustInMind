@@ -38,7 +38,7 @@ namespace JustInMindApp.Controllers
 
             var projects = dbContext.Projects
                         .FromSqlRaw("SELECT ProjectId as Id, Name, OwnerId FROM UsersToProjects up " +
-                                    "LEFT JOIN Projects p ON p.id = up.collaboratorId " +
+                                    "LEFT JOIN Projects p ON p.id = up.projectId " +
                                     $"WHERE CollaboratorId = {userId}")
                         .ToList();
 
@@ -48,7 +48,17 @@ namespace JustInMindApp.Controllers
         [HttpPost]
         public IActionResult Post([FromBody]Project project)
         {
+            if (string.IsNullOrWhiteSpace(project.Name))
+            {
+                return BadRequest(); 
+            }
 
+            var userId = int.Parse(HttpContext.User.Claims.ToList()[2].Value);
+
+            project.OwnerId = userId;
+
+            dbContext.Projects.Add(project);
+            dbContext.SaveChanges();
 
             return Ok();
         }
