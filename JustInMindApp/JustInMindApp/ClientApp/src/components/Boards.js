@@ -322,10 +322,6 @@ export class Boards extends React.Component {
                     <Logout logout={this.logout} />
 
                     <ProjectSelection selectProject={this.selectProject}/>
-
-                    <div>
-                        <h1 align="center" >No project selected</h1>
-                    </div>
                 </div>
 
             )

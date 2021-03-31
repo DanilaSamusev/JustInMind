@@ -62,5 +62,20 @@ namespace JustInMindApp.Controllers
 
             return Ok();
         }
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            var project = dbContext.Projects.FirstOrDefault(p => p.Id == id);
+
+            if (project != null)
+            {
+                dbContext.Projects.Remove(project);
+                dbContext.SaveChanges();
+                return Ok();
+            }
+
+            return BadRequest();
+        }
     }
 }
