@@ -26,6 +26,7 @@ namespace JustInMindApp
         public virtual DbSet<Urgency> Urgencies { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Project> Projects { get; set; }
+        public virtual DbSet<UsersToProjects> UsersToProjects { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

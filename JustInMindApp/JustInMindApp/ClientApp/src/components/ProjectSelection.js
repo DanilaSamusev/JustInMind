@@ -1,19 +1,14 @@
-﻿import React, { useEffect } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
-import ListSubheader from '@material-ui/core/ListSubheader';
-import AddProject from './AddProject'
-import IconButton from '@material-ui/core/IconButton';
-import DeleteIcon from '@material-ui/icons/Delete';
-import Typography from '@material-ui/core/Typography';
-import Box from '@material-ui/core/Box';
+﻿import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import MenuItem from '@material-ui/core/MenuItem';
 import Popover from '@material-ui/core/Popover';
-import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
+import { makeStyles } from '@material-ui/core/styles';
+import DeleteIcon from '@material-ui/icons/Delete';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import PopupState, { bindPopover, bindTrigger } from 'material-ui-popup-state';
+import React, { useEffect } from 'react';
+import AddProject from './AddProject';
 
 const useStyles = makeStyles((theme) => ({
     formControl: {
@@ -112,7 +107,32 @@ export default function ProjectSelection(props) {
             }
         }
 
-        fetch('project/' + id, requestOptions)
+        fetch('project/deleteProject/' + id, requestOptions)
+            .then(response => {
+                if (response.status == 401) {
+                    alert('You are not authorized!');
+
+                    this.setState({
+                        isAuthorized: false,
+                    });
+                }
+                else {
+                    fetchGetUserOwnProjects();
+                    fetchGetUserColoborationProjects();
+                }
+            });
+    }
+
+    const fetchLeaveProject = (id) => {
+        const requestOptions = {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                "Authorization": "Bearer " + localStorage.getItem('token')
+            }
+        }
+
+        fetch('project/leaveProject/' + id, requestOptions)
             .then(response => {
                 if (response.status == 401) {
                     alert('You are not authorized!');
@@ -167,50 +187,54 @@ export default function ProjectSelection(props) {
                                 }}
                             >
                                 <Box p={2}>
-                                    My projects
+                                    <div>
+                                        My projects
+                                    </div>
 
-                                {projects.map((data, index) => {
-                                    return (
-                                        <div className={classes.deleteProjectContainer}
-                                        >
-                                            <MenuItem
-                                                onClick={(event) => {
-                                                    setProjectName(data.name)
-                                                    setSelectedProject(data)
-                                                    props.selectProject(Number(event.target.value))
-                                                }}
-                                                key={index}
-                                                value={data.id}>
-                                                {data.name}
-                                            </MenuItem>
-                                            <IconButton component="span" className={classes.deleteProjectButton}>
-                                                <DeleteIcon onClick={() => fetchDeleteProject(data.id)}/>
-                                            </IconButton>
-                                        </div>
-                                    );
-                                })}
+                                    {projects.map((data, index) => {
+                                        return (
+                                            <div className={classes.deleteProjectContainer}
+                                            >
+                                                <MenuItem
+                                                    onClick={(event) => {
+                                                        setProjectName(data.name)
+                                                        setSelectedProject(data)
+                                                        props.selectProject(Number(event.target.value))
+                                                    }}
+                                                    key={index}
+                                                    value={data.id}>
+                                                    {data.name}
+                                                </MenuItem>
+                                                <IconButton component="span" className={classes.deleteProjectButton}>
+                                                    <DeleteIcon onClick={() => fetchDeleteProject(data.id)} />
+                                                </IconButton>
+                                            </div>
+                                        );
+                                    })}
 
-                                My coloborations
+                                    <div>
+                                        My coloborations
+                                    </div>
 
-                                {collaborationProjects.map((data, index) => {
-                                    return (
-                                        <div className={classes.deleteProjectContainer}
-                                        >
-                                            <MenuItem key={index} value={data.id}
-                                                onClick={(event) => {
-                                                    setProjectName(data.name)
-                                                    setSelectedProject(data)
-                                                    props.selectProject(data.id)
-                                                }}>
-                                                {data.name}
-                                            </MenuItem>
-                                            <IconButton component="span" className={classes.deleteProjectButton}>
-                                                <ExitToAppIcon />
-                                            </IconButton>
-                                        </div>
+                                    {collaborationProjects.map((data, index) => {
+                                        return (
+                                            <div className={classes.deleteProjectContainer}
+                                            >
+                                                <MenuItem key={index} value={data.id}
+                                                    onClick={(event) => {
+                                                        setProjectName(data.name)
+                                                        setSelectedProject(data)
+                                                        props.selectProject(data.id)
+                                                    }}>
+                                                    {data.name}
+                                                </MenuItem>
+                                                <IconButton component="span" className={classes.deleteProjectButton}>
+                                                    <ExitToAppIcon onClick={() => fetchLeaveProject(data.id)} />
+                                                </IconButton>
+                                            </div>
 
-                                    );
-                                })}
+                                        );
+                                    })}
                                 </Box>
                             </Popover>
                         </div>

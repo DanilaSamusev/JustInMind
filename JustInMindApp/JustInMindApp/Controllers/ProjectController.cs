@@ -63,7 +63,8 @@ namespace JustInMindApp.Controllers
             return Ok();
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete]
+        [Route("deleteProject/{id}")]
         public IActionResult Delete(int id)
         {
             var project = dbContext.Projects.FirstOrDefault(p => p.Id == id);
@@ -71,6 +72,23 @@ namespace JustInMindApp.Controllers
             if (project != null)
             {
                 dbContext.Projects.Remove(project);
+                dbContext.SaveChanges();
+                return Ok();
+            }
+
+            return BadRequest();
+        }
+
+        [HttpDelete]
+        [Route("leaveProject/{id}")]
+        public IActionResult LeaveProject(int id)
+        {
+            var userId = int.Parse(HttpContext.User.Claims.ToList()[2].Value);
+            var project = dbContext.UsersToProjects.FirstOrDefault(pu => pu.Id == id || pu.CollaboratorId == userId);
+
+            if (project != null)
+            {
+                dbContext.UsersToProjects.Remove(project);
                 dbContext.SaveChanges();
                 return Ok();
             }
