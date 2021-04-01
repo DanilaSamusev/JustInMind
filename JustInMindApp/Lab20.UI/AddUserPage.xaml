@@ -19,9 +19,7 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <Grid.Background>
-            <ImageBrush ImageSource="D:\MyProjects\JustInMind\JustInMindApp\Lab20.UI\Login.png" />
-        </Grid.Background>
+        
 
         <TextBlock
             Grid.Row="0"

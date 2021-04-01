@@ -30,7 +30,7 @@ namespace JustInMindApp
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Server=DESKTOP-8M7HAO3\\SQLEXPRESS;Database=JustInMind;Trusted_Connection=True;");
+                optionsBuilder.UseSqlServer("Server=justinmind.database.windows.net;Database=JustInMind;Trusted_Connection=True;");
             }
         }
     }
