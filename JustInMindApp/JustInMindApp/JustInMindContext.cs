@@ -30,7 +30,7 @@ namespace JustInMindApp
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Server=justinmind.database.windows.net;Database=JustInMind;Trusted_Connection=True;");
+                optionsBuilder.UseSqlServer("Server=tcp:justinmind.database.windows.net,1433;Initial Catalog=JustInMindDB;Persist Security Info=False;User ID=user;Password=one@345678;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
             }
         }
     }

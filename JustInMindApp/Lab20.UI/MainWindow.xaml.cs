@@ -46,6 +46,13 @@ namespace Lab20.UI
             win.Show();
         }
 
+        public void ViewUsers_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationWindow win = new NavigationWindow();
+            win.Content = new UsersView();
+            win.Show();
+        }
+
         public void AddTaskButton_Click(object sender, RoutedEventArgs e)
         {
 
