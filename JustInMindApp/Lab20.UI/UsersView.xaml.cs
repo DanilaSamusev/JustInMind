@@ -27,13 +27,13 @@ namespace Lab20.UI
 
             var context = new JustInMindContext();
 
-            var usersList = context.Users.ToList();
+            var usersList = context.Users;
 
             var text = "";
 
-            for (var i = 0; i < usersList.Count; i++)
+            foreach(var user in usersList)
             {
-                text += $"Id: {usersList[i].Id}, Name {usersList[i].UserName},  RoleId: {usersList[i].RoleId}\n";
+                text += $"Id: {user.Id}, Name {user.UserName},  RoleId: {user.RoleId}\n";
             }
 
             users.Text = text;
