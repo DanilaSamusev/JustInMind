@@ -96,7 +96,7 @@ export function Login(props) {
                 </Avatar>
                 <Typography component="h1" variant="h5">
                     Sign in
-        </Typography>
+                </Typography>
                 <div className={classes.form} noValidate>
                     <TextField
                         variant="outlined"
@@ -137,15 +137,15 @@ export function Login(props) {
                         onClick={fetchLogin}
                     >
                         Sign In
-          </Button>
+                    </Button>
                     <Grid container>
                         <Grid item xs>
                             <Link href="#" variant="body2">
                                 Forgot password?
-              </Link>
+                            </Link>
                         </Grid>
                         <Grid item>
-                            <Link href="#" variant="body2">
+                            <Link href="signUp" variant="body2">
                                 {"Don't have an account? Sign Up"}
                             </Link>
                         </Grid>

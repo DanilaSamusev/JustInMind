@@ -8,6 +8,7 @@ import { AddUser } from './components/AddUser';
 import { UpdateUser } from './components/UpdateUser';
 
 import './styles/custom.css'
+import SignUp from './components/Account/SignUp';
 
 export default class App extends Component {
     static displayName = App.name;
@@ -21,6 +22,7 @@ export default class App extends Component {
                     <Route path='/team' exact component={Team} />
                     <Route path='/board' exact component={Board} />
                     <Route path='/login' exact component={Login} />
+                    <Route path='/signUp' exact component={SignUp} />
 
                     //Just for test this components. Remove in release
                     <Route path='/addUser' exact component={AddUser} />

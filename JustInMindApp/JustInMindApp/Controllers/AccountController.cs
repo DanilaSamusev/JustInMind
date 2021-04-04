@@ -1,4 +1,5 @@
 ﻿using JustInMindApp.Models;
+using JustInMindApp.Requests;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -23,6 +24,26 @@ namespace JustInMindApp.Controllers
         public AccountController()
         {
             dbContext = new JustInMindContext();
+        }
+
+        [HttpPost("signUp")]
+        public IActionResult SignUp([FromBody] SignUpRequest request)
+        {
+            if (string.IsNullOrWhiteSpace(request.Name) || string.IsNullOrWhiteSpace(request.Password))
+            {
+                return BadRequest();
+            }
+
+            var user = new User
+            {
+                Name = request.Name,
+                Password = request.Password,
+            };
+
+            dbContext.Users.Add(user);
+            dbContext.SaveChanges();
+
+            return Ok();
         }
 
         [HttpPost("token")]
