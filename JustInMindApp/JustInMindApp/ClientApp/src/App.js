@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Switch, Route} from "react-router-dom";
 
 import { Team } from './components/Team';
 import { Login } from './components/Login';
-import { Boards } from './components/Boards';
+import Board from './components/MainPages/Board';
 import { AddUser } from './components/AddUser';
 import { UpdateUser } from './components/UpdateUser';
 
@@ -17,9 +17,9 @@ export default class App extends Component {
             <Router>
                 
                 <Switch>
-                    <Route path='/' exact component={Boards} />
+                    <Route path='/' exact component={Board} />
                     <Route path='/team' exact component={Team} />
-                    <Route path='/boards' exact component={Boards} />
+                    <Route path='/board' exact component={Board} />
                     <Route path='/login' exact component={Login} />
 
                     //Just for test this components. Remove in release

@@ -31,7 +31,7 @@ export class Team extends React.Component {
             },
         }
 
-        fetch('user/getAll', requestOptions)
+        fetch('user/getAllColaborators/' + Number(localStorage.getItem("projectId")), requestOptions)
             .then(response => {
                 if (response.status == 401) {
                     alert('You are not authorized!');
@@ -54,29 +54,25 @@ export class Team extends React.Component {
     }
 
     deleteUser = (user) => {
-        let index = this.state.users.indexOf(user);
-        let users = this.state.users;
-
-        users.splice(index, 1)
-
-        this.setState(
-            {
-                users: users,
-            })
-
-        this.fetchDeleteUser(user.id);
+        this.fetchDeleteColaborator(user.id);
 	}
 
-    fetchDeleteUser = (userId) => {
+    fetchDeleteColaborator = (userId) => {
+        const deleteColaboratorRequest = {
+            'userId': userId,
+            'projectId': Number(localStorage.getItem('projectId')),
+        }
+
         const requestOptions = {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
                 "Authorization": "Bearer " + localStorage.getItem('token')
-            }
+            },
+            body: JSON.stringify(deleteColaboratorRequest)
         }
 
-        fetch('user/' + userId, requestOptions)
+        fetch('user', requestOptions)
             .then(response => {
                 if (response.status == 401) {
                     alert('You are not authorized!');
@@ -85,7 +81,10 @@ export class Team extends React.Component {
                         isAuthorized: false,
                     });
                 }
-            });;
+            })
+            .then(() => {
+                this.getUsers();
+            });
 	}
 
     logout = () => {

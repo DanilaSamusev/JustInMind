@@ -1,13 +1,10 @@
 ﻿import React from 'react';
-import * as FaIcons from 'react-icons/fa';
-import * as AiIcons from 'react-icons/ai';
 import * as IoIcons from 'react-icons/io';
-import { ImFolder } from "react-icons/im";
 
 export const SidebarData = [
     {
         title: 'Board',
-        path: '/boards',
+        path: '/board',
         icon: <IoIcons.IoIosPaper />,
         cName: 'nav-text'
     },

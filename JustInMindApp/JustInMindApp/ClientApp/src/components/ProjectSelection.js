@@ -1,4 +1,6 @@
-﻿import Box from '@material-ui/core/Box';
+﻿import React, { useEffect } from 'react';
+
+import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -7,7 +9,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import PopupState, { bindPopover, bindTrigger } from 'material-ui-popup-state';
-import React, { useEffect } from 'react';
+
 import AddProject from './AddProject';
 
 const useStyles = makeStyles((theme) => ({
@@ -42,10 +44,8 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ProjectSelection(props) {
     const classes = useStyles();
-    const [projectName, setProjectName] = React.useState('No project selected');
-    const [selectedProject, setSelectedProject] = React.useState(null);
-    const [projects, setProjects] = React.useState(null);
-    const [collaborationProjects, setCollaborationProjects] = React.useState(null);
+    const [projects, setProjects] = React.useState([]);
+    const [collaborationProjects, setCollaborationProjects] = React.useState([]);
 
     useEffect(() => {
         fetchGetUserOwnProjects();
@@ -70,7 +70,6 @@ export default function ProjectSelection(props) {
                     response
                         .json()
                         .then(json => setProjects(json))
-
                 }
             });
     }
@@ -93,7 +92,6 @@ export default function ProjectSelection(props) {
                     response
                         .json()
                         .then(json => setCollaborationProjects(json))
-
                 }
             });
     }
@@ -148,24 +146,16 @@ export default function ProjectSelection(props) {
             });
     }
 
-    if (projects == null || collaborationProjects == null) {
-        return (
-            <div>Loading...</div>
-        )
+    const reloadAllProjects = () => {
+        fetchGetUserOwnProjects();
+        fetchGetUserColoborationProjects();
     }
 
     return (
         <div className={classes.projectSelectionContainer}>
 
-            <div className={classes.selectedProjectName}>
-                <h1>{projectName}</h1>
-            </div>
-
             <div>
-                <AddProject reloadProjects={() => {
-                    fetchGetUserOwnProjects();
-                    fetchGetUserColoborationProjects();
-                }} />
+                <AddProject reloadProjects={reloadAllProjects} />
             </div>
 
             <div className={classes.projectSelectionPopover}>
@@ -174,7 +164,7 @@ export default function ProjectSelection(props) {
                         <div>
                             <Button variant="contained" color="primary" {...bindTrigger(popupState)}>
                                 Select project
-                        </Button>
+                            </Button>
                             <Popover
                                 {...bindPopover(popupState)}
                                 anchorOrigin={{
@@ -196,13 +186,8 @@ export default function ProjectSelection(props) {
                                             <div className={classes.deleteProjectContainer}
                                             >
                                                 <MenuItem
-                                                    onClick={(event) => {
-                                                        setProjectName(data.name)
-                                                        setSelectedProject(data)
-                                                        props.selectProject(Number(event.target.value))
-                                                    }}
-                                                    key={index}
-                                                    value={data.id}>
+                                                    onClick={() => props.selectProject(data.id)}
+                                                >
                                                     {data.name}
                                                 </MenuItem>
                                                 <IconButton component="span" className={classes.deleteProjectButton}>
@@ -221,11 +206,8 @@ export default function ProjectSelection(props) {
                                             <div className={classes.deleteProjectContainer}
                                             >
                                                 <MenuItem key={index} value={data.id}
-                                                    onClick={(event) => {
-                                                        setProjectName(data.name)
-                                                        setSelectedProject(data)
-                                                        props.selectProject(data.id)
-                                                    }}>
+                                                    onClick={() => props.selectProject(data.id)}
+                                                >
                                                     {data.name}
                                                 </MenuItem>
                                                 <IconButton component="span" className={classes.deleteProjectButton}>

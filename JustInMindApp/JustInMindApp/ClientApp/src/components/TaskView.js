@@ -1,7 +1,7 @@
-﻿import { makeStyles } from '@material-ui/core/styles';
-import { deepOrange } from '@material-ui/core/colors';
+﻿import React, { useEffect, useState } from 'react';
 
-import React, { useEffect, useState } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import { deepOrange } from '@material-ui/core/colors';
 import Tooltip from '@material-ui/core/Tooltip';
 import Avatar from '@material-ui/core/Avatar'
 import Button from '@material-ui/core/Button';
@@ -12,6 +12,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+
 import { TaskStatesData } from '../ComponentsData/TaskStatesData';
 import { TaskCategoriesData } from '../ComponentsData/TaskCategoriesData';
 

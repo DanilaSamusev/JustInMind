@@ -21,6 +21,19 @@ namespace JustInMindApp.Controllers
             dbContext = new JustInMindContext();
         }
 
+        [HttpGet("{id}")]
+        public IActionResult GetById(int id)
+        {
+            var project = dbContext.Projects.First(p => p.Id == id);
+
+            if (project == null)
+            {
+                return BadRequest($"Project with specified id: {id} doesn't exist!");
+            }
+
+            return new ObjectResult(project);
+        }
+
         [HttpGet("getAllUserOwn")]
         public IActionResult GetProjects()
         {
