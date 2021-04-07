@@ -96,6 +96,29 @@ namespace JustInMindApp.Controllers
             return BadRequest();
         }
 
+        [HttpPost("addColaborator")]
+        public IActionResult AddColaborator(AddUserAsColaboratorRequset requset)
+        {
+            var user = dbContext.Users.FirstOrDefault(u => u.Name == requset.UserName);
+
+            if (user == null)
+            {
+                return BadRequest("Error: user with specified name doesn't exist!");
+            }
+
+            var entity = new UsersToProjects
+            {
+                ProjectId = requset.ProjectId,
+                CollaboratorId = user.Id,
+                CollaboratorRoleId = requset.UserRoleId
+            };
+
+            dbContext.UsersToProjects.Add(entity);
+            dbContext.SaveChanges();
+
+            return Ok();
+        }
+
         [HttpDelete]
         public IActionResult DeleteColaborator([FromBody] DeleteColaboratorRequest request)
         {

@@ -90,7 +90,9 @@ export class Team extends React.Component {
     logout = () => {
         this.setState({
             isAuthorized: false,
-        })
+        });
+
+        localStorage.removeItem('projectId');
     }
 
     componentDidMount() {

@@ -58,6 +58,7 @@ export default function Board() {
 
     const logout = () => {
         setIsAuthorized(false);
+        localStorage.removeItem('projectId');
     }
 
     if (!isAuthorized) {
