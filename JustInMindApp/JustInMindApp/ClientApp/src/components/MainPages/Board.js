@@ -2,7 +2,7 @@
 import { Redirect } from 'react-router-dom';
 
 import Navbar from '../Navbar';
-import { Logout } from '../Logout';
+import { SignOut } from '../Account/SignOut';
 import { Boards } from '../Task/Boards'
 import ProjectSelection from '../ProjectSelection';
 
@@ -63,7 +63,7 @@ export default function Board() {
 
     if (!isAuthorized) {
         return (
-            <Redirect to='/login' />
+            <Redirect to='/signIn' />
         )
     }
 
@@ -71,7 +71,7 @@ export default function Board() {
         <div>
             <Navbar />
 
-            <Logout logout={logout} />
+            <SignOut logout={logout} />
 
             <ProjectSelection selectProject={selectProject} />
         </div>;

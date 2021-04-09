@@ -5,7 +5,7 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 
-export function Logout(props) {
+export function SignOut(props) {
     const classes = useStyles();
 
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -36,7 +36,7 @@ export function Logout(props) {
                 <MenuItem>{"User: " + localStorage.getItem('userName')}</MenuItem>
                 <MenuItem>{"Role: " + localStorage.getItem('userRole')}</MenuItem>
                 <MenuItem onClick={logout}>
-                    Logout <ExitToAppIcon className={classes.logoutButton}/>
+                    SignOut <ExitToAppIcon className={classes.logoutButton}/>
                 </MenuItem>
             </Menu>
 

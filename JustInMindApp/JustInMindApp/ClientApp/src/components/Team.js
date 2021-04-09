@@ -1,7 +1,7 @@
 ﻿import React from 'react';
 
 import Navbar from './Navbar';
-import { Logout } from './Logout';
+import { SignOut } from './Account/SignOut';
 import { Link } from 'react-router-dom';
 import { Redirect } from 'react-router-dom';
 import { LoadingPage } from './LoadingPage';
@@ -103,7 +103,7 @@ export class Team extends React.Component {
 
         if (!this.state.isAuthorized) {
             return (
-                <Redirect to='login' />
+                <Redirect to='signIn' />
             )
         }
 
@@ -120,7 +120,7 @@ export class Team extends React.Component {
                 <div>
                     <Navbar />
 
-                    <Logout logout={this.logout} />
+                    <SignOut logout={this.logout} />
 
                     <Link className='add_user_button' to={'addUser'}>Add user</Link>
 

@@ -48,7 +48,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export function Login(props) {
+export function SignIn(props) {
     const classes = useStyles();
 
     const [name, setName] = useState(null);
