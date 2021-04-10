@@ -9,6 +9,8 @@ import Board from './components/MainPages/Board';
 import SignUp from './components/Account/SignUp';
 
 import './styles/custom.css'
+import Two from './components/Two';
+import One from './components/One';
 
 export default class App extends Component {
     static displayName = App.name;
@@ -17,18 +19,8 @@ export default class App extends Component {
         return (
             <Router>
                 
-                <Switch>
-                    <Route path='/' exact component={Board} />
-                    <Route path='/team' exact component={Team} />
-                    <Route path='/board' exact component={Board} />
-                    <Route path='/signIn' exact component={SignIn} />
-                    <Route path='/signUp' exact component={SignUp} />
-
-                    //Just for test this components. Remove in release
-                    <Route path='/addUser' exact component={AddUser} />
-                    <Route path='/updateUser/:id' exact component={UpdateUser} />
-                    
-                </Switch>
+                <One />
+                <Two />
             </Router>
         );
     }
