@@ -71,19 +71,28 @@ export default function Board(props) {
         <div>
             <Navbar />
 
-            <SignOut logout={logout} />
+            <SignOut logout={logout} setIsAuthorized={props.setIsAuthorized}/>
 
             <ProjectSelection selectProject={selectProject} setIsAuthorized={props.setIsAuthorized}/>
         </div>;
 
    
+    let boards = <h1>No project selected</h1>
 
-    
+    if (project != null) {
+        boards =
+            <div>
+                <h1>
+                    {project.name}
+                </h1>
+                <Boards project={project} />
+            </div>
+    }
 
     return (
         <div>
             {render}
-            
+            {boards}
         </div>
     )
 }

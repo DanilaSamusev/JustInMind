@@ -13,18 +13,8 @@ export default class Two extends Component {
     render() {
         return (
             <div>
-                <ul>
-                    <li>
-                        <Link to="/team">Team</Link>
-                    </li>
-                    <li>
-                        <Link to="/board">Board</Link>
-                    </li>
-                </ul>
-
-
                 <Switch>
-                    <Route path='/board' exact>
+                    <Route path='/' exact>
                         <Board setIsAuthorized={this.props.setIsAuthorized}/>
                     </Route>
                     <Route path='/team' exact component={Team} />

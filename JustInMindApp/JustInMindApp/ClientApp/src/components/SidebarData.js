@@ -4,7 +4,7 @@ import * as IoIcons from 'react-icons/io';
 export const SidebarData = [
     {
         title: 'Board',
-        path: '/board',
+        path: '/',
         icon: <IoIcons.IoIosPaper />,
         cName: 'nav-text'
     },

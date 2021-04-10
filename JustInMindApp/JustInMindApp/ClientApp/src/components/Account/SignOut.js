@@ -20,7 +20,7 @@ export function SignOut(props) {
 
     const logout = () => {
         localStorage.setItem('token', null);
-        props.logout();
+        props.setIsAuthorized(false);
     }
 
     return (

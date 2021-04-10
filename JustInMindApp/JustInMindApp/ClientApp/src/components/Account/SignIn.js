@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -12,7 +13,6 @@ import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
-
 import { makeStyles } from '@material-ui/core/styles';
 
 function Copyright() {
@@ -50,6 +50,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignIn(props) {
     const classes = useStyles();
+    const history = useHistory();
 
     const [name, setName] = useState(null);
     const [password, setPassword] = useState(null);
@@ -82,7 +83,11 @@ export default function SignIn(props) {
                             localStorage.setItem('userRole', json.userRole);
                             localStorage.setItem('userId', json.userId);
                         })
-                        .then(() => props.history.push('/'));
+                        .then(() =>
+                        {
+                            props.setIsAuthorized(true);
+                            history.push('/');
+                        });
                 }
             })
     }
