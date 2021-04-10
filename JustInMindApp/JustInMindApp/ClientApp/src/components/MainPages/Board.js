@@ -8,7 +8,7 @@ import ProjectSelection from '../ProjectSelection';
 
 import '../../styles/board.css'
 
-export default function Board() {
+export default function Board(props) {
 
     const [isAuthorized, setIsAuthorized] = useState(true);
     const [project, setProject] = useState(null);
@@ -39,7 +39,7 @@ export default function Board() {
                 if (response.status == 401) {
                     alert('You are not authorized!');
 
-                    setIsAuthorized(false);
+                    
                 }
                 else {
                     response.json()
@@ -73,25 +73,17 @@ export default function Board() {
 
             <SignOut logout={logout} />
 
-            <ProjectSelection selectProject={selectProject} />
+            <ProjectSelection selectProject={selectProject} setIsAuthorized={props.setIsAuthorized}/>
         </div>;
 
-    let boards = <h1>No project selected</h1>
+   
 
-    if (project != null) {
-        boards =
-            <div>
-                <h1>
-                    {project.name}
-                </h1>
-                <Boards project={project} />
-            </div>
-    }
+    
 
     return (
         <div>
             {render}
-            {boards}
+            
         </div>
     )
 }

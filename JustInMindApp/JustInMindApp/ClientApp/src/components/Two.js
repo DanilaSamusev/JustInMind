@@ -6,6 +6,9 @@ import Board from './MainPages/Board';
 import { Team } from './Team';
 
 export default class Two extends Component {
+    constructor(props) {
+        super(props);
+    }
 
     render() {
         return (
@@ -21,10 +24,12 @@ export default class Two extends Component {
 
 
                 <Switch>
-                    <Route path='/board' exact component={Board} />
+                    <Route path='/board' exact>
+                        <Board setIsAuthorized={this.props.setIsAuthorized}/>
+                    </Route>
                     <Route path='/team' exact component={Team} />
-                </Switch>     
-            </div>      
+                </Switch>
+            </div>
         );
     }
 }

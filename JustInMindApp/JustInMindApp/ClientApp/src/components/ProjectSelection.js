@@ -65,6 +65,7 @@ export default function ProjectSelection(props) {
             .then(response => {
                 if (response.status == 401) {
                     alert('You are not authorized!');
+                    props.setIsAuthorized(false);
                 }
                 else {
                     response
