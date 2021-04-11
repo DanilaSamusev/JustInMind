@@ -61,20 +61,16 @@ export function SignOut(props) {
 const useStyles = makeStyles((theme) => ({
     root: {
         position: 'absolute',
-        marginTop: theme.spacing(-8),
         right: theme.spacing(2),
         display: 'flex',
         alignItems: 'center',
     },
-
     logoutButton: {
         marginLeft: '5px',
         color: '#1976d2',
     },
-
     avatar: {
         width: theme.spacing(6),
         height: theme.spacing(6),
     },
-
 }));

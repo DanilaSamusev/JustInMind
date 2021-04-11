@@ -53,12 +53,9 @@ export default function Board(props) {
 
     let render =
         <div>
-            <SignOut setIsAuthorized={props.setIsAuthorized} />
-
-            <ProjectSelection selectProject={selectProject} setIsAuthorized={props.setIsAuthorized}/>
+            <ProjectSelection selectProject={selectProject} setIsAuthorized={props.setIsAuthorized} />
         </div>;
 
-   
     let boards = <h1>No project selected</h1>
 
     if (project != null) {
