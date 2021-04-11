@@ -1,9 +1,9 @@
 ﻿import React from 'react';
+import { Link } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 
 import Navbar from './Navbar';
 import { SignOut } from './Account/SignOut';
-import { Link } from 'react-router-dom';
-import { Redirect } from 'react-router-dom';
 import { LoadingPage } from './LoadingPage';
 
 import '../styles/team.scss'
