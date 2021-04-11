@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useHistory } from "react-router-dom";
 
 import './styles/custom.css'
-import AppRoutes from './components/AppRoutes';
+import AppRoutes from './components/Routes/AppRoutes';
 import AccountRoutes from './components/AccountRoutes';
 
 export default function App(props) {

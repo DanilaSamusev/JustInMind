@@ -29,6 +29,7 @@ export function SignOut(props) {
         localStorage.removeItem('userName');
         localStorage.removeItem('userRole');
         localStorage.removeItem('userId');
+        localStorage.removeItem('projectId');
         props.setIsAuthorized(false);
     }
 

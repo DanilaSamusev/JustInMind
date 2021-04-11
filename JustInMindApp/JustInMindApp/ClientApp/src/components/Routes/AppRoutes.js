@@ -1,9 +1,10 @@
 ﻿import React, { Component } from 'react';
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import Board from './MainPages/Board';
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import Board from '../MainPages/Board';
+import Navbar from '../Navbar';
 
 
-import { Team } from './Team';
+import { Team } from '../Team';
 
 export default class AppRoutes extends Component {
     constructor(props) {
@@ -13,6 +14,8 @@ export default class AppRoutes extends Component {
     render() {
         return (
             <div>
+                <Navbar />
+
                 <Switch>
                     <Route path='/' exact>
                         <Board setIsAuthorized={this.props.setIsAuthorized}/>
