@@ -4,7 +4,7 @@ import Board from '../MainPages/Board';
 import Navbar from '../Navbar';
 
 
-import { Team } from '../Team';
+import { Team } from '../MainPages/Team';
 
 export default class AppRoutes extends Component {
     constructor(props) {

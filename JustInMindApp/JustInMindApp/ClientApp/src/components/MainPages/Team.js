@@ -1,15 +1,12 @@
 ﻿import React from 'react';
 import { Link } from 'react-router-dom';
-import { Redirect } from 'react-router-dom';
 
-import Navbar from './Navbar';
-import { SignOut } from './Account/SignOut';
-import { LoadingPage } from './LoadingPage';
+import { SignOut } from '../Account/SignOut';
+import { LoadingPage } from '../LoadingPage';
 
-import '../styles/team.scss'
+import '../../styles/team.scss'
 
 export class Team extends React.Component {
-
     constructor(props) {
         super(props);
         this.state = {
@@ -22,7 +19,6 @@ export class Team extends React.Component {
     }
 
     getUsers() {
-
         const requestOptions = {
             method: 'GET',
             headers: {
@@ -35,10 +31,7 @@ export class Team extends React.Component {
             .then(response => {
                 if (response.status == 401) {
                     alert('You are not authorized!');
-
-                    this.setState({
-                        isAuthorized: false,
-                    });
+                    this.props.setIsAuthorized(false);
                 }
                 else {
                     response
@@ -76,10 +69,7 @@ export class Team extends React.Component {
             .then(response => {
                 if (response.status == 401) {
                     alert('You are not authorized!');
-
-                    this.setState({
-                        isAuthorized: false,
-                    });
+                    this.props.setIsAuthorized(false);
                 }
             })
             .then(() => {
@@ -87,30 +77,14 @@ export class Team extends React.Component {
             });
 	}
 
-    logout = () => {
-        this.setState({
-            isAuthorized: false,
-        });
-
-        localStorage.removeItem('projectId');
-    }
-
     componentDidMount() {
         this.getUsers();
     }
 
     render() {
-
-        if (!this.state.isAuthorized) {
-            return (
-                <Redirect to='signIn' />
-            )
-        }
-
         if (!this.state.isPageLoaded) {
             return (
                 <div>
-                    <Navbar />
                     <LoadingPage />
                 </div>
             )
@@ -119,11 +93,8 @@ export class Team extends React.Component {
             return (
                 <div>
                     <SignOut setIsAuthorized={this.props.setIsAuthorized} />
-
                     <Link className='add_user_button' to={'addUser'}>Add user</Link>
-
                     <table className="responstable">
-
                         <thead>
                             <tr>
                                 <th>Id</th>
@@ -134,7 +105,6 @@ export class Team extends React.Component {
                                 <th></th>
                             </tr>
                         </thead>
-
                         <tbody>
                             {this.state.users.map(user => (
                                 <tr key={user.id}>
