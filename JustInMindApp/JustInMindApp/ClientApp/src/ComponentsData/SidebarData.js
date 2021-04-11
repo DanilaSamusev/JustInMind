@@ -5,13 +5,11 @@ export const SidebarData = [
     {
         title: 'Board',
         path: '/',
-        icon: <IoIcons.IoIosPaper />,
-        cName: 'nav-text'
+        icon: <IoIcons.IoIosPaper style={{ fontSize: 25 }} />,
     },
     {
         title: 'Team',
         path: '/team',
-        icon: <IoIcons.IoMdPeople />,
-        cName: 'nav-text'
+        icon: <IoIcons.IoMdPeople style={{ fontSize: 25 }} />,
     },
 ];

@@ -10,7 +10,7 @@ export default function Two(props) {
                 <Route path='/signIn' exact >
                     <SignIn setIsAuthorized={props.setIsAuthorized} />
                 </Route>
-                <Route path='/signOut' exact component={SignUp} />
+                <Route path='/signUp' exact component={SignUp} />
             </Switch>
         </div>
     );

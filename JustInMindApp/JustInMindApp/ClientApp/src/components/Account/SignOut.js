@@ -5,6 +5,7 @@ import Avatar from '@material-ui/core/Avatar'
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
+import { deepOrange } from '@material-ui/core/colors';
 
 export function SignOut(props) {
     const classes = useStyles();
@@ -72,5 +73,6 @@ const useStyles = makeStyles((theme) => ({
     avatar: {
         width: theme.spacing(6),
         height: theme.spacing(6),
+        backgroundColor: deepOrange[500],
     },
 }));

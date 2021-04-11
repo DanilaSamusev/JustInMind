@@ -13,18 +13,22 @@ import PopupState, { bindPopover, bindTrigger } from 'material-ui-popup-state';
 import AddProject from './AddProject';
 
 const useStyles = makeStyles((theme) => ({
+    root: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+        minHeight: '100px',
+        marginRight: '25px',
+    },
+    addProject: {
+        marginRight: '20px',
+    },
     formControl: {
         margin: theme.spacing(1),
         minWidth: 120,
     },
     selectEmpty: {
         marginTop: theme.spacing(2),
-    },
-    projectSelectionContainer: {
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'flex-end',
-        minHeight: '100px',
     },
     deleteProjectContainer: {
         display: 'flex',
@@ -37,7 +41,6 @@ const useStyles = makeStyles((theme) => ({
         alignSelf: 'center'
     },
     projectSelectionPopover: {
-
         alignSelf: 'center'
     },
 }));
@@ -148,8 +151,8 @@ export default function ProjectSelection(props) {
     }
 
     return (
-        <div className={classes.projectSelectionContainer}>
-            <div>
+        <div className={classes.root}>
+            <div className={classes.addProject}>
                 <AddProject reloadProjects={reloadAllProjects} setIsAuthorized={props.setIsAuthorized} />
             </div>
             <div className={classes.projectSelectionPopover}>

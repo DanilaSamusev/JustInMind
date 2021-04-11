@@ -92,7 +92,6 @@ export class Team extends React.Component {
         else {
             return (
                 <div>
-                    <SignOut setIsAuthorized={this.props.setIsAuthorized} />
                     <Link className='add_user_button' to={'addUser'}>Add user</Link>
                     <table className="responstable">
                         <thead>

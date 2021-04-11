@@ -1,13 +1,24 @@
 ﻿import React, { useState, useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
 
+import { makeStyles } from '@material-ui/core/styles';
 import ProjectSelection from '../ProjectSelection';
 import { SignOut } from '../Account/SignOut';
 import { Boards } from '../Task/Boards'
 
 import '../../styles/board.css'
 
+const useStyles = makeStyles((theme) => ({
+    projectSelectionContainer: {
+        marginTop: '20px',
+    },
+    projectName: {
+        textAlign: 'center',
+    },
+}));
+
 export default function Board(props) {
+    const classes = useStyles();
     const [project, setProject] = useState(null);
 
     useEffect(() => {
@@ -52,20 +63,21 @@ export default function Board(props) {
     }
 
     let render =
-        <div>
+        <div className={classes.projectSelectionContainer}>
             <ProjectSelection selectProject={selectProject} setIsAuthorized={props.setIsAuthorized} />
-        </div>;
+        </div>
 
-    let boards = <h1>No project selected</h1>
+    let boards;
 
     if (project != null) {
         boards =
             <div>
-                <h1>
-                    {project.name}
-                </h1>
+                <h1 className={classes.projectName}>{project.name}</h1>
                 <Boards project={project} />
             </div>
+    }
+    else {
+        boards = <h1 className={classes.projectName}>No project selected</h1>
     }
 
     return (

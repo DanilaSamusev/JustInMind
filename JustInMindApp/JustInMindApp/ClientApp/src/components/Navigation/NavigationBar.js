@@ -20,6 +20,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
 import { SignOut } from '../Account/SignOut';
+import { SidebarData } from '../../ComponentsData/SidebarData';
 
 const drawerWidth = 240;
 
@@ -152,17 +153,15 @@ export default function NavigationBar(props) {
                 </div>
                 <Divider />
                 <List>
-                    {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-                        <ListItem button key={text} onClick={() => handleClick('/team')}>
-                            <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-                            <ListItemText primary={text} />
+                    {SidebarData.map((data, index) => (
+                        <ListItem button key={index} onClick={() => handleClick(data.path)}>
+                            <ListItemIcon>{data.icon}</ListItemIcon>
+                            <ListItemText primary={data.title} />
                         </ListItem>
                     ))}
                 </List>
             </Drawer>
-            <main className={classes.content}>
-
-            </main>
+            <main className={classes.content} />
         </div>
     );
 }
