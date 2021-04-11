@@ -1,4 +1,5 @@
 ﻿import React from 'react';
+
 import { makeStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar'
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
@@ -7,7 +8,6 @@ import MenuItem from '@material-ui/core/MenuItem';
 
 export function SignOut(props) {
     const classes = useStyles();
-
     const [anchorEl, setAnchorEl] = React.useState(null);
 
     const handleClick = (event) => {
@@ -18,14 +18,22 @@ export function SignOut(props) {
         setAnchorEl(null);
     };
 
+    const getUserNameFirstLetter = () => {
+        if (localStorage.getItem('userName') != null) {
+            return localStorage.getItem('userName').substring(0, 1);
+        }
+    }
+
     const logout = () => {
-        localStorage.setItem('token', null);
+        localStorage.removeItem('token');
+        localStorage.removeItem('userName');
+        localStorage.removeItem('userRole');
+        localStorage.removeItem('userId');
         props.setIsAuthorized(false);
     }
 
     return (
         <div className={classes.root}>
-
             <Menu
                 id="simple-menu"
                 anchorEl={anchorEl}
@@ -39,9 +47,12 @@ export function SignOut(props) {
                     SignOut <ExitToAppIcon className={classes.logoutButton}/>
                 </MenuItem>
             </Menu>
-
-            <Avatar aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick} className={classes.avatar}>{localStorage.getItem('userName').substring(0, 1)}</Avatar>
-
+            <Avatar
+                aria-controls="simple-menu"
+                aria-haspopup="true"
+                onClick={handleClick}
+                className={classes.avatar}>{getUserNameFirstLetter()}
+            </Avatar>
         </div>
     );
 }

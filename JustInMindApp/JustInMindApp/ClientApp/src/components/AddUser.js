@@ -2,7 +2,6 @@ import React from 'react';
 import '../styles/addTask.css'
 
 export class AddUser extends React.Component {
-
     constructor(props) {
         super(props);
         this.state = {

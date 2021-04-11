@@ -1,4 +1,5 @@
 ﻿import React, { useState } from 'react';
+
 import { makeStyles } from '@material-ui/core/styles';
 import { Button, TextField, ClickAwayListener } from '@material-ui/core';
 import { FormControl } from '@material-ui/core';
@@ -19,6 +20,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function AddProject(props) {
     const classes = useStyles();
+
     const [isClicked, setIsClicked] = useState(false);
     const [projectName, setProjectName] = useState('');
     
@@ -28,7 +30,6 @@ export default function AddProject(props) {
     }
 
     const fetchAddNewProject = () => {
-
         const requestOptions = {
             method: 'POST',
             headers: {
@@ -62,7 +63,6 @@ export default function AddProject(props) {
     }
 
     return (
-
         <ClickAwayListener onClickAway={() => setIsClicked(false)}>
             <FormControl 
                 className={classes.root}

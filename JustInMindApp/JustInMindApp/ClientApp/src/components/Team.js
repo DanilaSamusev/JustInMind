@@ -118,9 +118,7 @@ export class Team extends React.Component {
         else {
             return (
                 <div>
-                    <Navbar />
-
-                    <SignOut logout={this.logout} />
+                    <SignOut setIsAuthorized={this.props.setIsAuthorized} />
 
                     <Link className='add_user_button' to={'addUser'}>Add user</Link>
 

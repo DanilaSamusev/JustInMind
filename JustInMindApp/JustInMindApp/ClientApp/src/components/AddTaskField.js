@@ -1,4 +1,5 @@
 ﻿import React, { useState } from 'react';
+
 import { makeStyles } from '@material-ui/core/styles';
 import { Button, TextField, ClickAwayListener } from '@material-ui/core';
 import { FormControl } from '@material-ui/core';
@@ -20,7 +21,7 @@ export default function AddTaskField(props) {
     let addedTask = {};
 
     const handleChange = (event) => {
-        
+
         setTaskName(event.target.value);
     };
 
@@ -80,7 +81,6 @@ export default function AddTaskField(props) {
                 className={classes.root}
                 noValidate
                 autoComplete="off">
-
                 <TextField
                     autoFocus
                     label="Task name"

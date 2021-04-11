@@ -88,6 +88,7 @@ export default function ProjectSelection(props) {
             .then(response => {
                 if (response.status == 401) {
                     alert('You are not authorized!');
+                    props.setIsAuthorized(false);
                 }
                 else {
                     response
@@ -110,10 +111,7 @@ export default function ProjectSelection(props) {
             .then(response => {
                 if (response.status == 401) {
                     alert('You are not authorized!');
-
-                    this.setState({
-                        isAuthorized: false,
-                    });
+                    props.setIsAuthorized(false);
                 }
                 else {
                     fetchGetUserOwnProjects();
@@ -135,10 +133,7 @@ export default function ProjectSelection(props) {
             .then(response => {
                 if (response.status == 401) {
                     alert('You are not authorized!');
-
-                    this.setState({
-                        isAuthorized: false,
-                    });
+                    props.setIsAuthorized(false);
                 }
                 else {
                     fetchGetUserOwnProjects();
@@ -154,11 +149,9 @@ export default function ProjectSelection(props) {
 
     return (
         <div className={classes.projectSelectionContainer}>
-
             <div>
-                <AddProject reloadProjects={reloadAllProjects} />
+                <AddProject reloadProjects={reloadAllProjects} setIsAuthorized={props.setIsAuthorized} />
             </div>
-
             <div className={classes.projectSelectionPopover}>
                 <PopupState variant="popover" popupId="demo-popup-popover">
                     {(popupState) => (
@@ -181,7 +174,6 @@ export default function ProjectSelection(props) {
                                     <div>
                                         My projects
                                     </div>
-
                                     {projects.map((data, index) => {
                                         return (
                                             <div className={classes.deleteProjectContainer}
@@ -197,11 +189,9 @@ export default function ProjectSelection(props) {
                                             </div>
                                         );
                                     })}
-
                                     <div>
                                         My coloborations
                                     </div>
-
                                     {collaborationProjects.map((data, index) => {
                                         return (
                                             <div className={classes.deleteProjectContainer}
