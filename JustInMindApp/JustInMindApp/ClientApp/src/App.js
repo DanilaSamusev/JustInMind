@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { useHistory } from "react-router-dom";
 
 import './styles/custom.css'
-import Two from './components/Two';
-import One from './components/One';
+import AppRoutes from './components/AppRoutes';
+import AccountRoutes from './components/AccountRoutes';
 
 export default function App(props) {
     const [isAuthorized, setIsAuthorized] = useState(true)
@@ -20,7 +20,7 @@ export default function App(props) {
         }   
     }
 
-    let component = isAuthorized ? <Two setIsAuthorized={setIsUserAuthorized} /> : <One setIsAuthorized={setIsUserAuthorized} />
+    let component = isAuthorized ? <AppRoutes setIsAuthorized={setIsUserAuthorized} /> : <AccountRoutes setIsAuthorized={setIsUserAuthorized} />
 
     return (
         <div>

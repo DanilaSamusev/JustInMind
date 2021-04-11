@@ -5,7 +5,7 @@ import Board from './MainPages/Board';
 
 import { Team } from './Team';
 
-export default class Two extends Component {
+export default class AppRoutes extends Component {
     constructor(props) {
         super(props);
     }
