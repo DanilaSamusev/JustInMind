@@ -3,7 +3,7 @@ import { useHistory } from "react-router-dom";
 
 import './styles/custom.css'
 import AppRoutes from './components/Routes/AppRoutes';
-import AccountRoutes from './components/AccountRoutes';
+import AccountRoutes from './components/Routes/AccountRoutes';
 
 export default function App(props) {
     const [isAuthorized, setIsAuthorized] = useState(true)
