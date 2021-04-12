@@ -11,7 +11,6 @@ export default function App(props) {
     const history = useHistory();
 
     useEffect(() => {
-
         if (!isAuthorized) {
             history.push('/signIn');
         }

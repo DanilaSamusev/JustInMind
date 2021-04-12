@@ -1,24 +1,25 @@
-﻿import React from 'react';
-import { Link } from 'react-router-dom';
+﻿import React, { useState } from 'react';
 
-import { SignOut } from '../Account/SignOut';
-import { LoadingPage } from '../LoadingPage';
+import { makeStyles } from '@material-ui/core/styles';
+
+import UsersTable from '../UsersTable';
 
 import '../../styles/team.scss'
 
-export class Team extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            users: [],
-            isPageLoaded: false,
-            isAuthorized: true,
-        };
-
-        this.getUsers = this.getUsers.bind(this);
+const useStyles = makeStyles((theme) => ({
+    userTable: {
+        marginTop: '100px',
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'center',
     }
+}));
 
-    getUsers() {
+export function Team(props) {
+    const classes = useStyles();
+    const [isPageLoaded, setIsPageLoaded] = useState(false);
+
+    const getUsers = () => {
         const requestOptions = {
             method: 'GET',
             headers: {
@@ -46,11 +47,11 @@ export class Team extends React.Component {
             })
     }
 
-    deleteUser = (user) => {
-        this.fetchDeleteColaborator(user.id);
-	}
+    const deleteUser = (user) => {
+        fetchDeleteColaborator(user.id);
+    }
 
-    fetchDeleteColaborator = (userId) => {
+    const fetchDeleteColaborator = (userId) => {
         const deleteColaboratorRequest = {
             'userId': userId,
             'projectId': Number(localStorage.getItem('projectId')),
@@ -73,60 +74,13 @@ export class Team extends React.Component {
                 }
             })
             .then(() => {
-                this.getUsers();
+                getUsers();
             });
-	}
-
-    componentDidMount() {
-        this.getUsers();
     }
 
-    render() {
-        if (!this.state.isPageLoaded) {
-            return (
-                <div>
-                    <LoadingPage />
-                </div>
-            )
-        }
-        else {
-            return (
-                <div>
-                    <Link className='add_user_button' to={'addUser'}>Add user</Link>
-                    <table className="responstable">
-                        <thead>
-                            <tr>
-                                <th>Id</th>
-                                <th>UserName</th>
-                                <th>Password</th>
-                                <th>Role</th>
-                                <th></th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {this.state.users.map(user => (
-                                <tr key={user.id}>
-                                    <td>{user.id}</td>
-                                    <td>{user.name}</td>
-                                    <td>{user.password}</td>
-                                    <td>{user.role.name}</td>
-                                    <td>
-                                        <Link to={'updateUser/' + user.id}>
-                                            Edit
-                                    </Link>
-                                    </td>
-                                    <td>
-                                        <Link onClick={() => this.deleteUser(user)}>
-                                            Delete
-                                        </Link>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-            );
-        }
-    }
+    return (
+        <div className={classes.userTable}>
+            <UsersTable />
+        </div>
+    )
 }
