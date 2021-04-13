@@ -53,7 +53,8 @@ export function SignOut(props) {
                 aria-controls="simple-menu"
                 aria-haspopup="true"
                 onClick={handleClick}
-                className={classes.avatar}>{getUserNameFirstLetter()}
+                className={classes.avatar}>
+                {getUserNameFirstLetter()}
             </Avatar>
         </div>
     );
