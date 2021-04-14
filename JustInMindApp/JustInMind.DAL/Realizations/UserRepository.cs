@@ -11,19 +11,24 @@ namespace JustInMind.DAL.Realizations
 {
     public class UserRepository : IUserRepository
     {
-        private const string ConnectionString = "Server=DESKTOP-8M7HAO3\\SQLEXPRESS;Database=JustInMindDB;Trusted_Connection=True;";
+        private readonly string connectionString;
 
-        public async Task<IEnumerable<UserColaboration>> GetAllUserColaborationsByProjectIdAsync(int projectId)
+        public UserRepository(string connectionString)
         {
-            string query = "SELECT UserId as 'Id', u.Name, 'Smith' as 'Surname', r.Name as 'Role', 'someMail@mail.ru' as 'Email' " +
+            this.connectionString = connectionString;
+        }
+
+        public async Task<IEnumerable<UserColaboration>> GetAllColaboratorsByProjectIdAsync(int projectId)
+        {
+            string sql = "SELECT UserId as 'Id', u.Name, 'Smith' as 'Surname', r.Name as 'Role', 'someMail@mail.ru' as 'Email' " +
                             "FROM UsersToProjects up " +
                             "LEFT JOIN Users u ON u.Id = up.UserId " +
                             "LEFT JOIN Roles r ON u.RoleId = r.Id " +
                             $"WHERE up.ProjectId = {projectId}";
             
-            using var db = new SqlConnection(ConnectionString);
+            using var db = new SqlConnection(connectionString);
             
-            var users = await db.QueryAsync<UserColaboration>(query);
+            var users = await db.QueryAsync<UserColaboration>(sql);
 
             return users;
         }

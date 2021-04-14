@@ -48,8 +48,14 @@ namespace JustInMindApp
                 configuration.RootPath = "ClientApp/build";
             });
 
-            services.AddTransient<IUserRepository, UserRepository>();
+            var connectionStrings = Configuration.GetSection("ConnectionStrings");
+            string connectionString = connectionStrings.GetSection("LocalConnection").Value;
+
+            services.AddTransient<IUserRepository>(r => new UserRepository(connectionString));
+            services.AddTransient<IProjectRepository>(r => new ProjectRepository(connectionString));
+
             services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IProjectService, ProjectService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

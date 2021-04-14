@@ -1,10 +1,13 @@
-﻿using JustInMindApp.Models;
+﻿using JustInMind.BLL.Interfaces;
+
+using JustInMindApp.Models;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace JustInMindApp.Controllers
 {
@@ -15,46 +18,39 @@ namespace JustInMindApp.Controllers
     public class ProjectController : ControllerBase
     {
         private readonly JustInMindContext dbContext;
+        private readonly IProjectService projectService;
 
-        public ProjectController()
+        public ProjectController(IProjectService projectService)
         {
             dbContext = new JustInMindContext();
+
+            this.projectService = projectService;
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetById(int id)
+        public async Task<IActionResult> GetById(int id)
         {
-            var project = dbContext.Projects.First(p => p.Id == id);
-
-            if (project == null)
-            {
-                return BadRequest($"Project with specified id: {id} doesn't exist!");
-            }
+            var project = await projectService.GetAsync(id);
 
             return new ObjectResult(project);
         }
 
         [HttpGet("getAllUserOwn")]
-        public IActionResult GetProjects()
+        public async Task<IActionResult> GetAllUserOwn()
         {
-            var userId = int.Parse(HttpContext.User.Claims.ToList()[2].Value);
+            var userId = int.Parse(HttpContext.User.Claims.ToList()[1].Value);
 
-            var projects = dbContext.Projects.Where(p => p.OwnerId == userId);
+            var projects = await projectService.GetAllUserOwnAsync(userId);
 
             return new ObjectResult(projects);
         }
 
         [HttpGet("getAllUserCollaborate")]
-        public IActionResult GetCollaborations()
+        public async Task<IActionResult> GetAllUserColaborate()
         {
-            var userId = int.Parse(HttpContext.User.Claims.ToList()[2].Value);           
+            var userId = int.Parse(HttpContext.User.Claims.ToList()[1].Value);
 
-            var projects = dbContext.Projects
-                        .FromSqlRaw("SELECT ProjectId as Id, Name, OwnerId FROM UsersToProjects up " +
-                                    "LEFT JOIN Projects p ON p.id = up.projectId " +
-                                    $"WHERE user" +
-                                    $"Id = {userId}")
-                        .ToList();
+            var projects = await projectService.GetAllUserColaborate(userId);
 
             return new ObjectResult(projects);
         }
