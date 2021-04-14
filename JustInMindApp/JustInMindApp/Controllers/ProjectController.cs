@@ -52,7 +52,8 @@ namespace JustInMindApp.Controllers
             var projects = dbContext.Projects
                         .FromSqlRaw("SELECT ProjectId as Id, Name, OwnerId FROM UsersToProjects up " +
                                     "LEFT JOIN Projects p ON p.id = up.projectId " +
-                                    $"WHERE CollaboratorId = {userId}")
+                                    $"WHERE user" +
+                                    $"Id = {userId}")
                         .ToList();
 
             return new ObjectResult(projects);

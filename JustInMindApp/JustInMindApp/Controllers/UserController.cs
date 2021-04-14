@@ -1,4 +1,6 @@
-﻿using JustInMindApp.Models;
+﻿using JustInMind.BLL.Interfaces;
+
+using JustInMindApp.Models;
 using JustInMindApp.Requests;
 
 using Microsoft.AspNetCore.Authorization;
@@ -6,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace JustInMindApp.Controllers
 {
@@ -16,10 +19,12 @@ namespace JustInMindApp.Controllers
     public class UserController : ControllerBase
     {
         private readonly JustInMindContext dbContext;
+        private readonly IUserService userService;
 
-        public UserController()
+        public UserController(IUserService userService)
         {
             dbContext = new JustInMindContext();
+            this.userService = userService;
         }
 
         [HttpGet]
@@ -51,16 +56,9 @@ namespace JustInMindApp.Controllers
 
         [HttpGet]
         [Route("getAllColaborators/{projectId}")]
-        public IActionResult GetAllColaborators(int projectId)
+        public async Task<IActionResult> GetAllColaborators(int projectId)
         {
-            var users = dbContext
-                .Users
-                .FromSqlRaw("SELECT CollaboratorId as 'Id', CollaboratorRoleId as 'RoleId', Name, Password " +
-                            "FROM UsersToProjects up " +
-                            "LEFT JOIN Users u ON u.Id = up.CollaboratorId " +
-                            $"WHERE up.ProjectId = {projectId}")
-                .Include(u => u.Role)
-                .ToList();
+            var users = await this.userService.GetAllUserColaborationsByProjectIdAsync(projectId);
 
             if (users != null)
             {

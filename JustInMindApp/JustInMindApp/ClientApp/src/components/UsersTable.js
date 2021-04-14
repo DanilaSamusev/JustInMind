@@ -52,6 +52,7 @@ const headCells = [
     { id: 'id', disablePadding: false, label: 'ID' },
     { id: 'name', disablePadding: false, label: 'Name' },
     { id: 'surname', disablePadding: false, label: 'Surname' },
+    { id: 'email', disablePadding: false, label: 'Email' },
     { id: 'role', disablePadding: false, label: 'Role' },
     { id: 'action', disablePadding: false, label: '' },
 ];
@@ -329,9 +330,10 @@ export default function UsersTable(props) {
                                             </TableCell>
                                             <TableCell>{row.id}</TableCell>
                                             <TableCell>{row.name}</TableCell>
-                                            <TableCell>{row.fat}</TableCell>
-                                            <TableCell>{row.carbs}</TableCell>
-                                            <TableCell>{row.protein}</TableCell>
+                                            <TableCell>{row.surname}</TableCell>
+                                            <TableCell>{row.email}</TableCell>
+                                            <TableCell>{row.role}</TableCell>
+                                            <TableCell></TableCell>
                                         </TableRow>
                                     );
                                 })}

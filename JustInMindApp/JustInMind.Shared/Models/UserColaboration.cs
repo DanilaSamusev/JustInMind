@@ -1,6 +1,6 @@
-﻿namespace JustInMindApp.Models
+﻿namespace JustInMind.Shared.Models
 {
-    public class Colaborator
+    public class UserColaboration
     {
         public int Id { get; set; }
 
