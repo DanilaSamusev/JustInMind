@@ -7,6 +7,11 @@ using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 
+using JustInMind.DAL.Interfaces;
+using JustInMind.DAL.Realizations;
+using JustInMind.BLL.Interfaces;
+using JustInMind.BLL.Realizations;
+
 namespace JustInMindApp
 {
     public class Startup
@@ -42,6 +47,9 @@ namespace JustInMindApp
             {
                 configuration.RootPath = "ClientApp/build";
             });
+
+            services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<IUserService, UserService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

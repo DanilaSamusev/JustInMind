@@ -1,35 +1,35 @@
-import React, { Component } from 'react';
-import { BrowserRouter as Router, Switch, Route} from "react-router-dom";
-
-import { Team } from './components/Team';
-import { Login } from './components/Login';
-import { Boards } from './components/Boards';
-import { AddTask } from './components/AddTask';
-import { AddUser } from './components/AddUser';
-import { UpdateUser } from './components/UpdateUser';
+import React, { useState } from 'react';
+import { useHistory } from "react-router-dom";
 
 import './styles/custom.css'
+import AppRoutes from './components/Routes/AppRoutes';
+import AccountRoutes from './components/Routes/AccountRoutes';
+import { useEffect } from 'react';
 
-export default class App extends Component {
-    static displayName = App.name;
+export default function App(props) {
+    const [isAuthorized, setIsAuthorized] = useState(true)
+    const history = useHistory();
 
-    render() {
-        return (
-            <Router>
-                
-                <Switch>
-                    <Route path='/' exact component={Boards} />
-                    <Route path='/team' exact component={Team} />
-                    <Route path='/boards' exact component={Boards} />
-                    <Route path='/login' exact component={Login} />
+    useEffect(() => {
+        if (!isAuthorized) {
+            history.push('/signIn');
+        }
+        else {
+            history.push('/');
+        }   
 
-                    //Just for test this components. Remove in release
-                    <Route path='/addTask/:stateId?' exact component={AddTask} /> 
-                    <Route path='/addUser' exact component={AddUser} />
-                    <Route path='/updateUser/:id' exact component={UpdateUser} />
-                    
-                </Switch>
-            </Router>
-        );
+    }, [isAuthorized]);
+
+    const setIsUserAuthorized = (isAuthorized) => {
+        setIsAuthorized(isAuthorized);
     }
+
+    let component = isAuthorized ? <AppRoutes setIsAuthorized={setIsUserAuthorized} /> : <AccountRoutes setIsAuthorized={setIsUserAuthorized} />
+
+    return (
+        <div>
+            {component}
+        </div>
+    );
+
 }

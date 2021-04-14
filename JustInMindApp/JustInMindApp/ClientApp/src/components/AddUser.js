@@ -1,14 +1,14 @@
 import React from 'react';
+
 import '../styles/addTask.css'
 
 export class AddUser extends React.Component {
-
     constructor(props) {
         super(props);
         this.state = {
-            name: '',
-            password: '',
-            roleId: 1,
+            userName: '',
+            userRoleId: 1,
+            projectId: localStorage.getItem('projectId'),
         };
 
         this.onChange = this.onChange.bind(this);
@@ -40,7 +40,7 @@ export class AddUser extends React.Component {
             body: JSON.stringify(this.state)
         }
 
-        fetch('user', requestOptions);  
+        fetch('user/addColaborator', requestOptions);  
     }
 
     render() {
@@ -51,10 +51,9 @@ export class AddUser extends React.Component {
                 <div class="circle"></div>
                 <div class="form-inner">
                     <h3>Add user</h3>
-                    <input type="text" placeholder="User Name" name="name" onChange={this.onChange} />
-                    <input type="text" placeholder="Password" name="password" onChange={this.onChange} />
+                    <input type="text" placeholder="User Name" name="userName" onChange={this.onChange} />
                     <div class="dropdown">
-                        <select name="roleId" class="dropdown-select" onChange={this.onSelectChange}>
+                        <select name="userRoleId" class="dropdown-select" onChange={this.onSelectChange}>
                             <option value="1">Guest</option>
                             <option value="2">Developer</option>
                             <option value="4">Tester</option>

@@ -1,4 +1,5 @@
 ﻿import React, { useState } from 'react';
+
 import { makeStyles } from '@material-ui/core/styles';
 import { Button, TextField, ClickAwayListener } from '@material-ui/core';
 import { FormControl } from '@material-ui/core';
@@ -20,6 +21,7 @@ export default function AddTaskField(props) {
     let addedTask = {};
 
     const handleChange = (event) => {
+
         setTaskName(event.target.value);
     };
 
@@ -30,6 +32,7 @@ export default function AddTaskField(props) {
         task.categoryId = 0;
         task.userId = Number(localStorage.getItem('userId'));
         task.stateId = props.board.id;
+        task.projectId = props.projectId;
 
         const requestOptions = {
             method: 'POST',
@@ -78,7 +81,6 @@ export default function AddTaskField(props) {
                 className={classes.root}
                 noValidate
                 autoComplete="off">
-
                 <TextField
                     autoFocus
                     label="Task name"

@@ -18,6 +18,8 @@ namespace JustInMindApp.Models
 
         public int StateId { get; set; }
 
+        public int ProjectId { get; set; }
+
         public User User { get; set; }
 
         public State State { get; set; }

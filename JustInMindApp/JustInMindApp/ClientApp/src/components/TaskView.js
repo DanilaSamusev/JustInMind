@@ -1,7 +1,7 @@
-﻿import { makeStyles } from '@material-ui/core/styles';
-import { deepOrange } from '@material-ui/core/colors';
+﻿import React, { useEffect, useState } from 'react';
 
-import React, { useEffect, useState } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import { deepOrange } from '@material-ui/core/colors';
 import Tooltip from '@material-ui/core/Tooltip';
 import Avatar from '@material-ui/core/Avatar'
 import Button from '@material-ui/core/Button';
@@ -12,6 +12,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+
 import { TaskStatesData } from '../ComponentsData/TaskStatesData';
 import { TaskCategoriesData } from '../ComponentsData/TaskCategoriesData';
 
@@ -127,7 +128,6 @@ export function TaskView(props) {
             <Dialog className={classes.taskViewDialog} open={props.open} onClose={handleClose} aria-labelledby="form-dialog-title">
                 <DialogContent >
                     <div className={classes.taskView}>
-
                         <div>
                             <textarea
                                 className='taskName'
@@ -135,7 +135,6 @@ export function TaskView(props) {
                                 onChange={(e) => changeTaskName(e.target.value)}
                             />
                         </div>
-
                         <div className={classes.stateContainer}>
                             in <FormControl className={classes.formControl}>
                                 <Select
@@ -154,7 +153,6 @@ export function TaskView(props) {
                             </FormControl>
                             state
 					    </div>
-
                         <div className='ownerContainer'>
                             <div className='ownerLabel'>Owner:</div>
                             <Tooltip title={task.user.name} interactive arrow placement="right-start">
@@ -186,7 +184,6 @@ export function TaskView(props) {
                                 return <div key={comment.id}>{comment.text}</div>
                             })}
                         </div>
-
                         <div className={classes.categoryContainer}>
                             <FormControl className={classes.categorySelect}>
                                 <Select
@@ -207,7 +204,6 @@ export function TaskView(props) {
                                 </Select>
                             </FormControl>
                         </div>
-
                     </div>
                 </DialogContent>
                 <DialogActions>
@@ -224,41 +220,33 @@ export function TaskView(props) {
 }
 
 const useStyles = makeStyles((theme) => ({
-
     taskViewDialog: {
-
         '& .MuiDialogContent-root': {
             height: '520px',
         },
     },
-
     commentField: {
         display: 'block',
         marginLeft: '20px',
         marginTop: '7px',
-
         '& .MuiOutlinedInput-multiline': {
             width: '300px',
         },
     },
-
     orange: {
         color: theme.palette.getContrastText(deepOrange[500]),
         backgroundColor: deepOrange[500],
     },
-
     leaveCommentButton: {
         marginLeft: '20px',
         marginTop: '10px',
     },
-
     taskView: {
         color: '#172b4d',
         position: 'relative',
         height: '480px',
         width: '400px',
     },
-
     taskCommentsContainer: {
         overflow: 'auto',
         backgroundColor: '#dfe1e6',
@@ -269,26 +257,21 @@ const useStyles = makeStyles((theme) => ({
         borderRadius: '3px',
         border: '4px double black;',
     },
-
     descriptionField: {
         marginLeft: '20px',
         marginTop: '20px',
     },
-
     formControl: {
         minWidth: '30px',
         width: '80px',
     },
-
     categorySelect: {
         minWidth: '10px',
         width: '50px',
     },
-
     categoryImage: {
         marginLeft: '5px',
     },
-
     stateContainer: {
         display: 'flex',
         marginLeft: '20px',
@@ -300,9 +283,7 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: 'space-between',
         width: '130px',
     },
-
     categoryContainer: {
         marginLeft: '270px',
     }
-
 }));
