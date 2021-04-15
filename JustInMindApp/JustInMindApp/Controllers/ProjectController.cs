@@ -1,10 +1,8 @@
 ﻿using JustInMind.BLL.Interfaces;
-
-using JustInMindApp.Models;
+using JustInMind.Shared.Requests;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,6 +16,7 @@ namespace JustInMindApp.Controllers
     public class ProjectController : ControllerBase
     {
         private readonly JustInMindContext dbContext;
+
         private readonly IProjectService projectService;
 
         public ProjectController(IProjectService projectService)
@@ -50,25 +49,18 @@ namespace JustInMindApp.Controllers
         {
             var userId = int.Parse(HttpContext.User.Claims.ToList()[1].Value);
 
-            var projects = await projectService.GetAllUserColaborate(userId);
+            var projects = await projectService.GetAllUserColaborateAsync(userId);
 
             return new ObjectResult(projects);
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody]Project project)
-        {
-            if (string.IsNullOrWhiteSpace(project.Name))
-            {
-                return BadRequest(); 
-            }
+        public async Task<IActionResult> Post([FromBody]CreateProjectRequest request)
+        {        
+            var userId = int.Parse(HttpContext.User.Claims.ToList()[1].Value);
+            request.OwnerId = userId;
 
-            var userId = int.Parse(HttpContext.User.Claims.ToList()[2].Value);
-
-            project.OwnerId = userId;
-
-            dbContext.Projects.Add(project);
-            dbContext.SaveChanges();
+            await projectService.AddAsync(request);
 
             return Ok();
         }

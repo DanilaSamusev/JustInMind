@@ -1,5 +1,5 @@
-﻿namespace JustInMindApp.Requests
-{
+﻿namespace JustInMind.Shared.Requests
+{ 
     public class SignUpRequest
     {
         public string Name { get; set; }

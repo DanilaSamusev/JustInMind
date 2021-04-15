@@ -8,9 +8,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 using JustInMind.DAL.Interfaces;
-using JustInMind.DAL.Realizations;
+using JustInMind.DAL.Repositories;
 using JustInMind.BLL.Interfaces;
-using JustInMind.BLL.Realizations;
+using JustInMind.BLL.Services;
 
 namespace JustInMindApp
 {
@@ -53,9 +53,11 @@ namespace JustInMindApp
 
             services.AddTransient<IUserRepository>(r => new UserRepository(connectionString));
             services.AddTransient<IProjectRepository>(r => new ProjectRepository(connectionString));
+            services.AddTransient<IUsersToProjectsRepository>(r => new UsersToProjectsRepository(connectionString));
 
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IProjectService, ProjectService>();
+            services.AddTransient<IUsersToProjectsService, UsersToProjectsService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

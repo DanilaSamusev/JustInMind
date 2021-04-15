@@ -1,4 +1,5 @@
 ﻿using JustInMind.Shared.Models;
+using JustInMind.Shared.Requests;
 
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -11,6 +12,8 @@ namespace JustInMind.BLL.Interfaces
 
         public Task<IEnumerable<Project>> GetAllUserOwnAsync(int userId);
 
-        public Task<IEnumerable<Project>> GetAllUserColaborate(int userId);
+        public Task<IEnumerable<Project>> GetAllUserColaborateAsync(int userId);
+
+        Task AddAsync(CreateProjectRequest request);
     }
 }

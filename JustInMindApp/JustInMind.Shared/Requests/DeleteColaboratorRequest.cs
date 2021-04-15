@@ -1,4 +1,4 @@
-﻿namespace JustInMindApp.Requests
+﻿namespace JustInMind.Shared.Requests
 {
     public class DeleteColaboratorRequest
     {

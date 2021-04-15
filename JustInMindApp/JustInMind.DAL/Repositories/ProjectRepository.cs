@@ -8,7 +8,7 @@ using Dapper.Contrib.Extensions;
 using Dapper;
 using System.Collections.Generic;
 
-namespace JustInMind.DAL.Realizations
+namespace JustInMind.DAL.Repositories
 {
     public class ProjectRepository : IProjectRepository
     {
@@ -56,6 +56,15 @@ namespace JustInMind.DAL.Realizations
             var projects = await db.QueryAsync<Project>(sql);
 
             return projects;
+        }
+
+        public async Task<int> InsertAsync(Project entity)
+        {
+            using var db = new SqlConnection(connectionString);
+
+            var id = await db.InsertAsync(entity);
+
+            return id;
         }
     }
 }

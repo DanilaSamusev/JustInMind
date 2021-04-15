@@ -1,9 +1,9 @@
-﻿using JustInMindApp.Models;
-using JustInMindApp.Requests;
+﻿using JustInMind.Shared.Requests;
+
+using JustInMindApp.Models;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
 using System;

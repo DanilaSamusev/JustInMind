@@ -1,11 +1,10 @@
 ﻿using JustInMind.BLL.Interfaces;
+using JustInMind.Shared.Requests;
 
 using JustInMindApp.Models;
-using JustInMindApp.Requests;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 using System.Linq;
 using System.Threading.Tasks;

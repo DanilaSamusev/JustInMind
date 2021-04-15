@@ -5,7 +5,7 @@ using JustInMind.Shared.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace JustInMind.BLL.Realizations
+namespace JustInMind.BLL.Services
 {
     public class UserService : IUserService
     {

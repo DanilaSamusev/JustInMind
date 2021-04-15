@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
 
-namespace JustInMind.DAL.Realizations
+namespace JustInMind.DAL.Repositories
 {
     public class UserRepository : IUserRepository
     {
