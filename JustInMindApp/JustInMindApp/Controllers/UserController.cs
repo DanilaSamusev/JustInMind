@@ -117,7 +117,7 @@ namespace JustInMindApp.Controllers
             return Ok();
         }
 
-        [HttpDelete]
+        [HttpDelete("removeColaborator")]
         public IActionResult DeleteColaborator([FromBody] DeleteColaboratorRequest request)
         {
             var usersToProjectEntity = dbContext.UsersToProjects

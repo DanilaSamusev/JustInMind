@@ -15,11 +15,13 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import Checkbox from '@material-ui/core/Checkbox';
+import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import { useEffect } from 'react';
+import AddUserComponent from './User/AddUserComponent';
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -192,6 +194,10 @@ const useStyles = makeStyles((theme) => ({
         top: 20,
         width: 1,
     },
+    addUserButton: {
+        marginTop: 10,
+        marginLeft: 10,
+    }
 }));
 
 export default function UsersTable(props) {
@@ -202,6 +208,7 @@ export default function UsersTable(props) {
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const [rows, setRows] = React.useState([]);
+    const [open, setOpen] = React.useState(false);
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -234,6 +241,8 @@ export default function UsersTable(props) {
                 selected.slice(selectedIndex + 1),
             );
         }
+
+        console.log(newSelected);
 
         setSelected(newSelected);
     };
@@ -274,12 +283,48 @@ export default function UsersTable(props) {
                     response
                         .json()
                         .then(data => {
-                            console.log(data)
                             setRows(data)
                         })
                 }
             })
     }
+
+    const fetchRemoveColaborator = (id) => {
+        const requestOptions = {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                "Authorization": "Bearer " + localStorage.getItem('token')
+            },
+            body: JSON.stringify({
+                'userId': id,
+                'projectId': localStorage.getItem('projectId'),
+            })
+        }
+
+        fetch('user/removeColaborator', requestOptions)
+            .then(response => {
+                if (response.status == 401) {
+                    alert('You are not authorized!');
+                    props.setIsAuthorized(false);
+                }
+                else {
+                    reloadUsers();
+                }
+            });
+    }
+
+    const reloadUsers = () => {
+        getUsers();
+    }
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
 
     return (
         <div className={classes.root}>
@@ -310,7 +355,7 @@ export default function UsersTable(props) {
                                     return (
                                         <TableRow
                                             hover
-                                            onClick={(event) => handleClick(event, row.name)}
+                                            
                                             role="checkbox"
                                             aria-checked={isItemSelected}
                                             tabIndex={-1}
@@ -320,6 +365,7 @@ export default function UsersTable(props) {
                                             <TableCell padding="checkbox">
                                                 <Checkbox
                                                     checked={isItemSelected}
+                                                    onClick={(event) => handleClick(event, row.name)}
                                                     inputProps={{ 'aria-labelledby': labelId }}
                                                 />
                                             </TableCell>
@@ -333,13 +379,20 @@ export default function UsersTable(props) {
                                             <TableCell>{row.surname}</TableCell>
                                             <TableCell>{row.email}</TableCell>
                                             <TableCell>{row.role}</TableCell>
-                                            <TableCell></TableCell>
+                                            <TableCell>
+                                                <IconButton aria-label="delete" className={classes.margin} onClick={() => fetchRemoveColaborator(row.id)}>
+                                                    <DeleteIcon fontSize="large" />
+                                                </IconButton>
+                                            </TableCell>
                                         </TableRow>
                                     );
                                 })}
                         </TableBody>
                     </Table>
                 </TableContainer>
+                <Button variant="contained" color="primary" className={classes.addUserButton} onClick={handleClickOpen}>
+                    Add User
+                </Button>
                 <TablePagination
                     rowsPerPageOptions={[5, 10, 25]}
                     component="div"
@@ -350,6 +403,8 @@ export default function UsersTable(props) {
                     onChangeRowsPerPage={handleChangeRowsPerPage}
                 />
             </Paper>
+
+            <AddUserComponent open={open} onClose={handleClose} setIsAuthorized={props.setIsAuthorized} reloadUsers={reloadUsers}/>
         </div>
     );
 }
