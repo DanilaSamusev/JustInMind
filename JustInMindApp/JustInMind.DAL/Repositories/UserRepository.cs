@@ -23,8 +23,9 @@ namespace JustInMind.DAL.Repositories
             string sql = "SELECT UserId as 'Id', u.Name, 'Smith' as 'Surname', r.Name as 'Role', 'someMail@mail.ru' as 'Email' " +
                             "FROM UsersToProjects up " +
                             "LEFT JOIN Users u ON u.Id = up.UserId " +
-                            "LEFT JOIN Roles r ON u.RoleId = r.Id " +
-                            $"WHERE up.ProjectId = {projectId}";
+                            "LEFT JOIN Roles r ON up.UserRoleId = r.Id " +
+                            $"WHERE up.ProjectId = {projectId} AND " +
+                            "r.Name != 'Owner'";
             
             using var db = new SqlConnection(connectionString);
             

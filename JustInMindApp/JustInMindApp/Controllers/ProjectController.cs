@@ -85,8 +85,8 @@ namespace JustInMindApp.Controllers
         [Route("leaveProject/{id}")]
         public IActionResult LeaveProject(int id)
         {
-            var userId = int.Parse(HttpContext.User.Claims.ToList()[2].Value);
-            var project = dbContext.UsersToProjects.FirstOrDefault(pu => pu.Id == id || pu.CollaboratorId == userId);
+            var userId = int.Parse(HttpContext.User.Claims.ToList()[1].Value);
+            var project = dbContext.UsersToProjects.FirstOrDefault(pu => pu.ProjectId == id && pu.UserId == userId);
 
             if (project != null)
             {

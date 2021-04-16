@@ -1,4 +1,5 @@
 ﻿using JustInMind.BLL.Interfaces;
+using JustInMind.Shared.Models;
 using JustInMind.Shared.Requests;
 
 using JustInMindApp.Models;
@@ -100,14 +101,14 @@ namespace JustInMindApp.Controllers
 
             if (user == null)
             {
-                return BadRequest("Error: user with specified name doesn't exist!");
+                return BadRequest();
             }
 
             var entity = new UsersToProjects
             {
                 ProjectId = requset.ProjectId,
-                CollaboratorId = user.Id,
-                CollaboratorRoleId = requset.UserRoleId
+                UserId = user.Id,
+                UserRoleId = requset.UserRoleId
             };
 
             dbContext.UsersToProjects.Add(entity);
@@ -120,7 +121,7 @@ namespace JustInMindApp.Controllers
         public IActionResult DeleteColaborator([FromBody] DeleteColaboratorRequest request)
         {
             var usersToProjectEntity = dbContext.UsersToProjects
-                .First(up => up.CollaboratorId == request.UserId && up.ProjectId == request.ProjectId);
+                .First(up => up.UserId == request.UserId && up.ProjectId == request.ProjectId);
 
             if (usersToProjectEntity == null)
             {
