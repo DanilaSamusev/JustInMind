@@ -7,6 +7,6 @@ namespace JustInMind.BLL.Interfaces
 {
     public interface IUserService
     {
-        public Task<IEnumerable<UserColaboration>> GetAllUserColaborationsByProjectIdAsync(int projectId);
+        public Task<IEnumerable<UserColaboration>> GetAllColaboratorsByProjectIdAsync(int projectId);
     }
 }

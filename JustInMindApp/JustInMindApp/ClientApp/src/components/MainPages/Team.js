@@ -32,7 +32,7 @@ export function Team(props) {
             .then(response => {
                 if (response.status == 401) {
                     alert('You are not authorized!');
-                    this.props.setIsAuthorized(false);
+                    props.setIsAuthorized(false);
                 }
                 else {
                     response
@@ -70,7 +70,7 @@ export function Team(props) {
             .then(response => {
                 if (response.status == 401) {
                     alert('You are not authorized!');
-                    this.props.setIsAuthorized(false);
+                    props.setIsAuthorized(false);
                 }
             })
             .then(() => {
@@ -80,7 +80,7 @@ export function Team(props) {
 
     return (
         <div className={classes.userTable}>
-            <UsersTable />
+            <UsersTable setIsAuthorized={props.setIsAuthorized}/>
         </div>
     )
 }

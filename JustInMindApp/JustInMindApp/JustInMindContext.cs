@@ -1,4 +1,6 @@
-﻿using JustInMindApp.Models;
+﻿using JustInMind.Shared.Models;
+
+using JustInMindApp.Models;
 
 using Microsoft.EntityFrameworkCore;
 

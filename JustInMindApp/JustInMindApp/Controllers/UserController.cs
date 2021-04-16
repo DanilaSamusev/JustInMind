@@ -1,11 +1,11 @@
 ﻿using JustInMind.BLL.Interfaces;
+using JustInMind.Shared.Models;
+using JustInMind.Shared.Requests;
 
 using JustInMindApp.Models;
-using JustInMindApp.Requests;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 using System.Linq;
 using System.Threading.Tasks;
@@ -31,7 +31,7 @@ namespace JustInMindApp.Controllers
         [Route("getAll")]
         public IActionResult GetAll()
         {
-            var users = dbContext.Users.Include(u => u.Role);
+            var users = dbContext.Users;
 
             if (users != null)
             {
@@ -44,7 +44,7 @@ namespace JustInMindApp.Controllers
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
-            var user = dbContext.Users.Include(u => u.Role).FirstOrDefault(u => u.Id == id);
+            var user = dbContext.Users.FirstOrDefault(u => u.Id == id);
 
             if (user != null)
             {
@@ -58,7 +58,7 @@ namespace JustInMindApp.Controllers
         [Route("getAllColaborators/{projectId}")]
         public async Task<IActionResult> GetAllColaborators(int projectId)
         {
-            var users = await this.userService.GetAllUserColaborationsByProjectIdAsync(projectId);
+            var users = await this.userService.GetAllColaboratorsByProjectIdAsync(projectId);
 
             if (users != null)
             {
@@ -101,14 +101,14 @@ namespace JustInMindApp.Controllers
 
             if (user == null)
             {
-                return BadRequest("Error: user with specified name doesn't exist!");
+                return BadRequest();
             }
 
             var entity = new UsersToProjects
             {
                 ProjectId = requset.ProjectId,
-                CollaboratorId = user.Id,
-                CollaboratorRoleId = requset.UserRoleId
+                UserId = user.Id,
+                UserRoleId = requset.UserRoleId
             };
 
             dbContext.UsersToProjects.Add(entity);
@@ -121,7 +121,7 @@ namespace JustInMindApp.Controllers
         public IActionResult DeleteColaborator([FromBody] DeleteColaboratorRequest request)
         {
             var usersToProjectEntity = dbContext.UsersToProjects
-                .First(up => up.CollaboratorId == request.UserId && up.ProjectId == request.ProjectId);
+                .First(up => up.UserId == request.UserId && up.ProjectId == request.ProjectId);
 
             if (usersToProjectEntity == null)
             {

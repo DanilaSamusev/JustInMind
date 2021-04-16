@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace JustInMindApp.Models
+namespace JustInMind.Shared.Models
 {
     public class Project
     {
@@ -8,7 +8,5 @@ namespace JustInMindApp.Models
         public int Id { get; set; }
 
         public string Name { get; set; }
-
-        public int OwnerId { get; set; }
     }
 }

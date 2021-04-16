@@ -7,6 +7,6 @@ namespace JustInMind.DAL.Interfaces
 {
     public interface IUserRepository
     {
-        public Task<IEnumerable<UserColaboration>> GetAllUserColaborationsByProjectIdAsync(int projectId);
+        public Task<IEnumerable<UserColaboration>> GetAllColaboratorsByProjectIdAsync(int projectId);
     }
 }

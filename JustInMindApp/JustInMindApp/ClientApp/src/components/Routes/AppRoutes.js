@@ -20,7 +20,9 @@ export default class AppRoutes extends Component {
                     <Route path='/' exact>
                         <Board setIsAuthorized={this.props.setIsAuthorized} />
                     </Route>
-                    <Route path='/team' exact component={Team} />
+                    <Route path='/team' exact component={Team}>
+                        <Team setIsAuthorized={this.props.setIsAuthorized} />
+                    </Route>
                 </Switch>
             </div>
         );

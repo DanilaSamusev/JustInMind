@@ -5,7 +5,7 @@ using JustInMind.Shared.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace JustInMind.BLL.Realizations
+namespace JustInMind.BLL.Services
 {
     public class UserService : IUserService
     {
@@ -16,9 +16,9 @@ namespace JustInMind.BLL.Realizations
             this.userRepository = userRepository;
         }
 
-        public async Task<IEnumerable<UserColaboration>> GetAllUserColaborationsByProjectIdAsync(int projectId)
+        public async Task<IEnumerable<UserColaboration>> GetAllColaboratorsByProjectIdAsync(int projectId)
         {
-            return await this.userRepository.GetAllUserColaborationsByProjectIdAsync(projectId);
+            return await this.userRepository.GetAllColaboratorsByProjectIdAsync(projectId);
         }
     }
 }
