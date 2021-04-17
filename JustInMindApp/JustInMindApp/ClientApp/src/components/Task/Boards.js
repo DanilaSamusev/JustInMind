@@ -305,7 +305,7 @@ export class Boards extends React.Component {
 
                         {this.state.isFieldVisible[board.id]
                             ?
-                            <AddTaskField changeFieldVisibility={this.changeFieldVisibility} addTaskToBoard={this.addTaskToBoard} board={board} projectId={this.state.projectId} />
+                            <AddTaskField changeFieldVisibility={this.changeFieldVisibility} addTaskToBoard={this.addTaskToBoard} board={board} project={this.props.project} />
                             :
                             <Button
                                 className="add-button"
