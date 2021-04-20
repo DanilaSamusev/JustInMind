@@ -2,8 +2,6 @@
 using JustInMind.Shared.Models;
 using JustInMind.Shared.Requests;
 
-using JustInMindApp.Models;
-
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,46 +17,19 @@ namespace JustInMindApp.Controllers
     public class UserController : ControllerBase
     {
         private readonly JustInMindContext dbContext;
-        private readonly IUserService userService;
+        private readonly IUserService _userService;
 
         public UserController(IUserService userService)
         {
             dbContext = new JustInMindContext();
-            this.userService = userService;
-        }
-
-        [HttpGet]
-        [Route("getAll")]
-        public IActionResult GetAll()
-        {
-            var users = dbContext.Users;
-
-            if (users != null)
-            {
-                return new ObjectResult(users);
-            }
-
-            return BadRequest();
-        }
-
-        [HttpGet("{id}")]
-        public IActionResult Get(int id)
-        {
-            var user = dbContext.Users.FirstOrDefault(u => u.Id == id);
-
-            if (user != null)
-            {
-                return new ObjectResult(user);
-            }
-
-            return BadRequest();
+            this._userService = userService;
         }
 
         [HttpGet]
         [Route("getAllColaborators/{projectId}")]
         public async Task<IActionResult> GetAllColaborators(int projectId)
         {
-            var users = await this.userService.GetAllColaboratorsByProjectIdAsync(projectId);
+            var users = await _userService.GetAllColaboratorsByProjectIdAsync(projectId);
 
             if (users != null)
             {
@@ -68,40 +39,14 @@ namespace JustInMindApp.Controllers
             return BadRequest();
         }
 
-        [HttpPost]
-        public IActionResult Post([FromBody] User user)
-        {
-            if (user != null)
-            {
-                dbContext.Users.Add(user);
-                dbContext.SaveChanges();
-                return Ok();
-            }
-
-            return BadRequest();
-        }
-
-        [HttpPut]
-        public IActionResult Put([FromBody] User user)
-        {
-            if (user != null)
-            {
-                dbContext.Users.Update(user);
-                dbContext.SaveChanges();
-                return Ok();
-            }
-
-            return BadRequest();
-        }
-
         [HttpPost("addColaborator")]
-        public IActionResult AddColaborator(AddUserAsColaboratorRequset requset)
+        public async Task<IActionResult> AddColaborator(AddUserAsColaboratorRequset requset)
         {
-            var user = dbContext.Users.FirstOrDefault(u => u.Name == requset.UserName);
+            var user = await _userService.GetByEmailAsync(requset.UserEmail);
 
             if (user == null)
             {
-                return BadRequest();
+                return BadRequest("User not exists!");
             }
 
             var entity = new UsersToProjects

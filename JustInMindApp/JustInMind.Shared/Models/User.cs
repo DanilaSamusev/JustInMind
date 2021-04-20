@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace JustInMindApp.Models
+﻿namespace JustInMind.Shared.Models
 {
     public class User
     {

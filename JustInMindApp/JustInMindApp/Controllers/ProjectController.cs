@@ -15,21 +15,21 @@ namespace JustInMindApp.Controllers
     [Authorize]
     public class ProjectController : ControllerBase
     {
-        private readonly JustInMindContext dbContext;
+        private readonly JustInMindContext _dbContext;
 
-        private readonly IProjectService projectService;
+        private readonly IProjectService _projectService;
 
         public ProjectController(IProjectService projectService)
         {
-            dbContext = new JustInMindContext();
+            _dbContext = new JustInMindContext();
 
-            this.projectService = projectService;
+            _projectService = projectService;
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var project = await projectService.GetAsync(id);
+            var project = await _projectService.GetAsync(id);
 
             return new ObjectResult(project);
         }
@@ -39,7 +39,7 @@ namespace JustInMindApp.Controllers
         {
             var userId = int.Parse(HttpContext.User.Claims.ToList()[1].Value);
 
-            var projects = await projectService.GetAllUserOwnAsync(userId);
+            var projects = await _projectService.GetAllUserOwnAsync(userId);
 
             return new ObjectResult(projects);
         }
@@ -49,7 +49,7 @@ namespace JustInMindApp.Controllers
         {
             var userId = int.Parse(HttpContext.User.Claims.ToList()[1].Value);
 
-            var projects = await projectService.GetAllUserColaborateAsync(userId);
+            var projects = await _projectService.GetAllUserColaborateAsync(userId);
 
             return new ObjectResult(projects);
         }
@@ -60,7 +60,7 @@ namespace JustInMindApp.Controllers
             var userId = int.Parse(HttpContext.User.Claims.ToList()[1].Value);
             request.OwnerId = userId;
 
-            await projectService.AddAsync(request);
+            await _projectService.AddAsync(request);
 
             return Ok();
         }
@@ -69,12 +69,12 @@ namespace JustInMindApp.Controllers
         [Route("deleteProject/{id}")]
         public IActionResult Delete(int id)
         {
-            var project = dbContext.Projects.FirstOrDefault(p => p.Id == id);
+            var project = _dbContext.Projects.FirstOrDefault(p => p.Id == id);
 
             if (project != null)
             {
-                dbContext.Projects.Remove(project);
-                dbContext.SaveChanges();
+                _dbContext.Projects.Remove(project);
+                _dbContext.SaveChanges();
                 return Ok();
             }
 
@@ -86,12 +86,12 @@ namespace JustInMindApp.Controllers
         public IActionResult LeaveProject(int id)
         {
             var userId = int.Parse(HttpContext.User.Claims.ToList()[1].Value);
-            var project = dbContext.UsersToProjects.FirstOrDefault(pu => pu.ProjectId == id && pu.UserId == userId);
+            var project = _dbContext.UsersToProjects.FirstOrDefault(pu => pu.ProjectId == id && pu.UserId == userId);
 
             if (project != null)
             {
-                dbContext.UsersToProjects.Remove(project);
-                dbContext.SaveChanges();
+                _dbContext.UsersToProjects.Remove(project);
+                _dbContext.SaveChanges();
                 return Ok();
             }
 

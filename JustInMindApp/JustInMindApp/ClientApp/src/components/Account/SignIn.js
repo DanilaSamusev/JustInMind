@@ -108,9 +108,9 @@ export default function SignIn(props) {
                         required
                         fullWidth
                         id="email"
-                        label="Email Address"
+                        label="User Name"
                         name="name"
-                        autoComplete="email"
+                        autoComplete="name"
                         autoFocus
                         value={name}
                         onChange={e => setName(e.target.value)}

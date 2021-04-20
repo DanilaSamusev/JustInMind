@@ -1,6 +1,6 @@
-﻿using JustInMind.Shared.Requests;
-
-using JustInMindApp.Models;
+﻿using JustInMind.BLL.Interfaces;
+using JustInMind.Shared.Models;
+using JustInMind.Shared.Requests;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace JustInMindApp.Controllers
 {
@@ -19,37 +20,45 @@ namespace JustInMindApp.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
-        private readonly JustInMindContext dbContext;
+        private IUserService _userService;
 
-        public AccountController()
+        public AccountController(IUserService userService)
         {
-            dbContext = new JustInMindContext();
+            _userService = userService;
         }
 
         [HttpPost("signUp")]
         public IActionResult SignUp([FromBody] SignUpRequest request)
         {
-            if (string.IsNullOrWhiteSpace(request.Name) || string.IsNullOrWhiteSpace(request.Password))
+            if (!ModelState.IsValid)
             {
-                return BadRequest();
+                return BadRequest(ModelState);
             }
 
-            var user = new User
+            var user = _userService.GetByEmailAsync(request.Email);
+
+            if (user != null)
+            {
+                return BadRequest("User already exists!");
+            }
+
+            var newUser = new User
             {
                 Name = request.Name,
+                Surname = request.Surname,
+                Email = request.Email,
                 Password = request.Password,
             };
 
-            dbContext.Users.Add(user);
-            dbContext.SaveChanges();
+            _userService.InsertAsync(newUser);
 
             return Ok();
         }
 
         [HttpPost("token")]
-        public IActionResult Token([FromBody] UserLogin userLogin)
+        public async Task<IActionResult> GetTokenAsync([FromBody] SignInRequest request)
         {
-            var identity = GetIdentity(userLogin);
+            var identity = await GetIdentityAsync(request);
 
             if (identity == null)
             {
@@ -85,10 +94,9 @@ namespace JustInMindApp.Controllers
             return Ok();
         }
 
-        private ClaimsIdentity GetIdentity(UserLogin userLogin)
+        private async Task<ClaimsIdentity> GetIdentityAsync(SignInRequest request)
         {
-            var user = dbContext.Users
-                .FirstOrDefault(u => u.Name == userLogin.Name && u.Password == userLogin.Password);
+            var user = await _userService.GetByEmailAndPasswordAsync(request.Email, request.Password);
 
             if (user == null)
             {
