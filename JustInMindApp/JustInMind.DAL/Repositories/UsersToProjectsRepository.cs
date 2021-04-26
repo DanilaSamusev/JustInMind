@@ -1,4 +1,5 @@
-﻿using Dapper.Contrib.Extensions;
+﻿using Dapper;
+using Dapper.Contrib.Extensions;
 
 using JustInMind.DAL.Interfaces;
 using JustInMind.Shared.Models;
@@ -17,14 +18,28 @@ namespace JustInMind.DAL.Repositories
             this.connectionString = connectionString;
         }
 
-        public async Task<int> InsertAsync(UsersToProjects entity)
+        public async Task<UsersToProjects> GetByProjetcIdAndUserIdAsync(int projectId, int userId)
         {
+            string sql = "SELECT * FROM UsersToProjects " +
+                         $"WHERE ProjectId = @ProjectId AND UserId = @UserId";
 
             using var db = new SqlConnection(connectionString);
 
-            var id = await db.InsertAsync(entity);
+            return await db.QuerySingleAsync<UsersToProjects>(sql, new { ProjectId = projectId, UserId = userId });
+        }
 
-            return id;
+        public async Task<int> InsertAsync(UsersToProjects entity)
+        {
+            using var db = new SqlConnection(connectionString);
+
+            return await db.InsertAsync(entity);
+        }
+
+        public async Task<bool> DeleteAsync(UsersToProjects entity)
+        {
+            using var db = new SqlConnection(connectionString);
+
+            return await db.DeleteAsync(entity);
         }
     }
 }

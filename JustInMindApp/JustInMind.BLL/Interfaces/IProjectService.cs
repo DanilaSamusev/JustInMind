@@ -14,6 +14,10 @@ namespace JustInMind.BLL.Interfaces
 
         public Task<IEnumerable<Project>> GetAllUserColaborateAsync(int userId);
 
-        Task AddAsync(CreateProjectRequest request);
+        public Task AddAsync(CreateProjectRequest request);
+
+        public Task<bool> DeleteAsync(Project entity);
+
+        public Task<bool> LeaveAsync(UsersToProjects entity);
     }
 }

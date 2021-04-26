@@ -5,7 +5,6 @@ using JustInMind.Shared.Requests;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace JustInMindApp.Controllers
@@ -16,13 +15,13 @@ namespace JustInMindApp.Controllers
     [Authorize]
     public class UserController : ControllerBase
     {
-        private readonly JustInMindContext dbContext;
+        private readonly IUsersToProjectsService _usersToProjectsService;
         private readonly IUserService _userService;
 
-        public UserController(IUserService userService)
+        public UserController(IUserService userService, IUsersToProjectsService usersToProjectsService)
         {
-            dbContext = new JustInMindContext();
-            this._userService = userService;
+            _userService = userService;
+            _usersToProjectsService = usersToProjectsService;
         }
 
         [HttpGet]
@@ -31,12 +30,7 @@ namespace JustInMindApp.Controllers
         {
             var users = await _userService.GetAllColaboratorsByProjectIdAsync(projectId);
 
-            if (users != null)
-            {
-                return new ObjectResult(users);
-            }
-
-            return BadRequest();
+            return new ObjectResult(users);
         }
 
         [HttpPost("addColaborator")]
@@ -46,7 +40,7 @@ namespace JustInMindApp.Controllers
 
             if (user == null)
             {
-                return BadRequest("User not exists!");
+                return BadRequest();
             }
 
             var entity = new UsersToProjects
@@ -56,27 +50,24 @@ namespace JustInMindApp.Controllers
                 UserRoleId = requset.UserRoleId
             };
 
-            dbContext.UsersToProjects.Add(entity);
-            dbContext.SaveChanges();
+            await _usersToProjectsService.InsertAsync(entity);
 
             return Ok();
         }
 
         [HttpDelete("removeColaborator")]
-        public IActionResult DeleteColaborator([FromBody] DeleteColaboratorRequest request)
+        public async Task<IActionResult> DeleteColaborator([FromBody] DeleteColaboratorRequest request)
         {
-            var usersToProjectEntity = dbContext.UsersToProjects
-                .First(up => up.UserId == request.UserId && up.ProjectId == request.ProjectId);
+            var entity = await _usersToProjectsService.GetByProjetcIdAndUserIdAsync(request.ProjectId, request.UserId);
 
-            if (usersToProjectEntity == null)
+            if (entity == null)
             {
                 return BadRequest("User is not a colaborator of this project!");
             }
 
-            dbContext.UsersToProjects.Remove(usersToProjectEntity);
-            dbContext.SaveChanges();
+            await _usersToProjectsService.DeleteAsync(entity);
 
-            return BadRequest();
+            return Ok();
         }
     }
 }

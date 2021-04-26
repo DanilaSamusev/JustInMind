@@ -51,7 +51,7 @@ export default function SignIn(props) {
     const classes = useStyles();
     const history = useHistory();
 
-    const [name, setName] = useState(null);
+    const [email, setEmail] = useState(null);
     const [password, setPassword] = useState(null);
 
     const fetchLogin = () => {
@@ -60,13 +60,13 @@ export default function SignIn(props) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(
                 {
-                    'name': name,
+                    'email': email,
                     'password': password
                 }
             )
         }
 
-        fetch('account/token', requestOptions)
+        fetch('account/signIn', requestOptions)
             .then(response => {
                 if (response.status == 400) {
                     response
@@ -108,12 +108,12 @@ export default function SignIn(props) {
                         required
                         fullWidth
                         id="email"
-                        label="User Name"
-                        name="name"
-                        autoComplete="name"
+                        label="Email"
+                        name="email"
+                        autoComplete="email"
                         autoFocus
-                        value={name}
-                        onChange={e => setName(e.target.value)}
+                        value={email}
+                        onChange={e => setEmail(e.target.value)}
                     />
                     <TextField
                         variant="outlined"

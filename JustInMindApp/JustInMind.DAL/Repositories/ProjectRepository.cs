@@ -33,12 +33,12 @@ namespace JustInMind.DAL.Repositories
             string sql = "SELECT p.Id, p.Name FROM UsersToProjects up " +
                          "LEFT JOIN Projects p ON p.Id = up.ProjectId " +
                          "LEFT JOIN Roles r ON r.Id = up.UserRoleId " +
-                         $"WHERE up.UserId = {userId} AND " +
+                         $"WHERE up.UserId = @UserId AND " +
                          "r.Name = 'Owner'";
 
             using var db = new SqlConnection(connectionString);
 
-            var projects = await db.QueryAsync<Project>(sql);
+            var projects = await db.QueryAsync<Project>(sql, new { UserId = userId });
 
             return projects;
         }
@@ -48,12 +48,12 @@ namespace JustInMind.DAL.Repositories
             string sql = "SELECT p.Id, p.Name FROM UsersToProjects up " +
                          "LEFT JOIN Projects p ON p.Id = up.ProjectId " +
                          "LEFT JOIN Roles r ON r.Id = up.UserRoleId " +
-                         $"WHERE up.UserId = {userId} AND " +
+                         $"WHERE up.UserId = @UserId AND " +
                          $"r.Name != 'Owner'";
 
             using var db = new SqlConnection(connectionString);
 
-            var projects = await db.QueryAsync<Project>(sql);
+            var projects = await db.QueryAsync<Project>(sql, new { UserId = userId});
 
             return projects;
         }
@@ -65,6 +65,20 @@ namespace JustInMind.DAL.Repositories
             var id = await db.InsertAsync(entity);
 
             return id;
+        }
+
+        public async Task<bool> DeleteAsync(Project entity)
+        {
+            using var db = new SqlConnection();
+
+            return await db.DeleteAsync(entity);
+        }
+
+        public async Task<bool> LeaveAsync(UsersToProjects entity)
+        {
+            using var db = new SqlConnection();
+
+            return await db.DeleteAsync(entity);
         }
     }
 }

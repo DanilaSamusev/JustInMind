@@ -15,15 +15,13 @@ namespace JustInMindApp.Controllers
     [Authorize]
     public class ProjectController : ControllerBase
     {
-        private readonly JustInMindContext _dbContext;
-
         private readonly IProjectService _projectService;
+        private readonly IUsersToProjectsService _usersToProjectsService;
 
-        public ProjectController(IProjectService projectService)
+        public ProjectController(IProjectService projectService, IUsersToProjectsService usersToProjectsService)
         {
-            _dbContext = new JustInMindContext();
-
             _projectService = projectService;
+            _usersToProjectsService = usersToProjectsService;
         }
 
         [HttpGet("{id}")]
@@ -67,35 +65,18 @@ namespace JustInMindApp.Controllers
 
         [HttpDelete]
         [Route("deleteProject/{id}")]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var project = _dbContext.Projects.FirstOrDefault(p => p.Id == id);
+            var project = await _projectService.GetAsync(id);
 
-            if (project != null)
+            if (project == null)
             {
-                _dbContext.Projects.Remove(project);
-                _dbContext.SaveChanges();
-                return Ok();
+                return NotFound();
             }
 
-            return BadRequest();
-        }
+            await _projectService.DeleteAsync(project);
 
-        [HttpDelete]
-        [Route("leaveProject/{id}")]
-        public IActionResult LeaveProject(int id)
-        {
-            var userId = int.Parse(HttpContext.User.Claims.ToList()[1].Value);
-            var project = _dbContext.UsersToProjects.FirstOrDefault(pu => pu.ProjectId == id && pu.UserId == userId);
-
-            if (project != null)
-            {
-                _dbContext.UsersToProjects.Remove(project);
-                _dbContext.SaveChanges();
-                return Ok();
-            }
-
-            return BadRequest();
+            return Ok();
         }
     }
 }

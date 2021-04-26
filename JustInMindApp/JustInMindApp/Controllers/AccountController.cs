@@ -20,7 +20,7 @@ namespace JustInMindApp.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
-        private IUserService _userService;
+        private readonly IUserService _userService;
 
         public AccountController(IUserService userService)
         {
@@ -30,11 +30,6 @@ namespace JustInMindApp.Controllers
         [HttpPost("signUp")]
         public IActionResult SignUp([FromBody] SignUpRequest request)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             var user = _userService.GetByEmailAsync(request.Email);
 
             if (user != null)
@@ -55,14 +50,15 @@ namespace JustInMindApp.Controllers
             return Ok();
         }
 
-        [HttpPost("token")]
+        [HttpPost("signIn")]
         public async Task<IActionResult> GetTokenAsync([FromBody] SignInRequest request)
         {
             var identity = await GetIdentityAsync(request);
 
             if (identity == null)
             {
-                return BadRequest(new { ErrorMessage = "Invalid username or password!" });
+                ModelState.AddModelError("SignIn", "Invalid username or password!");
+                return BadRequest(ModelState);
             }
 
             var currentDate = DateTime.UtcNow;
@@ -85,13 +81,6 @@ namespace JustInMindApp.Controllers
             };
 
             return new ObjectResult(response);
-        }
-
-        [HttpGet()]
-        [Authorize]
-        public IActionResult Authorized()
-        {
-            return Ok();
         }
 
         private async Task<ClaimsIdentity> GetIdentityAsync(SignInRequest request)

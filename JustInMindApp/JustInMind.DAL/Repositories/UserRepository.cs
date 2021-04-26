@@ -41,7 +41,7 @@ namespace JustInMind.DAL.Repositories
 
         public async Task<IEnumerable<UserColaboration>> GetAllColaboratorsByProjectIdAsync(int projectId)
         {
-            string sql = "SELECT UserId as 'Id', u.Name, 'Smith' as 'Surname', r.Name as 'Role', 'someMail@mail.ru' as 'Email' " +
+            string sql = "SELECT UserId as 'Id', u.Name, u.Surname, r.Name as 'Role', u.Email " +
                             "FROM UsersToProjects up " +
                             "LEFT JOIN Users u ON u.Id = up.UserId " +
                             "LEFT JOIN Roles r ON up.UserRoleId = r.Id " +

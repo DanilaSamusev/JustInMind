@@ -47,6 +47,8 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignUp() {
     const [name, setName] = useState(null);
+    const [surname, setSurname] = useState(null);
+    const [email, setEmail] = useState(null);
     const [password, setPassword] = useState(null);
 
     const classes = useStyles();
@@ -58,6 +60,8 @@ export default function SignUp() {
             body: JSON.stringify(
                 {
                     'name': name,
+                    'surname': surname,
+                    'email': email,
                     'password': password
                 }
             )
@@ -94,17 +98,21 @@ export default function SignUp() {
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <TextField
+                                value={surname}
+                                onChange={(event) => setSurname(event.target.value)}
                                 variant="outlined"
                                 required
                                 fullWidth
-                                id="lastName"
-                                label="Last Name"
-                                name="lastName"
-                                autoComplete="lname"
+                                id="surname"
+                                label="Surname"
+                                name="surname"
+                                autoComplete="sname"
                             />
                         </Grid>
                         <Grid item xs={12}>
                             <TextField
+                                value={email}
+                                onChange={(event) => setEmail(event.target.value)}
                                 variant="outlined"
                                 required
                                 fullWidth

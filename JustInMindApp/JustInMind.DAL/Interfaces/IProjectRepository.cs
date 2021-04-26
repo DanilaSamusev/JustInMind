@@ -14,5 +14,9 @@ namespace JustInMind.DAL.Interfaces
         public Task<IEnumerable<Project>> GetAllUserColaborate(int userId);
 
         public Task<int> InsertAsync(Project entity);
+
+        public Task<bool> DeleteAsync(Project entity);
+
+        public Task<bool> LeaveAsync(UsersToProjects entity);
     }
 }
