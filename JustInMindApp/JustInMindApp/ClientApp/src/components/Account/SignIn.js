@@ -14,6 +14,8 @@ import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/core/styles';
 
+import ValidationHelper from '../../Helpers/ValidationHelper';
+
 function Copyright() {
     return (
         <Typography variant="body2" color="textSecondary" align="center">
@@ -55,6 +57,11 @@ export default function SignIn(props) {
     const [password, setPassword] = useState(null);
 
     const fetchLogin = () => {
+
+        if (ValidationHelper.isStringValid(email) || ValidationHelper.isStringValid(password)) {
+            props.openSnackbar(true, 'error', 'User Email or Password is empty!')
+        }
+
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -68,13 +75,15 @@ export default function SignIn(props) {
 
         fetch('account/signIn', requestOptions)
             .then(response => {
-                if (response.status == 400) {
+
+                if (response.status == 404) {
                     response
                         .text()
-                        .then(text => alert(JSON.parse(text).errorMessage))
+                        .then(text => props.openSnackbar(true, 'error', JSON.parse(text)))
                 }
-                else {
-                    return response
+
+                if (response.status == 200) {
+                    response
                         .json()
                         .then(json => {
                             localStorage.setItem('token', json.token);
@@ -82,8 +91,7 @@ export default function SignIn(props) {
                             localStorage.setItem('userRole', json.userRole);
                             localStorage.setItem('userId', json.userId);
                         })
-                        .then(() =>
-                        {
+                        .then(() => {
                             props.setIsAuthorized(true);
                             history.push('/');
                         });

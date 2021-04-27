@@ -2,7 +2,6 @@
 using JustInMind.Shared.Models;
 using JustInMind.Shared.Requests;
 
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 
@@ -51,14 +50,13 @@ namespace JustInMindApp.Controllers
         }
 
         [HttpPost("signIn")]
-        public async Task<IActionResult> GetTokenAsync([FromBody] SignInRequest request)
+        public async Task<IActionResult> SignIn([FromBody] SignInRequest request)
         {
             var identity = await GetIdentityAsync(request);
 
             if (identity == null)
             {
-                ModelState.AddModelError("SignIn", "Invalid username or password!");
-                return BadRequest(ModelState);
+                return NotFound("User is not found!");
             }
 
             var currentDate = DateTime.UtcNow;
