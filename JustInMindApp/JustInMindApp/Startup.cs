@@ -54,10 +54,12 @@ namespace JustInMindApp
             services.AddTransient<IUserRepository>(r => new UserRepository(connectionString));
             services.AddTransient<IProjectRepository>(r => new ProjectRepository(connectionString));
             services.AddTransient<IUsersToProjectsRepository>(r => new UsersToProjectsRepository(connectionString));
+            services.AddTransient<ITaskRepository>(r => new TaskRepository(connectionString));
 
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IProjectService, ProjectService>();
             services.AddTransient<IUsersToProjectsService, UsersToProjectsService>();
+            services.AddTransient<ITaskService, TaskService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

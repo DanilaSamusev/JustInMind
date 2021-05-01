@@ -1,10 +1,9 @@
-﻿using JustInMindApp.Models;
+﻿using JustInMind.BLL.Interfaces;
 
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
-using System.Linq;
+using System.Threading.Tasks;
 
 namespace JustInMindApp.Controllers
 {
@@ -14,82 +13,76 @@ namespace JustInMindApp.Controllers
     [Authorize]
     public class TaskController : ControllerBase
     {
-        private readonly JustInMindContext dbContext;
+        private readonly ITaskService _taskService;
 
-        public TaskController()
+        public TaskController(ITaskService taskService)
         {
-            dbContext = new JustInMindContext();
+            _taskService = taskService;
         }
 
         [HttpGet]
         [Route("getAll")]
-        public IActionResult GetAll([FromQuery]int id)
+        public async Task<IActionResult> GetAll([FromQuery] int projectId)
         {
-            var tasks = dbContext.Tasks.Where(t => t.ProjectId == id);
+            var tasks = await _taskService.GetAllByProjectIdAsync(projectId);
 
             if (tasks != null)
             {
                 return new ObjectResult(tasks);
             }
 
-            return BadRequest();
+            return NotFound();
         }
 
-        [HttpGet("{id}")]
-        public IActionResult Get(int id)
+        [HttpGet("{taskId}")]
+        public async Task<IActionResult> Get(int taskId)
         {
-            var task = dbContext.Tasks
-                .Include(t => t.User)
-                .Include(t => t.Comments)
-                .FirstOrDefault(t => t.Id == id);
+            var task = await _taskService.GetDetailedTaskByIdAsync(taskId);
 
             if (task != null)
             {
                 return new ObjectResult(task);
             }
 
-            return BadRequest();
+            return NotFound();
         }
-       
+
         [HttpPost]
-        public IActionResult Post([FromBody] Task task)
+        public async Task<IActionResult> Post([FromBody] JustInMind.Shared.Models.Task task)
         {
             if (task != null)
             {
-                dbContext.Tasks.Add(task);
-                dbContext.SaveChanges();
+                await _taskService.InsertAsync(task);
                 return Ok(task.Id);
             }
 
             else return BadRequest();
         }
-       
+
         [HttpPut]
-        public IActionResult Put([FromBody] Task task)
+        public async Task<IActionResult> Put([FromBody] JustInMind.Shared.Models.Task task)
         {
             if (task != null)
             {
-                dbContext.Tasks.Update(task);
-                dbContext.SaveChanges();
-                return Ok();
+                await _taskService.UpdateAsync(task);
+                return Ok(task.Id);
             }
 
             else return BadRequest();
         }
-       
-        [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+
+        [HttpDelete("{taskId}")]
+        public async Task<IActionResult> Delete(int taskId)
         {
-            var task = dbContext.Tasks.FirstOrDefault(t => t.Id == id);
+            var task = await _taskService.GetSingleByIdAsync(taskId);
 
             if (task != null)
             {
-                dbContext.Tasks.Remove(task);
-                dbContext.SaveChanges();
+                await _taskService.DeleteAsync(task);
                 return Ok();
             }
 
-            return BadRequest();
+            return NotFound();
         }
     }
 }

@@ -7,16 +7,16 @@ namespace JustInMind.DAL.Interfaces
 {
     public interface IProjectRepository
     {
-        public Task<Project> GetAsync(int id);
+        Task<Project> GetAsync(int id);
 
-        public Task<IEnumerable<Project>> GetAllUserOwnAsync(int userId);
+        Task<IEnumerable<Project>> GetAllUserOwnAsync(int userId);
 
-        public Task<IEnumerable<Project>> GetAllUserColaborate(int userId);
+        Task<IEnumerable<Project>> GetAllUserColaborate(int userId);
 
-        public Task<int> InsertAsync(Project entity);
+        Task<int> InsertAsync(Project entity);
 
-        public Task<bool> DeleteAsync(Project entity);
+        Task<bool> DeleteAsync(Project entity);
 
-        public Task<bool> LeaveAsync(UsersToProjects entity);
+        Task<bool> LeaveAsync(UsersToProjects entity);
     }
 }

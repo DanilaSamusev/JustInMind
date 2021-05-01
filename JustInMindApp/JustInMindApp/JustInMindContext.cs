@@ -19,12 +19,10 @@ namespace JustInMindApp
 
         public virtual DbSet<Attachement> Attachements { get; set; }
         public virtual DbSet<Category> Categories { get; set; }
-        public virtual DbSet<Comment> Comments { get; set; }
         public virtual DbSet<Feedback> Feedbacks { get; set; }
         public virtual DbSet<History> Histories { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<State> States { get; set; }
-        public virtual DbSet<Task> Tasks { get; set; }
         public virtual DbSet<Urgency> Urgencies { get; set; }
         public virtual DbSet<Project> Projects { get; set; }
         public virtual DbSet<UsersToProjects> UsersToProjects { get; set; }

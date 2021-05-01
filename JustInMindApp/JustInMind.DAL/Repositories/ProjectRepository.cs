@@ -69,14 +69,14 @@ namespace JustInMind.DAL.Repositories
 
         public async Task<bool> DeleteAsync(Project entity)
         {
-            using var db = new SqlConnection();
+            using var db = new SqlConnection(connectionString);
 
             return await db.DeleteAsync(entity);
         }
 
         public async Task<bool> LeaveAsync(UsersToProjects entity)
         {
-            using var db = new SqlConnection();
+            using var db = new SqlConnection(connectionString);
 
             return await db.DeleteAsync(entity);
         }
