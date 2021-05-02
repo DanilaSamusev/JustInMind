@@ -35,7 +35,9 @@ namespace JustInMindApp.Controllers
         [HttpGet("getAllUserOwn")]
         public async Task<IActionResult> GetAllUserOwn()
         {
-            var userId = int.Parse(HttpContext.User.Claims.ToList()[1].Value);
+            var userId = int.Parse(HttpContext.User.Claims
+                .FirstOrDefault(c => c.Type == nameof(JustInMind.Shared.Models.User.Id).ToLower())
+                .Value);
 
             var projects = await _projectService.GetAllUserOwnAsync(userId);
 
@@ -45,7 +47,9 @@ namespace JustInMindApp.Controllers
         [HttpGet("getAllUserCollaborate")]
         public async Task<IActionResult> GetAllUserColaborate()
         {
-            var userId = int.Parse(HttpContext.User.Claims.ToList()[1].Value);
+            var userId = int.Parse(HttpContext.User.Claims
+                .FirstOrDefault(c => c.Type == nameof(JustInMind.Shared.Models.User.Id).ToLower())
+                .Value);
 
             var projects = await _projectService.GetAllUserColaborateAsync(userId);
 
@@ -54,8 +58,11 @@ namespace JustInMindApp.Controllers
 
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]CreateProjectRequest request)
-        {        
-            var userId = int.Parse(HttpContext.User.Claims.ToList()[1].Value);
+        {
+            var userId = int.Parse(HttpContext.User.Claims
+                .FirstOrDefault(c => c.Type == nameof(JustInMind.Shared.Models.User.Id).ToLower())
+                .Value);
+
             request.OwnerId = userId;
 
             await _projectService.AddAsync(request);

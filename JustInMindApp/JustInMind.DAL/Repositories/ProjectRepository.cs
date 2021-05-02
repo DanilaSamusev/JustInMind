@@ -1,12 +1,12 @@
-﻿using JustInMind.DAL.Interfaces;
+﻿using Dapper;
+using Dapper.Contrib.Extensions;
+
+using JustInMind.DAL.Interfaces;
 using JustInMind.Shared.Models;
 
+using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
-
-using Dapper.Contrib.Extensions;
-using Dapper;
-using System.Collections.Generic;
 
 namespace JustInMind.DAL.Repositories
 {
@@ -53,7 +53,7 @@ namespace JustInMind.DAL.Repositories
 
             using var db = new SqlConnection(connectionString);
 
-            var projects = await db.QueryAsync<Project>(sql, new { UserId = userId});
+            var projects = await db.QueryAsync<Project>(sql, new { UserId = userId });
 
             return projects;
         }

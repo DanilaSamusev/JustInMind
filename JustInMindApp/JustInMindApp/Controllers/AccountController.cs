@@ -1,12 +1,10 @@
 ﻿using JustInMind.BLL.Interfaces;
+using JustInMind.Security;
 using JustInMind.Shared.Models;
 using JustInMind.Shared.Requests;
 
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 
-using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -27,7 +25,7 @@ namespace JustInMindApp.Controllers
         }
 
         [HttpPost("signUp")]
-        public IActionResult SignUp([FromBody] SignUpRequest request)
+        public async Task<IActionResult> SignUp([FromBody] SignUpRequest request)
         {
             var user = _userService.GetByEmailAsync(request.Email);
 
@@ -44,7 +42,7 @@ namespace JustInMindApp.Controllers
                 Password = request.Password,
             };
 
-            _userService.InsertAsync(newUser);
+            await _userService.InsertAsync(newUser);
 
             return Ok();
         }
@@ -52,58 +50,25 @@ namespace JustInMindApp.Controllers
         [HttpPost("signIn")]
         public async Task<IActionResult> SignIn([FromBody] SignInRequest request)
         {
-            var identity = await GetIdentityAsync(request);
+            var user = await _userService.GetByEmailAndPasswordAsync(request.Email, request.Password);
 
-            if (identity == null)
+            if (user == null)
             {
                 return NotFound("User is not found!");
             }
 
-            var currentDate = DateTime.UtcNow;
-
-            var token = new JwtSecurityToken(
-                    issuer: AuthOptions.Issuer,
-                    audience: AuthOptions.Audience,
-                    notBefore: currentDate,
-                    claims: identity.Claims,
-                    expires: currentDate.Add(TimeSpan.FromMinutes(AuthOptions.LifeTime)),
-                    signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
+            var token = TokenCreater.CreateToken(user);
 
             var encodedToken = new JwtSecurityTokenHandler().WriteToken(token);
 
             var response = new
             {
                 token = encodedToken,
-                userName = token.Claims.ToList()[0].Value,
-                userId = token.Claims.ToList()[1].Value,
+                userName = token.Claims.FirstOrDefault(c => c.Type == ClaimsIdentity.DefaultNameClaimType).Value,
+                userId = token.Claims.FirstOrDefault(c => c.Type == nameof(JustInMind.Shared.Models.User.Id).ToLower()).Value,
             };
 
             return new ObjectResult(response);
-        }
-
-        private async Task<ClaimsIdentity> GetIdentityAsync(SignInRequest request)
-        {
-            var user = await _userService.GetByEmailAndPasswordAsync(request.Email, request.Password);
-
-            if (user == null)
-            {
-                return null;
-            }
-
-            var claims = new List<Claim>
-                {
-                    new Claim(ClaimsIdentity.DefaultNameClaimType, user.Name),
-                    new Claim("userId", user.Id.ToString()),
-                };
-
-            var claimsIdentity = new ClaimsIdentity(
-                    claims,
-                    "Token",
-                    ClaimsIdentity.DefaultNameClaimType,
-                    ClaimsIdentity.DefaultRoleClaimType
-                );
-
-            return claimsIdentity;
         }
     }
 }

@@ -11,6 +11,7 @@ using JustInMind.DAL.Interfaces;
 using JustInMind.DAL.Repositories;
 using JustInMind.BLL.Interfaces;
 using JustInMind.BLL.Services;
+using JustInMindApp.Security;
 
 namespace JustInMindApp
 {
@@ -35,9 +36,9 @@ namespace JustInMindApp
                             ValidateAudience = true,
                             ValidateLifetime = true,
                             ValidateIssuerSigningKey = true,
-                            ValidIssuer = AuthOptions.Issuer, 
-                            ValidAudience = AuthOptions.Audience,
-                            IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
+                            ValidIssuer = TokenOptions.Issuer, 
+                            ValidAudience = TokenOptions.Audience,
+                            IssuerSigningKey = TokenOptions.GetSymmetricSecurityKey(),
                         };
                     });
 
