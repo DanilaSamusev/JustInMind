@@ -27,7 +27,7 @@ namespace JustInMindApp.Controllers
         [HttpPost("signUp")]
         public async Task<IActionResult> SignUp([FromBody] SignUpRequest request)
         {
-            var user = _userService.GetByEmailAsync(request.Email);
+            var user = await _userService.GetByEmailAsync(request.Email);
 
             if (user != null)
             {
