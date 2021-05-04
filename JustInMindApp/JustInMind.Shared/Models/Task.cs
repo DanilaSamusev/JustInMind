@@ -1,9 +1,7 @@
-﻿using System.Collections.Generic;
-
-namespace JustInMindApp.Models
+﻿namespace JustInMind.Shared.Models
 {
     public class Task
-    {        
+    {
         public int Id { get; set; }
 
         public string Name { get; set; }
@@ -19,15 +17,5 @@ namespace JustInMindApp.Models
         public int StateId { get; set; }
 
         public int ProjectId { get; set; }
-
-        public User User { get; set; }
-
-        public State State { get; set; }
-
-        public Urgency Urgency { get; set; }
-
-        public List<Comment> Comments { get; set; }
-
-        public Category Category { get; set; }
     }
 }

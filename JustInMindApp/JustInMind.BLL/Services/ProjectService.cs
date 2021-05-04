@@ -10,39 +10,39 @@ namespace JustInMind.BLL.Services
 {
     public class ProjectService : IProjectService
     {
-        private readonly IProjectRepository projectRepository;
+        private readonly IProjectRepository _projectRepository;
 
-        private readonly IUsersToProjectsService usersToProjectsService;
+        private readonly IUsersToProjectsService _usersToProjectsService;
 
         public ProjectService(IProjectRepository projectRepository, IUsersToProjectsService usersToProjectsService)
         {
-            this.projectRepository = projectRepository;
-            this.usersToProjectsService = usersToProjectsService;
+            _projectRepository = projectRepository;
+            _usersToProjectsService = usersToProjectsService;
         }
 
         public async Task<Project> GetAsync(int id)
         {
-            return await projectRepository.GetAsync(id);
+            return await _projectRepository.GetAsync(id);
         }
 
         public async Task<IEnumerable<Project>> GetAllUserOwnAsync(int userId)
         {
-            return await projectRepository.GetAllUserOwnAsync(userId);
+            return await _projectRepository.GetAllUserOwnAsync(userId);
         }
 
         public async Task<IEnumerable<Project>> GetAllUserColaborateAsync(int userId)
         {
-            return await projectRepository.GetAllUserColaborate(userId);
+            return await _projectRepository.GetAllUserColaborate(userId);
         }
 
-        public async Task AddAsync(CreateProjectRequest request)
+        public async System.Threading.Tasks.Task AddAsync(CreateProjectRequest request)
         {
             var project = new Project
             {
                 Name = request.Name,
             };
 
-            var projectId = await projectRepository.InsertAsync(project);
+            var projectId = await _projectRepository.InsertAsync(project);
 
             var usersToProjects = new UsersToProjects
             {
@@ -52,7 +52,17 @@ namespace JustInMind.BLL.Services
                 UserRoleId = 5,
             };
 
-            await usersToProjectsService.InsertAsync(usersToProjects);
+            await _usersToProjectsService.InsertAsync(usersToProjects);
+        }
+
+        public async Task<bool> DeleteAsync(Project entity)
+        {
+           return await _projectRepository.DeleteAsync(entity);
+        }
+
+        public async Task<bool> LeaveAsync(UsersToProjects entity)
+        {
+            return await _projectRepository.LeaveAsync(entity);
         }
     }
 }

@@ -11,6 +11,7 @@ using JustInMind.DAL.Interfaces;
 using JustInMind.DAL.Repositories;
 using JustInMind.BLL.Interfaces;
 using JustInMind.BLL.Services;
+using JustInMindApp.Security;
 
 namespace JustInMindApp
 {
@@ -35,9 +36,9 @@ namespace JustInMindApp
                             ValidateAudience = true,
                             ValidateLifetime = true,
                             ValidateIssuerSigningKey = true,
-                            ValidIssuer = AuthOptions.Issuer, 
-                            ValidAudience = AuthOptions.Audience,
-                            IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
+                            ValidIssuer = TokenOptions.Issuer, 
+                            ValidAudience = TokenOptions.Audience,
+                            IssuerSigningKey = TokenOptions.GetSymmetricSecurityKey(),
                         };
                     });
 
@@ -54,10 +55,12 @@ namespace JustInMindApp
             services.AddTransient<IUserRepository>(r => new UserRepository(connectionString));
             services.AddTransient<IProjectRepository>(r => new ProjectRepository(connectionString));
             services.AddTransient<IUsersToProjectsRepository>(r => new UsersToProjectsRepository(connectionString));
+            services.AddTransient<ITaskRepository>(r => new TaskRepository(connectionString));
 
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IProjectService, ProjectService>();
             services.AddTransient<IUsersToProjectsService, UsersToProjectsService>();
+            services.AddTransient<ITaskService, TaskService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

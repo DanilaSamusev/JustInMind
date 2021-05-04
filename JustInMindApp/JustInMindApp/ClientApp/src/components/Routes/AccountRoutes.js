@@ -8,7 +8,7 @@ export default function Two(props) {
         <div>
             <Switch>
                 <Route path='/signIn' exact >
-                    <SignIn setIsAuthorized={props.setIsAuthorized} />
+                    <SignIn setIsAuthorized={props.setIsAuthorized} openSnackbar={props.openSnackbar}/>
                 </Route>
                 <Route path='/signUp' exact component={SignUp} />
             </Switch>

@@ -11,10 +11,10 @@ const useStyles = makeStyles({
 export default function AddUserComponent(props) {
     const classes = useStyles();
     const { onClose, open } = props;
-    const [userName, setUserName] = React.useState('');
+    const [userEmail, setUserEmail] = React.useState('');
 
     const handleClose = () => {
-        setUserName('');
+        setUserEmail('');
         onClose();
     };
 
@@ -30,7 +30,7 @@ export default function AddUserComponent(props) {
                 "Authorization": "Bearer " + localStorage.getItem('token')
             },
             body: JSON.stringify({
-                'userName': userName,
+                'userEmail': userEmail,
                 'userRoleId': 0,
                 'projectId': localStorage.getItem('projectId'),
             })
@@ -50,8 +50,8 @@ export default function AddUserComponent(props) {
 
     return (
         <Dialog onClose={handleClose} aria-labelledby="simple-dialog-title" open={open}>
-            <TextField id="filled-basic" label="User Name" variant="filled" onChange={(event) => setUserName(event.target.value)}>
-                {userName}
+            <TextField id="filled-basic" label="User Email" variant="filled" onChange={(event) => setUserEmail(event.target.value)}>
+                {userEmail}
             </TextField>
             <Button variant="contained" color="primary" onClick={() => inviteColaborator()}>
                 Invite

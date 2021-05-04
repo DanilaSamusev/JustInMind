@@ -15,21 +15,19 @@ namespace JustInMindApp.Controllers
     [Authorize]
     public class ProjectController : ControllerBase
     {
-        private readonly JustInMindContext dbContext;
+        private readonly IProjectService _projectService;
+        private readonly IUsersToProjectsService _usersToProjectsService;
 
-        private readonly IProjectService projectService;
-
-        public ProjectController(IProjectService projectService)
+        public ProjectController(IProjectService projectService, IUsersToProjectsService usersToProjectsService)
         {
-            dbContext = new JustInMindContext();
-
-            this.projectService = projectService;
+            _projectService = projectService;
+            _usersToProjectsService = usersToProjectsService;
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var project = await projectService.GetAsync(id);
+            var project = await _projectService.GetAsync(id);
 
             return new ObjectResult(project);
         }
@@ -37,9 +35,11 @@ namespace JustInMindApp.Controllers
         [HttpGet("getAllUserOwn")]
         public async Task<IActionResult> GetAllUserOwn()
         {
-            var userId = int.Parse(HttpContext.User.Claims.ToList()[1].Value);
+            var userId = int.Parse(HttpContext.User.Claims
+                .FirstOrDefault(c => c.Type == nameof(JustInMind.Shared.Models.User.Id).ToLower())
+                .Value);
 
-            var projects = await projectService.GetAllUserOwnAsync(userId);
+            var projects = await _projectService.GetAllUserOwnAsync(userId);
 
             return new ObjectResult(projects);
         }
@@ -47,55 +47,43 @@ namespace JustInMindApp.Controllers
         [HttpGet("getAllUserCollaborate")]
         public async Task<IActionResult> GetAllUserColaborate()
         {
-            var userId = int.Parse(HttpContext.User.Claims.ToList()[1].Value);
+            var userId = int.Parse(HttpContext.User.Claims
+                .FirstOrDefault(c => c.Type == nameof(JustInMind.Shared.Models.User.Id).ToLower())
+                .Value);
 
-            var projects = await projectService.GetAllUserColaborateAsync(userId);
+            var projects = await _projectService.GetAllUserColaborateAsync(userId);
 
             return new ObjectResult(projects);
         }
 
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]CreateProjectRequest request)
-        {        
-            var userId = int.Parse(HttpContext.User.Claims.ToList()[1].Value);
+        {
+            var userId = int.Parse(HttpContext.User.Claims
+                .FirstOrDefault(c => c.Type == nameof(JustInMind.Shared.Models.User.Id).ToLower())
+                .Value);
+
             request.OwnerId = userId;
 
-            await projectService.AddAsync(request);
+            await _projectService.AddAsync(request);
 
             return Ok();
         }
 
         [HttpDelete]
         [Route("deleteProject/{id}")]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var project = dbContext.Projects.FirstOrDefault(p => p.Id == id);
+            var project = await _projectService.GetAsync(id);
 
-            if (project != null)
+            if (project == null)
             {
-                dbContext.Projects.Remove(project);
-                dbContext.SaveChanges();
-                return Ok();
+                return NotFound();
             }
 
-            return BadRequest();
-        }
+            await _projectService.DeleteAsync(project);
 
-        [HttpDelete]
-        [Route("leaveProject/{id}")]
-        public IActionResult LeaveProject(int id)
-        {
-            var userId = int.Parse(HttpContext.User.Claims.ToList()[1].Value);
-            var project = dbContext.UsersToProjects.FirstOrDefault(pu => pu.ProjectId == id && pu.UserId == userId);
-
-            if (project != null)
-            {
-                dbContext.UsersToProjects.Remove(project);
-                dbContext.SaveChanges();
-                return Ok();
-            }
-
-            return BadRequest();
+            return Ok();
         }
     }
 }

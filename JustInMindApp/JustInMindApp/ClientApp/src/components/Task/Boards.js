@@ -57,7 +57,7 @@ export class Boards extends React.Component {
             },
         }
 
-        fetch('task/getAll?id=' + this.props.project.id, requestOptions)
+        fetch('task/getAll?projectId=' + this.props.project.id, requestOptions)
             .then(response => {
                 if (response.status == 401) {
                     alert('You are not authorized!');

@@ -14,6 +14,8 @@ import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/core/styles';
 
+import ValidationHelper from '../../Helpers/ValidationHelper';
+
 function Copyright() {
     return (
         <Typography variant="body2" color="textSecondary" align="center">
@@ -51,30 +53,37 @@ export default function SignIn(props) {
     const classes = useStyles();
     const history = useHistory();
 
-    const [name, setName] = useState(null);
+    const [email, setEmail] = useState(null);
     const [password, setPassword] = useState(null);
 
     const fetchLogin = () => {
+
+        if (ValidationHelper.isStringValid(email) || ValidationHelper.isStringValid(password)) {
+            props.openSnackbar(true, 'error', 'User Email or Password is empty!')
+        }
+
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(
                 {
-                    'name': name,
+                    'email': email,
                     'password': password
                 }
             )
         }
 
-        fetch('account/token', requestOptions)
+        fetch('account/signIn', requestOptions)
             .then(response => {
-                if (response.status == 400) {
+
+                if (response.status == 404) {
                     response
                         .text()
-                        .then(text => alert(JSON.parse(text).errorMessage))
+                        .then(text => props.openSnackbar(true, 'error', JSON.parse(text)))
                 }
-                else {
-                    return response
+
+                if (response.status == 200) {
+                    response
                         .json()
                         .then(json => {
                             localStorage.setItem('token', json.token);
@@ -82,8 +91,7 @@ export default function SignIn(props) {
                             localStorage.setItem('userRole', json.userRole);
                             localStorage.setItem('userId', json.userId);
                         })
-                        .then(() =>
-                        {
+                        .then(() => {
                             props.setIsAuthorized(true);
                             history.push('/');
                         });
@@ -108,12 +116,12 @@ export default function SignIn(props) {
                         required
                         fullWidth
                         id="email"
-                        label="Email Address"
-                        name="name"
+                        label="Email"
+                        name="email"
                         autoComplete="email"
                         autoFocus
-                        value={name}
-                        onChange={e => setName(e.target.value)}
+                        value={email}
+                        onChange={e => setEmail(e.target.value)}
                     />
                     <TextField
                         variant="outlined"

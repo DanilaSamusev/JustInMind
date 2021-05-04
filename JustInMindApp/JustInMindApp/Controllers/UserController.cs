@@ -2,12 +2,9 @@
 using JustInMind.Shared.Models;
 using JustInMind.Shared.Requests;
 
-using JustInMindApp.Models;
-
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace JustInMindApp.Controllers
@@ -18,86 +15,28 @@ namespace JustInMindApp.Controllers
     [Authorize]
     public class UserController : ControllerBase
     {
-        private readonly JustInMindContext dbContext;
-        private readonly IUserService userService;
+        private readonly IUsersToProjectsService _usersToProjectsService;
+        private readonly IUserService _userService;
 
-        public UserController(IUserService userService)
+        public UserController(IUserService userService, IUsersToProjectsService usersToProjectsService)
         {
-            dbContext = new JustInMindContext();
-            this.userService = userService;
-        }
-
-        [HttpGet]
-        [Route("getAll")]
-        public IActionResult GetAll()
-        {
-            var users = dbContext.Users;
-
-            if (users != null)
-            {
-                return new ObjectResult(users);
-            }
-
-            return BadRequest();
-        }
-
-        [HttpGet("{id}")]
-        public IActionResult Get(int id)
-        {
-            var user = dbContext.Users.FirstOrDefault(u => u.Id == id);
-
-            if (user != null)
-            {
-                return new ObjectResult(user);
-            }
-
-            return BadRequest();
+            _userService = userService;
+            _usersToProjectsService = usersToProjectsService;
         }
 
         [HttpGet]
         [Route("getAllColaborators/{projectId}")]
         public async Task<IActionResult> GetAllColaborators(int projectId)
         {
-            var users = await this.userService.GetAllColaboratorsByProjectIdAsync(projectId);
+            var users = await _userService.GetAllColaboratorsByProjectIdAsync(projectId);
 
-            if (users != null)
-            {
-                return new ObjectResult(users);
-            }
-
-            return BadRequest();
-        }
-
-        [HttpPost]
-        public IActionResult Post([FromBody] User user)
-        {
-            if (user != null)
-            {
-                dbContext.Users.Add(user);
-                dbContext.SaveChanges();
-                return Ok();
-            }
-
-            return BadRequest();
-        }
-
-        [HttpPut]
-        public IActionResult Put([FromBody] User user)
-        {
-            if (user != null)
-            {
-                dbContext.Users.Update(user);
-                dbContext.SaveChanges();
-                return Ok();
-            }
-
-            return BadRequest();
+            return new ObjectResult(users);
         }
 
         [HttpPost("addColaborator")]
-        public IActionResult AddColaborator(AddUserAsColaboratorRequset requset)
+        public async Task<IActionResult> AddColaborator(AddUserAsColaboratorRequset requset)
         {
-            var user = dbContext.Users.FirstOrDefault(u => u.Name == requset.UserName);
+            var user = await _userService.GetByEmailAsync(requset.UserEmail);
 
             if (user == null)
             {
@@ -111,27 +50,24 @@ namespace JustInMindApp.Controllers
                 UserRoleId = requset.UserRoleId
             };
 
-            dbContext.UsersToProjects.Add(entity);
-            dbContext.SaveChanges();
+            await _usersToProjectsService.InsertAsync(entity);
 
             return Ok();
         }
 
         [HttpDelete("removeColaborator")]
-        public IActionResult DeleteColaborator([FromBody] DeleteColaboratorRequest request)
+        public async Task<IActionResult> DeleteColaborator([FromBody] DeleteColaboratorRequest request)
         {
-            var usersToProjectEntity = dbContext.UsersToProjects
-                .First(up => up.UserId == request.UserId && up.ProjectId == request.ProjectId);
+            var entity = await _usersToProjectsService.GetByProjetcIdAndUserIdAsync(request.ProjectId, request.UserId);
 
-            if (usersToProjectEntity == null)
+            if (entity == null)
             {
                 return BadRequest("User is not a colaborator of this project!");
             }
 
-            dbContext.UsersToProjects.Remove(usersToProjectEntity);
-            dbContext.SaveChanges();
+            await _usersToProjectsService.DeleteAsync(entity);
 
-            return BadRequest();
+            return Ok();
         }
     }
 }

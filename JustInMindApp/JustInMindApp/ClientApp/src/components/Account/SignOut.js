@@ -44,7 +44,6 @@ export function SignOut(props) {
                 onClose={handleClose}
             >
                 <MenuItem>{"User: " + localStorage.getItem('userName')}</MenuItem>
-                <MenuItem>{"Role: " + localStorage.getItem('userRole')}</MenuItem>
                 <MenuItem onClick={logout}>
                     SignOut <ExitToAppIcon className={classes.logoutButton}/>
                 </MenuItem>

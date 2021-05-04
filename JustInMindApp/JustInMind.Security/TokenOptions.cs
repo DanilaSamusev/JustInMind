@@ -2,9 +2,9 @@
 
 using System.Text;
 
-namespace JustInMindApp
+namespace JustInMindApp.Security
 {
-    public class AuthOptions
+    public class TokenOptions
     {
         public const string Issuer = "MyAuthServer";
         public const string Audience = "MyAuthClient";

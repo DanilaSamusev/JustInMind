@@ -1,16 +1,14 @@
-﻿using JustInMind.Shared.Requests;
+﻿using JustInMind.BLL.Interfaces;
+using JustInMind.Security;
+using JustInMind.Shared.Models;
+using JustInMind.Shared.Requests;
 
-using JustInMindApp.Models;
-
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 
-using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace JustInMindApp.Controllers
 {
@@ -19,96 +17,58 @@ namespace JustInMindApp.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
-        private readonly JustInMindContext dbContext;
+        private readonly IUserService _userService;
 
-        public AccountController()
+        public AccountController(IUserService userService)
         {
-            dbContext = new JustInMindContext();
+            _userService = userService;
         }
 
         [HttpPost("signUp")]
-        public IActionResult SignUp([FromBody] SignUpRequest request)
+        public async Task<IActionResult> SignUp([FromBody] SignUpRequest request)
         {
-            if (string.IsNullOrWhiteSpace(request.Name) || string.IsNullOrWhiteSpace(request.Password))
+            var user = _userService.GetByEmailAsync(request.Email);
+
+            if (user != null)
             {
-                return BadRequest();
+                return BadRequest("User already exists!");
             }
 
-            var user = new User
+            var newUser = new User
             {
                 Name = request.Name,
+                Surname = request.Surname,
+                Email = request.Email,
                 Password = request.Password,
             };
 
-            dbContext.Users.Add(user);
-            dbContext.SaveChanges();
+            await _userService.InsertAsync(newUser);
 
             return Ok();
         }
 
-        [HttpPost("token")]
-        public IActionResult Token([FromBody] UserLogin userLogin)
+        [HttpPost("signIn")]
+        public async Task<IActionResult> SignIn([FromBody] SignInRequest request)
         {
-            var identity = GetIdentity(userLogin);
+            var user = await _userService.GetByEmailAndPasswordAsync(request.Email, request.Password);
 
-            if (identity == null)
+            if (user == null)
             {
-                return BadRequest(new { ErrorMessage = "Invalid username or password!" });
+                return NotFound("User is not found!");
             }
 
-            var currentDate = DateTime.UtcNow;
-
-            var token = new JwtSecurityToken(
-                    issuer: AuthOptions.Issuer,
-                    audience: AuthOptions.Audience,
-                    notBefore: currentDate,
-                    claims: identity.Claims,
-                    expires: currentDate.Add(TimeSpan.FromMinutes(AuthOptions.LifeTime)),
-                    signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
+            var token = TokenCreater.CreateToken(user);
 
             var encodedToken = new JwtSecurityTokenHandler().WriteToken(token);
 
             var response = new
             {
                 token = encodedToken,
-                userName = token.Claims.ToList()[0].Value,
-                userId = token.Claims.ToList()[1].Value,
+                userName = token.Claims.FirstOrDefault(c => c.Type == ClaimsIdentity.DefaultNameClaimType).Value,
+                userId = token.Claims.FirstOrDefault(c => c.Type == nameof(JustInMind.Shared.Models.User.Id).ToLower()).Value,
             };
 
             return new ObjectResult(response);
-        }
-
-        [HttpGet()]
-        [Authorize]
-        public IActionResult Authorized()
-        {
-            return Ok();
-        }
-
-        private ClaimsIdentity GetIdentity(UserLogin userLogin)
-        {
-            var user = dbContext.Users
-                .FirstOrDefault(u => u.Name == userLogin.Name && u.Password == userLogin.Password);
-
-            if (user == null)
-            {
-                return null;
-            }
-
-            var claims = new List<Claim>
-                {
-                    new Claim(ClaimsIdentity.DefaultNameClaimType, user.Name),
-                    new Claim("userId", user.Id.ToString()),
-                };
-
-            var claimsIdentity = new ClaimsIdentity(
-                    claims,
-                    "Token",
-                    ClaimsIdentity.DefaultNameClaimType,
-                    ClaimsIdentity.DefaultRoleClaimType
-                );
-
-            return claimsIdentity;
         }
     }
 }

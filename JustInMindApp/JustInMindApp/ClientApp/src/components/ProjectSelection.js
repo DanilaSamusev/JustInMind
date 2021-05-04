@@ -123,16 +123,20 @@ export default function ProjectSelection(props) {
             });
     }
 
-    const fetchLeaveProject = (id) => {
+    const fetchLeaveProject = (projectId) => {
         const requestOptions = {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
                 "Authorization": "Bearer " + localStorage.getItem('token')
-            }
+            },
+            body: JSON.stringify({
+                'userId': Number(localStorage.getItem('userId')),
+                'projectId': projectId,
+            })
         }
 
-        fetch('project/leaveProject/' + id, requestOptions)
+        fetch('user/removeColaborator', requestOptions)
             .then(response => {
                 if (response.status == 401) {
                     alert('You are not authorized!');
@@ -195,17 +199,17 @@ export default function ProjectSelection(props) {
                                     <div>
                                         My coloborations
                                     </div>
-                                    {collaborationProjects.map((data, index) => {
+                                    {collaborationProjects.map((project, index) => {
                                         return (
                                             <div className={classes.deleteProjectContainer}
                                             >
-                                                <MenuItem key={index} value={data.id}
-                                                    onClick={() => props.selectProject(data.id)}
+                                                <MenuItem key={index} value={project.id}
+                                                    onClick={() => props.selectProject(project.id)}
                                                 >
-                                                    {data.name}
+                                                    {project.name}
                                                 </MenuItem>
                                                 <IconButton component="span" className={classes.deleteProjectButton}>
-                                                    <ExitToAppIcon onClick={() => fetchLeaveProject(data.id)} />
+                                                    <ExitToAppIcon onClick={() => fetchLeaveProject(project.id)} />
                                                 </IconButton>
                                             </div>
 

@@ -6,7 +6,6 @@ namespace JustInMind.Shared.Models
     [Table("UsersToProjects")]
     public class UsersToProjects
     {
-        [Key]
         public int Id { get; set; }
 
         public int ProjectId { get; set; }
