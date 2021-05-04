@@ -50,7 +50,7 @@ namespace JustInMindApp
             });
 
             var connectionStrings = Configuration.GetSection("ConnectionStrings");
-            string connectionString = connectionStrings.GetSection("LocalConnection").Value;
+            string connectionString = connectionStrings.GetSection("RemoteConnection").Value;
 
             services.AddTransient<IUserRepository>(r => new UserRepository(connectionString));
             services.AddTransient<IProjectRepository>(r => new ProjectRepository(connectionString));
