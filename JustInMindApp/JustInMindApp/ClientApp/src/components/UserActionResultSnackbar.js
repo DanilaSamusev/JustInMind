@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function CustomSnackbar(props) {
+export default function UserActionResultSnackbar(props) {
     const classes = useStyles();
 
     const handleClose = (event, reason) => {

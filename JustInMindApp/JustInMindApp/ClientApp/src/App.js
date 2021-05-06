@@ -1,15 +1,17 @@
+import { useEffect } from 'react';
 import React, { useState } from 'react';
 import { useHistory } from "react-router-dom";
 
+import UserActionResultSnackbar from './components/UserActionResultSnackbar';
+import AppRoutes from './components/Navigation/AppRoutes';
+import AccountRoutes from './components/Navigation/AccountRoutes';
+
 import './styles/custom.css'
-import AppRoutes from './components/Routes/AppRoutes';
-import AccountRoutes from './components/Routes/AccountRoutes';
-import { useEffect } from 'react';
-import CustomSnackbar from './components/CustomSnackbar';
 
 export default function App(props) {
     const [snackBarData, setSnackBarData] = useState({})
     const [isAuthorized, setIsAuthorized] = useState(true)
+
     const history = useHistory();
 
     useEffect(() => {
@@ -23,7 +25,6 @@ export default function App(props) {
     }, [isAuthorized]);
 
     const openSnackbar = (isOpen, status, message) => {
-
         setSnackBarData(
             {
                 'isOpen': isOpen,
@@ -37,16 +38,14 @@ export default function App(props) {
         setIsAuthorized(isAuthorized);
     }
 
-    let component = isAuthorized ?
+    let content = isAuthorized ?
         <AppRoutes setIsAuthorized={setIsUserAuthorized} openSnackbar={openSnackbar} /> :
         <AccountRoutes setIsAuthorized={setIsUserAuthorized} openSnackbar={openSnackbar} />
 
-    console.log(component)
-
     return (
         <div>
-            {component}
-            <CustomSnackbar openSnackbar={openSnackbar} snackBarData={snackBarData} />
+            {content}
+            <UserActionResultSnackbar openSnackbar={openSnackbar} snackBarData={snackBarData} />
         </div>
     );
 
