@@ -1,11 +1,11 @@
 ﻿import React from 'react';
 import { BsPencil } from "react-icons/bs";
+import { BsTrashFill } from "react-icons/bs";
 
 import { TaskView } from '../TaskView';
 import AddTaskField from '../AddTaskField';
 import { TaskColorData } from '../TaskColorData';
 import { LoadingPage } from '../LoadingPage';
-import { BsTrashFill } from "react-icons/bs";
 
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
@@ -38,6 +38,20 @@ export class Boards extends React.Component {
         return true;
     }
 
+    refreshTasks = () => {
+        this.setState({
+            boards: [
+                { id: 0, title: "New", tasks: [] },
+                { id: 1, title: "Investigation", tasks: [] },
+                { id: 2, title: "Active", tasks: [] },
+                { id: 3, title: "In Test", tasks: [] },
+                { id: 4, title: "Done", tasks: [] },
+            ],
+        })
+
+
+    }
+
     fetchGetAllTasks = () => {
         this.setState({
             boards: [
@@ -60,7 +74,8 @@ export class Boards extends React.Component {
         fetch('task/getAll?projectId=' + this.props.project.id, requestOptions)
             .then(response => {
                 if (response.status == 401) {
-                    alert('You are not authorized!');
+                    this.props.openSnackbar(true, 'error', 'You are not authorized!')
+                    this.props.setIsAuthorized(false);
                 }
                 else {
                     response.json()
@@ -151,7 +166,8 @@ export class Boards extends React.Component {
         fetch('task', requestOptions)
             .then(response => {
                 if (response.status == 401) {
-                    alert('You are not authorized!');
+                    this.props.openSnackbar(true, 'error', 'You are not authorized!')
+                    this.props.setIsAuthorized(false);
                 }
             });
     }
@@ -181,7 +197,8 @@ export class Boards extends React.Component {
         fetch('task/' + taskId, requestOptions)
             .then(response => {
                 if (response.status == 401) {
-                    alert('You are not authorized!');
+                    this.props.openSnackbar(true, 'error', 'You are not authorized!')
+                    this.props.setIsAuthorized(false);
                 }
             });
     }
@@ -220,7 +237,8 @@ export class Boards extends React.Component {
         fetch('task', requestOptions)
             .then(response => {
                 if (response.status == 401) {
-                    alert('You are not authorized!');
+                    this.props.openSnackbar(true, 'error', 'You are not authorized!')
+                    this.props.setIsAuthorized(false);
                 }
             });
     }

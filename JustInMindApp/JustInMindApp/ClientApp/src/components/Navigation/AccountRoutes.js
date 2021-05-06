@@ -4,7 +4,7 @@ import { Switch, Route } from "react-router-dom";
 import SignIn from '../Account/SignIn';
 import SignUp from '../Account/SignUp';
 
-export default function Two(props) {
+export default function AccountRoutes(props) {
     return (
         <div>
             <Switch>

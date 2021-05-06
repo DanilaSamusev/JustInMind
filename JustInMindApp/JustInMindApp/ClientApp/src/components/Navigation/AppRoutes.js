@@ -5,25 +5,19 @@ import Board from '../MainPages/Board';
 import NavigationBar from '../Navigation/NavigationBar';
 import { Team } from '../MainPages/Team';
 
-export default class AppRoutes extends Component {
-    constructor(props) {
-        super(props);
-    }
-
-    render() {
-        return (
-            <div>
-                <NavigationBar setIsAuthorized={this.props.setIsAuthorized} />
-                <Switch>
-                    <Route path='/' exact>
-                        <Board setIsAuthorized={this.props.setIsAuthorized} />
-                    </Route>
-                    <Route path='/team' exact component={Team}>
-                        <Team setIsAuthorized={this.props.setIsAuthorized} />
-                    </Route>
-                </Switch>
-            </div>
-        );
-    }
+export default function AppRoutes(props) {
+    return (
+        <div>
+            <NavigationBar />
+            <Switch>
+                <Route path='/' exact>
+                    <Board setIsAuthorized={props.setIsAuthorized} openSnackbar={props.openSnackbar} />
+                </Route>
+                <Route path='/team' exact>
+                    <Team setIsAuthorized={props.setIsAuthorized} openSnackbar={props.openSnackbar} />
+                </Route>
+            </Switch>
+        </div>
+    );
 }
 

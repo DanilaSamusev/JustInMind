@@ -1,12 +1,9 @@
 ﻿import React, { useState, useEffect } from 'react';
-import { Redirect } from 'react-router-dom';
 
 import { makeStyles } from '@material-ui/core/styles';
-import ProjectSelection from '../ProjectSelection';
-import { SignOut } from '../Account/SignOut';
-import { Boards } from '../Task/Boards'
 
-import '../../styles/board.css'
+import ProjectSelection from '../ProjectSelection';
+import { Boards } from '../Task/Boards'
 
 const useStyles = makeStyles((theme) => ({
     projectSelectionContainer: {
@@ -64,7 +61,7 @@ export default function Board(props) {
 
     let render =
         <div className={classes.projectSelectionContainer}>
-            <ProjectSelection selectProject={selectProject} setIsAuthorized={props.setIsAuthorized} />
+            <ProjectSelection selectProject={selectProject} setIsAuthorized={props.setIsAuthorized} openSnackbar={props.openSnackbar} />
         </div>
 
     let boards;
@@ -73,7 +70,7 @@ export default function Board(props) {
         boards =
             <div>
                 <h1 className={classes.projectName}>{project.name}</h1>
-                <Boards project={project} />
+                <Boards project={project} setIsAuthorized={props.setIsAuthorized} openSnackbar={props.openSnackbar} />
             </div>
     }
     else {
