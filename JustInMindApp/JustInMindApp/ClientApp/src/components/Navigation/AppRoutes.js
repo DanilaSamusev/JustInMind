@@ -8,7 +8,7 @@ import { Team } from '../MainPages/Team';
 export default function AppRoutes(props) {
     return (
         <div>
-            <NavigationBar />
+            <NavigationBar setIsAuthorized={props.setIsAuthorized} />
             <Switch>
                 <Route path='/' exact>
                     <Board setIsAuthorized={props.setIsAuthorized} openSnackbar={props.openSnackbar} />
@@ -20,4 +20,3 @@ export default function AppRoutes(props) {
         </div>
     );
 }
-
