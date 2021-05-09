@@ -24,6 +24,20 @@ export default function App(props) {
 
     }, [isAuthorized]);
 
+    const message = () => {
+        alert(1);
+    }
+
+    const validateFetchResponse = async (response) => {
+        if (response.status == 401) {
+            openSnackbar(true, 'error', 'You are not authorized!');
+            setIsAuthorized(false);
+        }
+        else {
+            return await response.json();
+        }
+    }
+
     const openSnackbar = (isOpen, status, message) => {
         setSnackBarData(
             {
@@ -39,7 +53,7 @@ export default function App(props) {
     }
 
     let content = isAuthorized ?
-        <AppRoutes setIsAuthorized={setIsUserAuthorized} openSnackbar={openSnackbar} /> :
+        <AppRoutes setIsAuthorized={setIsUserAuthorized} openSnackbar={openSnackbar} validateFetchResponse={validateFetchResponse}/> :
         <AccountRoutes setIsAuthorized={setIsUserAuthorized} openSnackbar={openSnackbar} />
 
     return (
