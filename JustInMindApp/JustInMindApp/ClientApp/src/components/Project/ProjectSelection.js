@@ -14,9 +14,6 @@ const useStyles = makeStyles((theme) => ({
         margin: '0 auto',
         alignSelf: 'center'
     },
-    projectSelectionPopover: {
-        alignSelf: 'center'
-    },
 }));
 
 export default function ProjectSelection(props) {
@@ -47,57 +44,55 @@ export default function ProjectSelection(props) {
     }
 
     return (
-            <div className={classes.projectSelectionPopover}>
-                <PopupState variant="popover" popupId="demo-popup-popover">
-                    {(popupState) => (
-                        <div>
-                            <Button variant="contained" color="primary" {...bindTrigger(popupState)}>
-                                Select project
+        <PopupState variant="popover" popupId="demo-popup-popover">
+            {(popupState) => (
+                <div>
+                    <Button variant="contained" color="primary" size="large" {...bindTrigger(popupState)}>
+                        Select project
                             </Button>
-                            <Popover
-                                {...bindPopover(popupState)}
-                                anchorOrigin={{
-                                    vertical: 'bottom',
-                                    horizontal: 'center',
-                                }}
-                                transformOrigin={{
-                                    vertical: 'top',
-                                    horizontal: 'center',
-                                }}
-                            >
-                                <Box p={2}>
-                                    <div>
-                                        My projects
+                    <Popover
+                        {...bindPopover(popupState)}
+                        anchorOrigin={{
+                            vertical: 'bottom',
+                            horizontal: 'center',
+                        }}
+                        transformOrigin={{
+                            vertical: 'top',
+                            horizontal: 'center',
+                        }}
+                    >
+                        <Box p={2}>
+                            <div>
+                                My projects
                                     </div>
-                                    {ownProjects.map((data, index) => {
-                                        return (
-                                            <div className={classes.deleteProjectContainer}
-                                            >
-                                                <MenuItem onClick={() => props.selectProject(data.id)} >
-                                                    {data.name}
-                                                </MenuItem>
-                                            </div>
-                                        );
-                                    })}
-                                    <div>
-                                        My coloborations
+                            {ownProjects.map((data, index) => {
+                                return (
+                                    <div className={classes.deleteProjectContainer}
+                                    >
+                                        <MenuItem onClick={() => props.selectProject(data.id)} >
+                                            {data.name}
+                                        </MenuItem>
                                     </div>
-                                    {collaborationProjects.map((project, index) => {
-                                        return (
-                                            <div className={classes.deleteProjectContainer}
-                                            >
-                                                <MenuItem key={index} value={project.id} onClick={() => props.selectProject(project.id)} >
-                                                    {project.name}
-                                                </MenuItem>
-                                            </div>
-                                        );
-                                    })}
-                                </Box>
-                            </Popover>
-                        </div>
-                    )}
-                </PopupState>
-            </div>
+                                );
+                            })}
+                            <div>
+                                My coloborations
+                                    </div>
+                            {collaborationProjects.map((project, index) => {
+                                return (
+                                    <div className={classes.deleteProjectContainer}
+                                    >
+                                        <MenuItem key={index} value={project.id} onClick={() => props.selectProject(project.id)} >
+                                            {project.name}
+                                        </MenuItem>
+                                    </div>
+                                );
+                            })}
+                        </Box>
+                    </Popover>
+                </div>
+            )}
+        </PopupState>
     );
 }
 
