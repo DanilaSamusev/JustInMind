@@ -23,4 +23,8 @@
     static async fetchPut(url, token, body) {
         return await fetch(url, FetchHelper.requestOptions('PUT', token, body))
     }
+
+    static async fetchDelete(url, token) {
+        return await fetch(url, FetchHelper.requestOptions('DELETE', token))
+    }
 }

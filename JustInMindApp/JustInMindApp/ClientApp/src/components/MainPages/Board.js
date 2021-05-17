@@ -1,6 +1,6 @@
 ﻿import React, { useState, useEffect } from 'react';
 
-import { Boards } from '../Task/Boards'
+import Boards from '../Task/Boards'
 import { ProjectToolsBar } from '../Project/ProjectToolsBar';
 import FetchHelper from '../../Helpers/FetchHelper';
 
@@ -17,22 +17,28 @@ export default function Board(props) {
         }
 
         let lastSelectedProjectResponse = await FetchHelper.fetchGet('project/' + localStorage.projectId, localStorage.token);
-        let lastSelectedProject = await props.validateFetchResponse(lastSelectedProjectResponse);
+        let isLastSelectedProjectValid = await props.validateFetchResponse(lastSelectedProjectResponse);
 
-        setProject(lastSelectedProject);
+        if (isLastSelectedProjectValid) {
+            let lastSelectedProject = await lastSelectedProjectResponse.json();
+            setProject(lastSelectedProject);
+        }
     }
 
     const selectProject = async (projectId) => {
         let projectResponse = await FetchHelper.fetchGet('project/' + projectId, localStorage.token);
-        let project = await props.validateFetchResponse(projectResponse);
+        let isProjectResponseValid = await props.validateFetchResponse(projectResponse);
 
-        setProject(project);
-        localStorage.setItem('projectId', projectId)
+        if (isProjectResponseValid) {
+            let project = await projectResponse.json();
+            setProject(project);
+            localStorage.setItem('projectId', projectId)
+        }
     }
 
     return (
         <div>
-            <ProjectToolsBar selectProject={selectProject} setIsAuthorized={props.setIsAuthorized} openSnackbar={props.openSnackbar} validateFetchResponse={props.validateFetchResponse} />
+            <ProjectToolsBar validateFetchResponseNoReturn={props.validateFetchResponseNoReturn} resetProject={() => setProject(null)} project={project} selectProject={selectProject} setIsAuthorized={props.setIsAuthorized} openSnackbar={props.openSnackbar} validateFetchResponse={props.validateFetchResponse} />
             <Boards project={project} setIsAuthorized={props.setIsAuthorized} openSnackbar={props.openSnackbar} validateFetchResponse={props.validateFetchResponse}/>
         </div>
     )

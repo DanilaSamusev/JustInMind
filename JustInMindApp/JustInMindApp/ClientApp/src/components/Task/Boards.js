@@ -1,9 +1,10 @@
-﻿import React from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { BsPencil } from "react-icons/bs";
 import { BsTrashFill } from "react-icons/bs";
 
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
+import { makeStyles } from '@material-ui/core/styles';
 
 import { TaskView } from '../TaskView';
 import AddTaskField from '../AddTaskField';
@@ -13,77 +14,48 @@ import FetchHelper from '../../Helpers/FetchHelper';
 
 import '../../styles/board.css'
 
-export class Boards extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            boards: null,
-            boardForTaskPut: [],
-            draggedTask: null,
-            taskToView: null,
-            isTaskViewOpen: false,
-            isPageLoaded: false,
-            isFieldVisible: [],
-        };
-    }
+export default function Boards(props) {
+    const classes = useStyles();
 
-    componentDidMount() {
-        if (this.props.project == null) {
+    const [boards, setBoards] = useState(null);
+    const [draggedBoard, setDraggedBoard] = useState(null);
+    const [draggedTask, setDraggedTask] = useState(null);
+    const [taskToView, setTaskToView] = useState(null);
+    const [isTaskViewOpen, setIsTaskViewOpen] = useState(null);
+    const [isPageLoaded, setIsPageLoaded] = useState(null);
+    const [isFieldVisible, setIsFieldVisible] = useState([false, false]);
+
+    useEffect(() => {
+        if (props.project == null) {
             return
         }
 
-        this.refreshTasks();
-    }
+        refreshTasks();
+    }, [props.project]);
 
-    componentDidUpdate(prevProps, prevState, snapshot) {
-        if (prevProps.project !== this.props.project) {
-            this.refreshTasks();
-        }
+    const refreshTasks = async () => {
+        let response = await FetchHelper.fetchGet('task/getAll?projectId=' + props.project.id, localStorage.token);
+        let isOk = await props.validateFetchResponse(response);
 
-        return true;
-    }
+        if (isOk) {
+            let tasks = await response.json();
 
-    refreshTasks = async () => {
-        this.setState({
-            boards: [
-                { id: 0, title: "New", tasks: [] },
-                { id: 1, title: "Investigation", tasks: [] },
-                { id: 2, title: "Active", tasks: [] },
-                { id: 3, title: "In Test", tasks: [] },
-                { id: 4, title: "Done", tasks: [] },
-            ],
-        })
-
-        let response = await FetchHelper.fetchGet('task/getAll?projectId=' + this.props.project.id, localStorage.token);
-        let result = await this.props.validateFetchResponse(response);
-
-        console.log(result)
-
-        if (result) {
-
-            this.setTasksToBoards(result, this.state.boards);
+            if (tasks != null) {
+                setTasksToBoards(tasks);
+            }
         }
     }
 
-    updateTask = async (task) => {
+    const updateTask = async (task) => {
         let response = await FetchHelper.fetchPut('task', localStorage.token, task);
-        this.props.validateFetchResponse(response);
+        props.validateFetchResponse(response);
     }
 
-    deleteTask = (board, task) => {
-
-        let index = board.tasks.indexOf(task)
-        board.tasks.splice(index, 1)
-
-        this.setState(
-            {
-                boards: this.refreshBoard(board),
-            })
-
-        this.fetchDeleteTask(task.id);
+    const deleteTask = (board, task) => {
+        fetchDeleteTask(task.id);
     }
 
-    fetchDeleteTask = (taskId) => {
+    const fetchDeleteTask = (taskId) => {
         const requestOptions = {
             method: 'DELETE',
             headers: {
@@ -95,175 +67,172 @@ export class Boards extends React.Component {
         fetch('task/' + taskId, requestOptions)
             .then(response => {
                 if (response.status == 401) {
-                    this.props.openSnackbar(true, 'error', 'You are not authorized!')
-                    this.props.setIsAuthorized(false);
+                    props.openSnackbar(true, 'error', 'You are not authorized!')
+                    props.setIsAuthorized(false);
                 }
             });
     }
 
-    dragStartHandler = (event, board, task) => {
-        this.setState(
-            {
-                boardForTaskPut: board,
-                draggedTask: task,
-            })
+    const dragStartHandler = (event, draggedBoard, draggedTask) => {
+        setDraggedBoard(draggedBoard);
+        setDraggedTask(draggedTask);
     }
 
-    dropCardHandler = (event, board) => {
-        board.tasks.push(this.state.draggedTask)
-        this.state.draggedTask.stateId = board.id;
+    const dropCardHandler = (event, board) => {
+        board.tasks.push(draggedTask)
 
-        let currentIndex = this.state.boardForTaskPut.tasks.indexOf(this.state.draggedTask)
-        this.state.boardForTaskPut.tasks.splice(currentIndex, 1)
+        let task = draggedTask;
+        task.stateId = board.id;
+        setDraggedTask(task);
 
-        this.setState(
-            {
-                boards: this.refreshBoard(board),
-            })
+        let currentIndex = draggedBoard.tasks.indexOf(draggedTask)
+        draggedBoard.tasks.splice(currentIndex, 1)
 
-        this.updateTask(this.state.draggedTask);
+        setBoards(refreshBoard(board));
+
+        updateTask(draggedTask);
     }
 
-    setTasksToBoards = (tasks, boards) => {
+    const setTasksToBoards = (tasks) => {
+        let boards =
+            [
+                { id: 0, title: "New", tasks: [] },
+                { id: 1, title: "Investigation", tasks: [] },
+                { id: 2, title: "Active", tasks: [] },
+                { id: 3, title: "In Test", tasks: [] },
+                { id: 4, title: "Done", tasks: [] },
+            ];
+
         tasks.forEach((task) => {
             boards.find((board) => { return board.id == task.stateId }).tasks.push(task);
         });
 
-        this.setState(
-            {
-                boards: boards,
-                isPageLoaded: true
-            })
+        setBoards(boards);
+        setIsPageLoaded(true);
     }
 
-    refreshBoard = (board) => {
-        let boards = this.state.boards.map(item => {
+    // very strange logic and I need to change it!
+    const refreshBoard = (board) => {
+        let newBoards = boards.map(item => {
+            // that means, we put the task to board in 'dropCardHandler' and return this board instead of old unchaged. 
             if (item.id === board.id) {
                 return board
             }
 
-            if (item.id === this.state.boardForTaskPut.id) {
-                return this.state.boardForTaskPut
+            // that means, we cut the task from dragged board in 'dropCardHandler' and return this board instead of old unchaged. 
+            if (item.id === draggedBoard.id) {
+                return draggedBoard
             }
 
             return item
         })
 
-        return boards;
+        return newBoards;
     }
 
-    chooseTaskToModify = (task, isOpen) => {
-        this.setState({
-            taskToView: task
-        });
-
-        this.changeIsTaskViewOpen(isOpen);
+    const chooseTaskToModify = (task, isOpen) => {
+        setTaskToView(task);
+        changeIsTaskViewOpen(isOpen);
     }
 
-    changeIsTaskViewOpen = (isOpen) => {
-
+    const changeIsTaskViewOpen = (isOpen) => {
         if (isOpen === false) {
-            this.setState({
-                taskToView: null
-            })
+            setTaskToView(null)
         }
 
-        this.setState({
-            isTaskViewOpen: isOpen
-        })
+        setIsTaskViewOpen(isOpen)
     }
 
-    addTaskToBoard = (boardId, task) => {
-        let newBoards = this.state.boards;
+    const addTaskToBoard = (boardId, task) => {
+        let newBoards = boards;
         newBoards[boardId].tasks.push(task);
-        this.setState({
-            boards: newBoards,
-        });
-        this.changeFieldVisibility(boardId);
+        setBoards(newBoards);
+        changeFieldVisibility(boardId);
     }
 
-    changeFieldVisibility = (boardId) => {
-        let isCurrentFieldVisible = this.state.isFieldVisible;
+    const changeFieldVisibility = (boardId) => {
+        let isCurrentFieldVisible = isFieldVisible;
         isCurrentFieldVisible[boardId] = !isCurrentFieldVisible[boardId];
-        this.setState({
-            isFieldVisible: isCurrentFieldVisible,
-        });
+        setIsFieldVisible([...isCurrentFieldVisible]);
     }
 
-    getTaskId = () => {
-        if (this.state.taskToView == null) {
+    const getTaskId = () => {
+        if (taskToView == null) {
             return null
         }
         else {
-            return this.state.taskToView.id
+            return taskToView.id
         }
     }
 
-    render() {
-        if (this.props.project == null) {
-            return (
-                <h1>No project selected</h1>
-            )
-        }
-
-        if (!this.state.isPageLoaded) {
-            return (
-                <LoadingPage />
-            )
-        }
-
+    if (props.project == null) {
         return (
-            <div>
-                <div>
-                    <h1>{this.props.project.name}</h1>
-                </div>
-                <div className='tasksExplorer'>
-                    {this.state.boards.map(board =>
-                        <div className='board'
-                            key={board.id}
-                            onDragOver={(e) => e.preventDefault()}
-                            onDrop={(e) => this.dropCardHandler(e, board)}
-                        >
-                            <div className='board_title'>{board.title}</div>
-                            {board.tasks.map(task =>
-                                <div
-                                    className='task'
-                                    onDragOver={(e) => e.preventDefault()}
-                                    onDragStart={(e) => this.dragStartHandler(e, board, task)}
-                                    key={task.id}
-                                    draggable={true}
-                                    style={{ border: '2px solid ' + TaskColorData.find((e) => e.id == task.categoryId).color }}
-                                >
-                                    <div>{task.name}</div>
-                                    <div className='pencilIcon'>
-                                        <BsPencil onClick={() => this.chooseTaskToModify(task, true)} onMouseEnter={(event) => event.target.style.cursor = 'pointer'} />
-                                    </div>
-                                    <div className='trashIcon'>
-                                        <BsTrashFill onClick={() => this.deleteTask(board, task)} onMouseEnter={(event) => event.target.style.cursor = 'pointer'} />
-                                    </div>
-                                </div>
-                            )}
-
-                            {this.state.isFieldVisible[board.id]
-                                ?
-                                <AddTaskField changeFieldVisibility={this.changeFieldVisibility} addTaskToBoard={this.addTaskToBoard} board={board} project={this.props.project} />
-                                :
-                                <Button
-                                    className="add-button"
-                                    color="primary"
-                                    fullWidth
-                                    startIcon={<AddIcon />}
-                                    onClick={() => this.changeFieldVisibility(board.id)}
-                                >
-                                    Add task
-                                    </Button>
-                            }
-                        </div>
-                    )}
-                </div>
-
-                <TaskView taskId={this.getTaskId()} open={this.state.isTaskViewOpen} changeOpen={this.changeIsTaskViewOpen} reloadBoard={this.refreshTasks} />
-            </div>
-        );
+            <h1 className={classes.projectName}>No project selected</h1>
+        )
     }
+
+    if (!isPageLoaded) {
+        return (
+            <LoadingPage />
+        )
+    }
+
+    return (
+        <div>
+            <div>
+                <h1 className={classes.projectName}>{props.project.name}</h1>
+            </div>
+            <div className='tasksExplorer'>
+                {boards.map(board =>
+                    <div className='board'
+                        key={board.id}
+                        onDragOver={(e) => e.preventDefault()}
+                        onDrop={(e) => dropCardHandler(e, board)}
+                    >
+                        <div className='board_title'>{board.title}</div>
+                        {board.tasks.map(task =>
+                            <div
+                                className='task'
+                                onDragOver={(e) => e.preventDefault()}
+                                onDragStart={(e) => dragStartHandler(e, board, task)}
+                                key={task.id}
+                                draggable={true}
+                                style={{ border: '2px solid ' + TaskColorData.find((e) => e.id == task.categoryId).color }}
+                            >
+                                <div>{task.name}</div>
+                                <div className='pencilIcon'>
+                                    <BsPencil onClick={() => chooseTaskToModify(task, true)} onMouseEnter={(event) => event.target.style.cursor = 'pointer'} />
+                                </div>
+                                <div className='trashIcon'>
+                                    <BsTrashFill onClick={() => deleteTask(board, task)} onMouseEnter={(event) => event.target.style.cursor = 'pointer'} />
+                                </div>
+                            </div>
+                        )}
+                        {isFieldVisible[board.id]
+                            ?
+                            <AddTaskField changeFieldVisibility={changeFieldVisibility} addTaskToBoard={addTaskToBoard} board={board} project={props.project} />
+                            :
+                            <Button
+                                className="add-button"
+                                color="primary"
+                                fullWidth
+                                startIcon={<AddIcon />}
+                                onClick={() => changeFieldVisibility(board.id)}
+                            >
+                                Add task
+                            </Button>
+                        }
+                    </div>
+                )}
+            </div>
+
+            <TaskView taskId={getTaskId()} open={isTaskViewOpen} changeOpen={changeIsTaskViewOpen} reloadBoard={refreshTasks} />
+        </div>
+    );
 }
+
+const useStyles = makeStyles((theme) => ({
+    projectName: {
+        textAlign: "center"
+    }
+}));

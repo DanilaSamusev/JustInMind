@@ -30,11 +30,15 @@ export default function ProjectSelection(props) {
         let ownProjectsResponse = await FetchHelper.fetchGet('project/getAllUserOwn', localStorage.token);
         let colaborationProjectsResponse = await FetchHelper.fetchGet('project/getAllUserCollaborate', localStorage.token);
 
-        let ownProjects = await props.validateFetchResponse(ownProjectsResponse);
-        let colaborationProjects = await props.validateFetchResponse(colaborationProjectsResponse);
+        let isOwnProjecsResponseValid = await props.validateFetchResponse(ownProjectsResponse);
+        let isColaborationProjectsResponse = await props.validateFetchResponse(colaborationProjectsResponse);
 
-        setOwnProjects(ownProjects);
-        setCollaborationProjects(colaborationProjects);
+        if (isOwnProjecsResponseValid && isColaborationProjectsResponse) {
+            let ownProjects = await ownProjectsResponse.json();
+            let colaborationProjects = await colaborationProjectsResponse.json();
+            setOwnProjects(ownProjects);
+            setCollaborationProjects(colaborationProjects);
+        }
     }
 
     if (ownProjects == null || collaborationProjects == null) {

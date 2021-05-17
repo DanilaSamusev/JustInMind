@@ -71,7 +71,7 @@ namespace JustInMindApp.Controllers
         }
 
         [HttpDelete]
-        [Route("deleteProject/{id}")]
+        [Route("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
             var project = await _projectService.GetAsync(id);

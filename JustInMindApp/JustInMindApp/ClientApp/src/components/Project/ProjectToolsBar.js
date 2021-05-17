@@ -6,9 +6,20 @@ import ProjectSelection from './ProjectSelection';
 import { makeStyles } from '@material-ui/core/styles';
 
 import { AddProject } from './AddProject';
+import FetchHelper from '../../Helpers/FetchHelper';
 
 export function ProjectToolsBar(props) {
     const classes = useStyles();
+
+    const deleteProject = async () => {
+        let response = await FetchHelper.fetchDelete('project/' + props.project.id, localStorage.token);
+        let result = await props.validateFetchResponse(response);
+
+        if (result) {
+            props.resetProject();
+            props.openSnackbar(true, 'success', 'Project is deleted');
+        }
+    }
 
     return (
         <div className={classes.root}>
@@ -24,6 +35,7 @@ export function ProjectToolsBar(props) {
                     color="secondary"
                     className={classes.button}
                     startIcon={<DeleteIcon />}
+                    onClick={() => deleteProject()}
                 >
                     Delete
                 </Button>
