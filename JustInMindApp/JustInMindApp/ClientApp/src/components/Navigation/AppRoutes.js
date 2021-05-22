@@ -1,9 +1,9 @@
-﻿import React, { Component } from 'react';
+﻿import React from 'react';
 import { Switch, Route } from "react-router-dom";
 
-import Board from '../MainPages/Board';
+import BoardPage from '../MainPages/BoardPage';
 import NavigationBar from '../Navigation/NavigationBar';
-import { Team } from '../MainPages/Team';
+import { TeamPage } from '../MainPages/TeamPage';
 
 export default function AppRoutes(props) {
     return (
@@ -11,10 +11,10 @@ export default function AppRoutes(props) {
             <NavigationBar setIsAuthorized={props.setIsAuthorized} />
             <Switch>
                 <Route path='/' exact>
-                    <Board setIsAuthorized={props.setIsAuthorized} openSnackbar={props.openSnackbar} validateFetchResponse={props.validateFetchResponse} validateFetchResponseNoReturn={props.validateFetchResponseNoReturn}/>
+                    <BoardPage setIsAuthorized={props.setIsAuthorized} openSnackbar={props.openSnackbar} validateFetchResponse={props.validateFetchResponse}/>
                 </Route>
                 <Route path='/team' exact>
-                    <Team setIsAuthorized={props.setIsAuthorized} openSnackbar={props.openSnackbar} validateFetchResponse={props.validateFetchResponse}/>
+                    <TeamPage setIsAuthorized={props.setIsAuthorized} openSnackbar={props.openSnackbar} validateFetchResponse={props.validateFetchResponse}/>
                 </Route>
             </Switch>
         </div>

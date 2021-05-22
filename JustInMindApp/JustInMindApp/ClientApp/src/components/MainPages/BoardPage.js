@@ -4,7 +4,7 @@ import Boards from '../Task/Boards'
 import { ProjectToolsBar } from '../Project/ProjectToolsBar';
 import FetchHelper from '../../Helpers/FetchHelper';
 
-export default function Board(props) {
+export default function BoardPage(props) {
     const [project, setProject] = useState(null);
 
     useEffect(() => {

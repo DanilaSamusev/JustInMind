@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export function Team(props) {
+export function TeamPage(props) {
     const classes = useStyles();
     const [isPageLoaded, setIsPageLoaded] = useState(false);
 
