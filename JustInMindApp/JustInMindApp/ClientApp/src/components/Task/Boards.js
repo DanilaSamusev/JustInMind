@@ -8,7 +8,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import { TaskView } from '../TaskView';
 import AddTaskField from '../AddTaskField';
-import { TaskColorData } from '../TaskColorData';
+import { TaskColorData } from '../../ComponentsData/TaskColorData';
 import { LoadingPage } from '../LoadingPage';
 import FetchHelper from '../../Helpers/FetchHelper';
 

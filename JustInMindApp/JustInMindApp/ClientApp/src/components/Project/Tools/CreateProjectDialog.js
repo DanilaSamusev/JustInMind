@@ -5,7 +5,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
 import React from 'react';
-import FetchHelper from '../../Helpers/FetchHelper';
+import FetchHelper from '../../../Helpers/FetchHelper';
 
 const useStyles = makeStyles({
     avatar: {

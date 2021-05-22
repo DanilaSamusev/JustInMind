@@ -6,8 +6,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Popover from '@material-ui/core/Popover';
 import { makeStyles } from '@material-ui/core/styles';
 import PopupState, { bindPopover, bindTrigger } from 'material-ui-popup-state';
-
-import FetchHelper from '../../Helpers/FetchHelper';
+import FetchHelper from '../../../Helpers/FetchHelper';
 
 const useStyles = makeStyles((theme) => ({
     selectedProjectName: {
@@ -16,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function ProjectSelection(props) {
+export default function SelectProjectTool(props) {
     const classes = useStyles();
 
     const [ownProjects, setOwnProjects] = React.useState([]);
