@@ -1,11 +1,12 @@
 ﻿import React, { useEffect } from 'react';
 
+import { makeStyles } from '@material-ui/core/styles';
+import PopupState, { bindPopover, bindTrigger } from 'material-ui-popup-state';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import MenuItem from '@material-ui/core/MenuItem';
 import Popover from '@material-ui/core/Popover';
-import { makeStyles } from '@material-ui/core/styles';
-import PopupState, { bindPopover, bindTrigger } from 'material-ui-popup-state';
+
 import FetchHelper from '../../../Helpers/FetchHelper';
 
 const useStyles = makeStyles((theme) => ({

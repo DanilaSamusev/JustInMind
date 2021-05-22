@@ -13,10 +13,10 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 
-import { TaskStatesData } from '../ComponentsData/TaskStatesData';
-import { TaskCategoriesData } from '../ComponentsData/TaskCategoriesData';
+import { TaskStatesData } from '../../ComponentsData/TaskStatesData';
+import { TaskCategoriesData } from '../../ComponentsData/TaskCategoriesData';
 
-import '../styles/taskView.css';
+import '../../styles/taskView.css';
 
 export function TaskView(props) {
     const classes = useStyles();

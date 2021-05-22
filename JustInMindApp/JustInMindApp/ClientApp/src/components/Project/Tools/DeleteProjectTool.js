@@ -2,15 +2,16 @@
 
 import Button from '@material-ui/core/Button';
 import DeleteIcon from '@material-ui/icons/Delete';
+
 import FetchHelper from '../../../Helpers/FetchHelper';
 
-export function DeleteProjectTool(props) {
+export default function DeleteProjectTool(props) {
 
     const deleteSelectedProject = async () => {
-        let response = await FetchHelper.fetchDelete('project/' + props.project.id, localStorage.token);
-        let result = await props.validateFetchResponse(response);
+        let deleteSelectedProjectResponse = await FetchHelper.fetchDelete('project/' + props.project.id, localStorage.token);
+        let deleteSelectedProjectResult = await props.validateFetchResponse(deleteSelectedProjectResponse);
 
-        if (result) {
+        if (deleteSelectedProjectResult) {
             props.resetProject();
             props.openSnackbar(true, 'success', 'Project is deleted');
         }

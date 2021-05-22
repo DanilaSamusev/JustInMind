@@ -5,7 +5,7 @@ import AddIcon from '@material-ui/icons/Add';
 import { makeStyles } from '@material-ui/core/styles';
 import { CreateProjectDialog } from './CreateProjectDialog';
 
-export function CreateProjectTool(props) {
+export default function CreateProjectTool(props) {
     const classes = useStyles();
 
     const [open, setOpen] = React.useState(false);

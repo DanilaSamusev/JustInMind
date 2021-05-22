@@ -2,9 +2,8 @@
 
 import { makeStyles } from '@material-ui/core/styles';
 
-import UsersTable from '../UsersTable';
-
 import '../../styles/team.scss'
+import UsersTable from '../User/UsersTable';
 
 const useStyles = makeStyles((theme) => ({
     userTable: {
@@ -80,7 +79,7 @@ export function TeamPage(props) {
 
     return (
         <div className={classes.userTable}>
-            <UsersTable setIsAuthorized={props.setIsAuthorized}/>
+            <UsersTable setIsAuthorized={props.setIsAuthorized} />
         </div>
     )
 }

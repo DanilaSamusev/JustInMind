@@ -1,10 +1,10 @@
 ﻿import React from 'react';
 
-import SelectProjectTool from './Tools/SelectProjectTool';
 import { makeStyles } from '@material-ui/core/styles';
 
-import { CreateProjectTool } from './Tools/CreateProjectTool';
-import { DeleteProjectTool } from './Tools/DeleteProjectTool';
+import SelectProjectTool from './Tools/SelectProjectTool';
+import CreateProjectTool from './Tools/CreateProjectTool';
+import DeleteProjectTool from './Tools/DeleteProjectTool';
 
 export function ProjectToolsBar(props) {
     const classes = useStyles();
@@ -12,13 +12,13 @@ export function ProjectToolsBar(props) {
     return (
         <div className={classes.root}>
             <div className={classes.item} >
-                <CreateProjectTool validateFetchResponse={props.validateFetchResponse} openSnackbar={props.openSnackbar} />
+                <CreateProjectTool openSnackbar={props.openSnackbar} validateFetchResponse={props.validateFetchResponse} />
             </div>
             <div className={classes.item} >
                 <SelectProjectTool selectProject={props.selectProject} validateFetchResponse={props.validateFetchResponse} />
             </div>
             <div className={classes.item} >
-                <DeleteProjectTool selectProject={props.selectProject} validateFetchResponse={props.validateFetchResponse} />
+                <DeleteProjectTool openSnackbar={props.openSnackbar} selectProject={props.selectProject} validateFetchResponse={props.validateFetchResponse} />
             </div>
         </div>
     );

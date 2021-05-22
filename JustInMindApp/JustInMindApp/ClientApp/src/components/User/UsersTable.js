@@ -21,7 +21,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import { useEffect } from 'react';
-import AddUserComponent from './User/AddUserComponent';
+import AddUserComponent from './AddUserComponent';
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {

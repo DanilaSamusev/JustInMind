@@ -6,13 +6,13 @@ import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
 import { makeStyles } from '@material-ui/core/styles';
 
-import { TaskView } from '../TaskView';
-import AddTaskField from '../AddTaskField';
 import { TaskColorData } from '../../ComponentsData/TaskColorData';
 import { LoadingPage } from '../LoadingPage';
 import FetchHelper from '../../Helpers/FetchHelper';
 
 import '../../styles/board.css'
+import AddTaskField from './AddTaskField';
+import { TaskView } from './TaskView';
 
 export default function Boards(props) {
     const classes = useStyles();
