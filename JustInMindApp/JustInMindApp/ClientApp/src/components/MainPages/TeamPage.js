@@ -2,7 +2,6 @@
 
 import { makeStyles } from '@material-ui/core/styles';
 
-import '../../styles/team.scss'
 import UsersTable from '../User/UsersTable';
 
 const useStyles = makeStyles((theme) => ({

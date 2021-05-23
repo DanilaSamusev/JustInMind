@@ -6,8 +6,6 @@ import UserActionResultSnackbar from './components/UserActionResultSnackbar';
 import AppRoutes from './components/Navigation/AppRoutes';
 import AccountRoutes from './components/Navigation/AccountRoutes';
 
-import './styles/custom.css'
-
 export default function App(props) {
     const [snackBarData, setSnackBarData] = useState({})
     const [isAuthorized, setIsAuthorized] = useState(true)

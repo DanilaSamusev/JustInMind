@@ -7,7 +7,6 @@ import AddIcon from '@material-ui/icons/Add';
 import { makeStyles } from '@material-ui/core/styles';
 
 import { TaskColorData } from '../../ComponentsData/TaskColorData';
-import { LoadingPage } from '../LoadingPage';
 import FetchHelper from '../../Helpers/FetchHelper';
 
 import '../../styles/board.css'
@@ -173,7 +172,7 @@ export default function Boards(props) {
 
     if (!isPageLoaded) {
         return (
-            <LoadingPage />
+            <div></div>
         )
     }
 
