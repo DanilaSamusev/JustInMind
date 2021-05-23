@@ -1,15 +1,15 @@
+import { useEffect } from 'react';
 import React, { useState } from 'react';
 import { useHistory } from "react-router-dom";
 
-import './styles/custom.css'
-import AppRoutes from './components/Routes/AppRoutes';
-import AccountRoutes from './components/Routes/AccountRoutes';
-import { useEffect } from 'react';
-import CustomSnackbar from './components/CustomSnackbar';
+import UserActionResultSnackbar from './components/UserActionResultSnackbar';
+import AppRoutes from './components/Navigation/AppRoutes';
+import AccountRoutes from './components/Navigation/AccountRoutes';
 
 export default function App(props) {
     const [snackBarData, setSnackBarData] = useState({})
     const [isAuthorized, setIsAuthorized] = useState(true)
+
     const history = useHistory();
 
     useEffect(() => {
@@ -22,8 +22,17 @@ export default function App(props) {
 
     }, [isAuthorized]);
 
-    const openSnackbar = (isOpen, status, message) => {
+    const validateFetchResponse = async (response) => {
+        if (response.status == 401) {
+            openSnackbar(true, 'error', 'You are not authorized!');
+            setIsAuthorized(false);
+        }
+        else {
+            return 1;
+        }
+    }
 
+    const openSnackbar = (isOpen, status, message) => {
         setSnackBarData(
             {
                 'isOpen': isOpen,
@@ -37,16 +46,14 @@ export default function App(props) {
         setIsAuthorized(isAuthorized);
     }
 
-    let component = isAuthorized ?
-        <AppRoutes setIsAuthorized={setIsUserAuthorized} openSnackbar={openSnackbar} /> :
+    let content = isAuthorized ?
+        <AppRoutes setIsAuthorized={setIsUserAuthorized} openSnackbar={openSnackbar} validateFetchResponse={validateFetchResponse} /> :
         <AccountRoutes setIsAuthorized={setIsUserAuthorized} openSnackbar={openSnackbar} />
-
-    console.log(component)
 
     return (
         <div>
-            {component}
-            <CustomSnackbar openSnackbar={openSnackbar} snackBarData={snackBarData} />
+            {content}
+            <UserActionResultSnackbar openSnackbar={openSnackbar} snackBarData={snackBarData} />
         </div>
     );
 
