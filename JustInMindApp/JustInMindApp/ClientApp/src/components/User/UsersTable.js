@@ -1,6 +1,9 @@
 ﻿import React from 'react';
+import { useEffect } from 'react';
 import PropTypes from 'prop-types';
+
 import clsx from 'clsx';
+
 import { lighten, makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -20,8 +23,9 @@ import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
-import { useEffect } from 'react';
-import AddUserComponent from './AddUserComponent';
+
+import AddUserComponent from './AddUserTool';
+import AddUserTool from './AddUserTool';
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -194,7 +198,7 @@ const useStyles = makeStyles((theme) => ({
         top: 20,
         width: 1,
     },
-    addUserButton: {
+    addUserTool: {
         marginTop: 10,
         marginLeft: 10,
     }
@@ -208,7 +212,6 @@ export default function UsersTable(props) {
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const [rows, setRows] = React.useState([]);
-    const [open, setOpen] = React.useState(false);
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -318,14 +321,6 @@ export default function UsersTable(props) {
         getUsers();
     }
 
-    const handleClose = () => {
-        setOpen(false);
-    };
-
-    const handleClickOpen = () => {
-        setOpen(true);
-    };
-
     return (
         <div className={classes.root}>
             <Paper className={classes.paper}>
@@ -390,9 +385,11 @@ export default function UsersTable(props) {
                         </TableBody>
                     </Table>
                 </TableContainer>
-                <Button variant="contained" color="primary" className={classes.addUserButton} onClick={handleClickOpen}>
-                    Add User
-                </Button>
+
+                <div className={classes.addUserTool}>
+                    <AddUserTool openSnackbar={props.openSnackbar} validateFetchResponse={props.validateFetchResponse} reloadUsers={reloadUsers} />
+                </div>
+
                 <TablePagination
                     rowsPerPageOptions={[5, 10, 25]}
                     component="div"
@@ -403,8 +400,6 @@ export default function UsersTable(props) {
                     onChangeRowsPerPage={handleChangeRowsPerPage}
                 />
             </Paper>
-
-            <AddUserComponent open={open} onClose={handleClose} setIsAuthorized={props.setIsAuthorized} reloadUsers={reloadUsers}/>
         </div>
     );
 }

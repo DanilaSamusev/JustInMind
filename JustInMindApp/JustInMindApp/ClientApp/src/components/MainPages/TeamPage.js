@@ -79,7 +79,7 @@ export function TeamPage(props) {
 
     return (
         <div className={classes.userTable}>
-            <UsersTable setIsAuthorized={props.setIsAuthorized} />
+            <UsersTable openSnackbar={props.openSnackbar} validateFetchResponse={props.validateFetchResponse} />
         </div>
     )
 }
