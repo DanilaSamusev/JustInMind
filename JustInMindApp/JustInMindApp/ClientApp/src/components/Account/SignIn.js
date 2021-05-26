@@ -16,19 +16,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import ValidationHelper from '../../Helpers/ValidationHelper';
 import FetchHelper from '../../Helpers/FetchHelper';
-
-function Copyright() {
-    return (
-        <Typography variant="body2" color="textSecondary" align="center">
-            {'Copyright '}
-            <Link color="inherit">
-                Just In Mind
-            </Link>{' '}
-            {new Date().getFullYear()}
-            {'.'}
-        </Typography>
-    );
-}
+import Copyright from '../Copyright';
 
 const useStyles = makeStyles((theme) => ({
     paper: {
