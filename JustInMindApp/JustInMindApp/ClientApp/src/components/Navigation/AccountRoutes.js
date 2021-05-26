@@ -9,7 +9,7 @@ export default function AccountRoutes(props) {
         <div>
             <Switch>
                 <Route path='/signIn' exact>
-                    <SignIn setIsAuthorized={props.setIsAuthorized} openSnackbar={props.openSnackbar} />
+                    <SignIn setIsAuthorized={props.setIsAuthorized} validateFetchResponse={props.validateFetchResponse} openSnackbar={props.openSnackbar} />
                 </Route>
                 <Route path='/signUp' exact>
                     <SignUp setIsAuthorized={props.setIsAuthorized} openSnackbar={props.openSnackbar} />

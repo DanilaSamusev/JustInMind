@@ -48,7 +48,7 @@ export default function App(props) {
 
     let content = isAuthorized ?
         <AppRoutes setIsAuthorized={setIsUserAuthorized} openSnackbar={openSnackbar} validateFetchResponse={validateFetchResponse} /> :
-        <AccountRoutes setIsAuthorized={setIsUserAuthorized} openSnackbar={openSnackbar} />
+        <AccountRoutes setIsAuthorized={setIsUserAuthorized} openSnackbar={openSnackbar} validateFetchResponse={validateFetchResponse} />
 
     return (
         <div>

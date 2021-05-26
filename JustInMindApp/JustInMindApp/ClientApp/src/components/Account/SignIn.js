@@ -15,6 +15,7 @@ import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/core/styles';
 
 import ValidationHelper from '../../Helpers/ValidationHelper';
+import FetchHelper from '../../Helpers/FetchHelper';
 
 function Copyright() {
     return (
@@ -56,47 +57,31 @@ export default function SignIn(props) {
     const [email, setEmail] = useState(null);
     const [password, setPassword] = useState(null);
 
-    const fetchLogin = () => {
-
+    const login = async () => {
         if (ValidationHelper.isStringValid(email) || ValidationHelper.isStringValid(password)) {
             props.openSnackbar(true, 'error', 'User Email or Password is empty!')
         }
 
-        const requestOptions = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(
-                {
-                    'email': email,
-                    'password': password
-                }
-            )
+        let body = JSON.stringify(
+            {
+                'email': email,
+                'password': password
+            });
+
+        let loginResponse = await FetchHelper.fetchPost('account/signIn', localStorage.token, body)
+        let isLoginResponseValid = await props.validateFetchResponse(loginResponse);
+
+        if (isLoginResponseValid) {
+            let identity = await loginResponse.json();
+
+            localStorage.setItem('token', identity.token);
+            localStorage.setItem('userName', identity.userName);
+            localStorage.setItem('userRole', identity.userRole);
+            localStorage.setItem('userId', identity.userId);
+
+            props.setIsAuthorized(true);
+            history.push('/');
         }
-
-        fetch('account/signIn', requestOptions)
-            .then(response => {
-
-                if (response.status == 404) {
-                    response
-                        .text()
-                        .then(text => props.openSnackbar(true, 'error', JSON.parse(text)))
-                }
-
-                if (response.status == 200) {
-                    response
-                        .json()
-                        .then(json => {
-                            localStorage.setItem('token', json.token);
-                            localStorage.setItem('userName', json.userName);
-                            localStorage.setItem('userRole', json.userRole);
-                            localStorage.setItem('userId', json.userId);
-                        })
-                        .then(() => {
-                            props.setIsAuthorized(true);
-                            history.push('/');
-                        });
-                }
-            })
     }
 
     return (
@@ -146,7 +131,7 @@ export default function SignIn(props) {
                         variant="contained"
                         color="primary"
                         className={classes.submit}
-                        onClick={fetchLogin}
+                        onClick={login}
                     >
                         Sign In
                     </Button>
