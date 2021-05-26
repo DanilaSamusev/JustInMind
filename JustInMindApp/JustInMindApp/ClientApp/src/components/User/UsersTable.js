@@ -18,14 +18,13 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import Checkbox from '@material-ui/core/Checkbox';
-import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
 
-import AddUserComponent from './AddUserTool';
 import AddUserTool from './AddUserTool';
+import FetchHelper from '../../Helpers/FetchHelper';
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -267,58 +266,31 @@ export default function UsersTable(props) {
         }
     })
 
-    const getUsers = () => {
-        const requestOptions = {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                "Authorization": "Bearer " + localStorage.getItem('token')
-            },
-        }
+    const getUsers = async () => {
+        let usersResponse = await FetchHelper.fetchGet('user/getAllColaborators/' + Number(localStorage.getItem("projectId")), localStorage.token)
+        let isUserResponseValid = await props.validateFetchResponse(usersResponse);
 
-        fetch('user/getAllColaborators/' + Number(localStorage.getItem("projectId")), requestOptions)
-            .then(response => {
-                if (response.status == 401) {
-                    alert('You are not authorized!');
-                    props.setIsAuthorized(false);
-                }
-                else {
-                    response
-                        .json()
-                        .then(data => {
-                            setRows(data)
-                        })
-                }
-            })
+        if (isUserResponseValid) {
+            let users = await usersResponse.json();
+
+            setRows(users)
+        }
     }
 
-    const fetchRemoveColaborator = (id) => {
-        const requestOptions = {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-                "Authorization": "Bearer " + localStorage.getItem('token')
-            },
-            body: JSON.stringify({
-                'userId': id,
-                'projectId': localStorage.getItem('projectId'),
-            })
-        }
+    const removeColaborator = async (id) => {
+        let body = JSON.stringify({
+            'userId': id,
+            'projectId': localStorage.getItem('projectId'),
+        });
 
-        fetch('user/removeColaborator', requestOptions)
-            .then(response => {
-                if (response.status == 401) {
-                    alert('You are not authorized!');
-                    props.setIsAuthorized(false);
-                }
-                else {
-                    reloadUsers();
-                }
-            });
+        let removeColaboratorResponse = await FetchHelper.fetchDelete('user/removeColaborator', localStorage.token, body);
+        await props.validateFetchResponse(removeColaboratorResponse);
+
+        reloadUsers();
     }
 
-    const reloadUsers = () => {
-        getUsers();
+    const reloadUsers = async () => {
+        await getUsers();
     }
 
     return (
@@ -375,7 +347,7 @@ export default function UsersTable(props) {
                                             <TableCell>{row.email}</TableCell>
                                             <TableCell>{row.role}</TableCell>
                                             <TableCell>
-                                                <IconButton aria-label="delete" className={classes.margin} onClick={() => fetchRemoveColaborator(row.id)}>
+                                                <IconButton aria-label="delete" className={classes.margin} onClick={() => removeColaborator(row.id)}>
                                                     <DeleteIcon fontSize="large" />
                                                 </IconButton>
                                             </TableCell>

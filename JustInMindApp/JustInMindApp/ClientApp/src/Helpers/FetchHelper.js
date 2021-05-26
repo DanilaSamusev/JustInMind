@@ -31,4 +31,8 @@
     static async fetchDelete(url, token) {
         return await fetch(url, FetchHelper.requestOptions('DELETE', token))
     }
+
+    static async fetchDelete(url, token, body) {
+        return await fetch(url, FetchHelper.requestOptions('DELETE', token, body))
+    }
 }
