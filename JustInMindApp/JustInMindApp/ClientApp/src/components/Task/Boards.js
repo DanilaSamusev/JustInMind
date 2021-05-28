@@ -50,26 +50,14 @@ export default function Boards(props) {
         props.validateFetchResponse(response);
     }
 
-    const deleteTask = (board, task) => {
-        fetchDeleteTask(task.id);
+    const deleteTask = async (task) => {
+        await fetchDeleteTask(task.id);
+        await refreshTasks();
     }
 
     const fetchDeleteTask = (taskId) => {
-        const requestOptions = {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-                "Authorization": "Bearer " + localStorage.getItem('token')
-            }
-        }
-
-        fetch('task/' + taskId, requestOptions)
-            .then(response => {
-                if (response.status == 401) {
-                    props.openSnackbar(true, 'error', 'You are not authorized!')
-                    props.setIsAuthorized(false);
-                }
-            });
+        let deleteTaskResponse = FetchHelper.fetchDelete('task/' + taskId, localStorage.token)
+        props.validateFetchResponse(deleteTaskResponse);
     }
 
     const dragStartHandler = (event, draggedBoard, draggedTask) => {
@@ -203,13 +191,13 @@ export default function Boards(props) {
                                     <BsPencil onClick={() => chooseTaskToModify(task, true)} onMouseEnter={(event) => event.target.style.cursor = 'pointer'} />
                                 </div>
                                 <div className='trashIcon'>
-                                    <BsTrashFill onClick={() => deleteTask(board, task)} onMouseEnter={(event) => event.target.style.cursor = 'pointer'} />
+                                    <BsTrashFill onClick={() => deleteTask(task)} onMouseEnter={(event) => event.target.style.cursor = 'pointer'} />
                                 </div>
                             </div>
                         )}
                         {isFieldVisible[board.id]
                             ?
-                            <AddTaskField changeFieldVisibility={changeFieldVisibility} addTaskToBoard={addTaskToBoard} board={board} project={props.project} />
+                            <AddTaskField changeFieldVisibility={changeFieldVisibility} addTaskToBoard={addTaskToBoard} board={board} project={props.project} openSnackbar={props.openSnackbar} validateFetchResponse={props.validateFetchResponse} />
                             :
                             <Button
                                 className="add-button"
@@ -225,7 +213,7 @@ export default function Boards(props) {
                 )}
             </div>
 
-            <TaskView taskId={getTaskId()} open={isTaskViewOpen} changeOpen={changeIsTaskViewOpen} reloadBoard={refreshTasks} />
+            <TaskView taskId={getTaskId()} open={isTaskViewOpen} changeOpen={changeIsTaskViewOpen} reloadBoard={refreshTasks} validateFetchResponse={props.validateFetchResponse} />
         </div>
     );
 }

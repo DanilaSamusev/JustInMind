@@ -3,6 +3,7 @@
 import { makeStyles } from '@material-ui/core/styles';
 import { Button, TextField, ClickAwayListener } from '@material-ui/core';
 import { FormControl } from '@material-ui/core';
+import FetchHelper from '../../Helpers/FetchHelper';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -17,7 +18,6 @@ export default function AddTaskField(props) {
     const classes = useStyles();
     const [taskName, setTaskName] = useState('');
 
-    let task = {};
     let addedTask = {};
 
     const handleChange = (event) => {
@@ -25,7 +25,9 @@ export default function AddTaskField(props) {
         setTaskName(event.target.value);
     };
 
-    const onSubmit = () => {
+    const onSubmit = async () => {
+        let task = {};
+
         task.name = taskName;
         task.description = '';
         task.urgencyId = 0;
@@ -34,32 +36,25 @@ export default function AddTaskField(props) {
         task.stateId = props.board.id;
         task.projectId = props.project.id;
 
-        const requestOptions = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                "Authorization": "Bearer " + localStorage.getItem('token')
-            },
-            body: JSON.stringify(task)
-        }
+        let taskJson = JSON.stringify(task)
 
-        fetch('Task', requestOptions)
-            .then(response => response.json())
-            .then(taskId => pushToBoard(taskId));
+        let addTaskResponse = await FetchHelper.fetchPost('task', localStorage.token, taskJson);
+        let isAddTaskResponseValid = await props.validateFetchResponse(addTaskResponse);
+
+        if (isAddTaskResponseValid) {
+            let taskId = await addTaskResponse.json();
+            pushToBoard(taskId);
+        }
     };
 
-    const pushToBoard = (taskId) => {
-        const requestOptions = {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                "Authorization": "Bearer " + localStorage.getItem('token')
-            },
-        };
+    const pushToBoard = async (taskId) => {
+        let getTaskResponse = await FetchHelper.fetchGet('task/' + taskId, localStorage.token);
+        let isGetTaskResponseValid = await props.validateFetchResponse(getTaskResponse);
 
-        fetch('Task/' + taskId, requestOptions)
-            .then(response => response.json())
-            .then(data => setAddedTask(data));
+        if (isGetTaskResponseValid) {
+            let task = await getTaskResponse.json();
+            setAddedTask(task);
+        }
     }
 
     const setAddedTask = (data) => {

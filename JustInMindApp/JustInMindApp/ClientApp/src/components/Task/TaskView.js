@@ -17,6 +17,7 @@ import { TaskStatesData } from '../../ComponentsData/TaskStatesData';
 import { TaskCategoriesData } from '../../ComponentsData/TaskCategoriesData';
 
 import '../../styles/taskView.css';
+import FetchHelper from '../../Helpers/FetchHelper';
 
 export function TaskView(props) {
     const classes = useStyles();
@@ -70,51 +71,29 @@ export function TaskView(props) {
         setTask(changedTask);
     }
 
-    const submitTask = () => {
-        const requestOptions = {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                "Authorization": "Bearer " + localStorage.getItem('token')
-            },
-            body: JSON.stringify(task)
-        }
+    const submitTask = async () => {
+        let taskJson = JSON.stringify(task);
 
-        fetch('task', requestOptions)
-            .then(response => {
-                if (response.status == 401) {
-                    alert('You are not authorized!');
-                }
-            })
-            .then(props.reloadBoard);
+        let updateTaskResponse = await FetchHelper.fetchPut(taskJson);
+        await props.validateFetchResponse(updateTaskResponse);
     }
 
-    useEffect(() => {
-
+    const getTask = async () => {
         if (props.taskId == null) {
             return
         }
 
-        const requestOptions = {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                "Authorization": "Bearer " + localStorage.getItem('token')
-            }
+        let getTaskResponse = await FetchHelper.fetchGet('task/' + props.taskId, localStorage.token);
+        let isGetTaskResponseValid = await props.validateFetchResponse(getTaskResponse);
+
+        if (isGetTaskResponseValid) {
+            let task = await getTaskResponse.json();
+            setTask(task)
         }
+    }
 
-        fetch('task/' + props.taskId, requestOptions)
-            .then(response => {
-                if (response.status == 401) {
-                    alert('You are not authorized!');
-                }
-                else {
-                    response
-                        .json()
-                        .then(json => setTask(json))
-
-                }
-            });
+    useEffect(() => {
+        getTask()
     }, [props.taskId]);
 
     if (task === null) {

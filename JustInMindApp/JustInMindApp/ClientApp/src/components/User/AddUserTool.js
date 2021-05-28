@@ -1,13 +1,9 @@
 ﻿import React from 'react';
 
 import Button from '@material-ui/core/Button';
-import { makeStyles } from '@material-ui/core/styles';
 import AddUserDialog from './AddUserDialog';
 
-
 export default function AddUserTool(props) {
-    const classes = useStyles();
-
     const [open, setOpen] = React.useState(false);
 
     const handleClose = () => {
@@ -28,6 +24,3 @@ export default function AddUserTool(props) {
         </div>
     );
 }
-
-const useStyles = makeStyles((theme) => ({
-}));
