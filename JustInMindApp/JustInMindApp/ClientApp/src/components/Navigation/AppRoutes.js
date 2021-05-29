@@ -11,10 +11,10 @@ export default function AppRoutes(props) {
             <NavigationBar setIsAuthorized={props.setIsAuthorized} />
             <Switch>
                 <Route path='/' exact>
-                    <BoardPage validateFetchResponse={props.validateFetchResponse}/>
+                    <BoardPage validateFetchResponse={props.validateFetchResponse} openSnackbar={props.openSnackbar} />
                 </Route>
                 <Route path='/team' exact>
-                    <TeamPage validateFetchResponse={props.validateFetchResponse}/>
+                    <TeamPage validateFetchResponse={props.validateFetchResponse} openSnackbar={props.openSnackbar} />
                 </Route>
             </Switch>
         </div>
