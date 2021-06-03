@@ -171,30 +171,34 @@ export default function Boards(props) {
             </div>
             <div className='tasksExplorer'>
                 {boards.map(board =>
-                    <div className='board'
+                    <div className={classes.board}
                         key={board.id}
                         onDragOver={(e) => e.preventDefault()}
                         onDrop={(e) => dropCardHandler(e, board)}
                     >
                         <div className='board_title'>{board.title}</div>
-                        {board.tasks.map(task =>
-                            <div
-                                className='task'
-                                onDragOver={(e) => e.preventDefault()}
-                                onDragStart={(e) => dragStartHandler(e, board, task)}
-                                key={task.id}
-                                draggable={true}
-                                style={{ border: '2px solid ' + TaskColorData.find((e) => e.id == task.categoryId).color }}
-                            >
-                                <div>{task.name}</div>
-                                <div className='pencilIcon'>
-                                    <BsPencil onClick={() => chooseTaskToModify(task, true)} onMouseEnter={(event) => event.target.style.cursor = 'pointer'} />
-                                </div>
-                                <div className='trashIcon'>
-                                    <BsTrashFill onClick={() => deleteTask(task)} onMouseEnter={(event) => event.target.style.cursor = 'pointer'} />
-                                </div>
-                            </div>
-                        )}
+                        <div className={classes.tasks}>
+                            {
+                                board.tasks.map(task =>
+                                    <div
+                                        className='task'
+                                        onDragOver={(e) => e.preventDefault()}
+                                        onDragStart={(e) => dragStartHandler(e, board, task)}
+                                        key={task.id}
+                                        draggable={true}
+                                        style={{ border: '2px solid ' + TaskColorData.find((e) => e.id == task.categoryId).color }}
+                                    >
+                                        <div>{task.name}</div>
+                                        <div className='pencilIcon'>
+                                            <BsPencil onClick={() => chooseTaskToModify(task, true)} onMouseEnter={(event) => event.target.style.cursor = 'pointer'} />
+                                        </div>
+                                        <div className='trashIcon'>
+                                            <BsTrashFill onClick={() => deleteTask(task)} onMouseEnter={(event) => event.target.style.cursor = 'pointer'} />
+                                        </div>
+                                    </div>
+                                )
+                            }
+                        </div>
                         {isFieldVisible[board.id]
                             ?
                             <AddTaskField changeFieldVisibility={changeFieldVisibility} addTaskToBoard={addTaskToBoard} board={board} project={props.project} openSnackbar={props.openSnackbar} validateFetchResponse={props.validateFetchResponse} />
@@ -221,5 +225,29 @@ export default function Boards(props) {
 const useStyles = makeStyles((theme) => ({
     projectName: {
         textAlign: "center"
+    },
+
+    board: {
+        width: 300,
+        height: 510,
+        border: '5px solid lightgrey',
+        padding: '20px 10px',
+        borderRadius: 12,
+        margin: 10,
+        display: 'flex',
+        alignItems: 'center',
+        flexDirection: 'column',
+    },
+
+    tasks: {
+        overflow: 'auto',
+        width: 250,
+        
+        padding: '20px 10px',
+        borderRadius: 12,
+        margin: 10,
+        display: 'flex',
+        alignItems: 'center',
+        flexDirection: 'column',
     }
 }));
