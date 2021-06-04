@@ -17,9 +17,7 @@ export function ProjectToolsBar(props) {
             <div className={classes.item} >
                 <SelectProjectTool selectProject={props.selectProject} validateFetchResponse={props.validateFetchResponse} />
             </div>
-            <div className={classes.item} >
-                <DeleteProjectTool resetProject={props.resetProject} project={props.project} openSnackbar={props.openSnackbar} selectProject={props.selectProject} validateFetchResponse={props.validateFetchResponse} />
-            </div>
+            
         </div>
     );
 }
