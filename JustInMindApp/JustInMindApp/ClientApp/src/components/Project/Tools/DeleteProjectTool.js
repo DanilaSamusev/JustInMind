@@ -21,6 +21,7 @@ export default function DeleteProjectTool(props) {
             <Button
                 variant="contained"
                 color="secondary"
+                size='large'
                 startIcon={<DeleteIcon />}
                 onClick={() => deleteSelectedProject()}
             >

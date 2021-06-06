@@ -16,6 +16,8 @@ namespace JustInMind.BLL.Interfaces
 
         public System.Threading.Tasks.Task AddAsync(CreateProjectRequest request);
 
+        public Task<bool> UpdateAsync(Project entity);
+
         public Task<bool> DeleteAsync(Project entity);
 
         public Task<bool> LeaveAsync(UsersToProjects entity);

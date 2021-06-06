@@ -55,6 +55,11 @@ namespace JustInMind.BLL.Services
             await _usersToProjectsService.InsertAsync(usersToProjects);
         }
 
+        public async Task<bool> UpdateAsync(Project entity)
+        {
+            return await _projectRepository.UpdateAsync(entity);
+        }
+
         public async Task<bool> DeleteAsync(Project entity)
         {
            return await _projectRepository.DeleteAsync(entity);

@@ -1,4 +1,5 @@
 ﻿using JustInMind.BLL.Interfaces;
+using JustInMind.Shared.Models;
 using JustInMind.Shared.Requests;
 
 using Microsoft.AspNetCore.Authorization;
@@ -54,6 +55,14 @@ namespace JustInMindApp.Controllers
             var projects = await _projectService.GetAllUserColaborateAsync(userId);
 
             return new ObjectResult(projects);
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> Put([FromBody] Project project)
+        {
+            await _projectService.UpdateAsync(project);
+
+            return Ok();
         }
 
         [HttpPost]

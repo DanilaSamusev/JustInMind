@@ -9,16 +9,7 @@ import Popover from '@material-ui/core/Popover';
 
 import FetchHelper from '../../../Helpers/FetchHelper';
 
-const useStyles = makeStyles((theme) => ({
-    selectedProjectName: {
-        margin: '0 auto',
-        alignSelf: 'center'
-    },
-}));
-
 export default function SelectProjectTool(props) {
-    const classes = useStyles();
-
     const [ownProjects, setOwnProjects] = React.useState([]);
     const [collaborationProjects, setCollaborationProjects] = React.useState([]);
 
@@ -53,7 +44,7 @@ export default function SelectProjectTool(props) {
                 <div>
                     <Button variant="contained" color="primary" size="large" {...bindTrigger(popupState)}>
                         Select project
-                            </Button>
+                    </Button>
                     <Popover
                         {...bindPopover(popupState)}
                         anchorOrigin={{
@@ -71,8 +62,7 @@ export default function SelectProjectTool(props) {
                                     </div>
                             {ownProjects.map((data, index) => {
                                 return (
-                                    <div className={classes.deleteProjectContainer}
-                                    >
+                                    <div>
                                         <MenuItem onClick={() => props.selectProject(data.id)} >
                                             {data.name}
                                         </MenuItem>
@@ -84,8 +74,7 @@ export default function SelectProjectTool(props) {
                                     </div>
                             {collaborationProjects.map((project, index) => {
                                 return (
-                                    <div className={classes.deleteProjectContainer}
-                                    >
+                                    <div>
                                         <MenuItem key={index} value={project.id} onClick={() => props.selectProject(project.id)} >
                                             {project.name}
                                         </MenuItem>

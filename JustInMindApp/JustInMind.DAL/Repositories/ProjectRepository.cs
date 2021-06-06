@@ -67,6 +67,13 @@ namespace JustInMind.DAL.Repositories
             return id;
         }
 
+        public async Task<bool> UpdateAsync(Project entity)
+        {
+            using var db = new SqlConnection(connectionString);
+
+            return await db.UpdateAsync(entity);
+        }
+
         public async Task<bool> DeleteAsync(Project entity)
         {
             using var db = new SqlConnection(connectionString);
