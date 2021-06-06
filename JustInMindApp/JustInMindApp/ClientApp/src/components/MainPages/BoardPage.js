@@ -1,10 +1,14 @@
 ﻿import React, { useState, useEffect } from 'react';
 
+import { makeStyles } from '@material-ui/core/styles';
+
 import Boards from '../Task/Boards'
 import { ProjectToolsBar } from '../Project/ProjectToolsBar';
 import FetchHelper from '../../Helpers/FetchHelper';
 
 export default function BoardPage(props) {
+    const classes = useStyles();
+
     const [project, setProject] = useState(null);
 
     useEffect(() => {
@@ -38,8 +42,16 @@ export default function BoardPage(props) {
 
     return (
         <div>
-            <ProjectToolsBar resetProject={() => setProject(null)} project={project} selectProject={selectProject} setIsAuthorized={props.setIsAuthorized} openSnackbar={props.openSnackbar} validateFetchResponse={props.validateFetchResponse} />
+            <div className={classes.projectToolsBar}>
+                <ProjectToolsBar resetProject={() => setProject(null)} project={project} selectProject={selectProject} setIsAuthorized={props.setIsAuthorized} openSnackbar={props.openSnackbar} validateFetchResponse={props.validateFetchResponse} />
+            </div>
             <Boards project={project} setIsAuthorized={props.setIsAuthorized} openSnackbar={props.openSnackbar} validateFetchResponse={props.validateFetchResponse}/>
         </div>
     )
 }
+
+const useStyles = makeStyles((theme) => ({
+    projectToolsBar: {
+        marginTop: '1%',
+    }
+}));

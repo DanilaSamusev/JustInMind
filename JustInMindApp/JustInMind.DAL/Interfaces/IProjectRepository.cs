@@ -15,6 +15,8 @@ namespace JustInMind.DAL.Interfaces
 
         Task<int> InsertAsync(Project entity);
 
+        public Task<bool> UpdateAsync(Project entity);
+
         Task<bool> DeleteAsync(Project entity);
 
         Task<bool> LeaveAsync(UsersToProjects entity);
