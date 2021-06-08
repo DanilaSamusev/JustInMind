@@ -42,7 +42,9 @@ export default function BoardPage(props) {
 
     return (
         <div>
-
+            <div className={classes.projectToolsBar}>
+                <ProjectToolsBar resetProject={() => setProject(null)} project={project} selectProject={selectProject} setIsAuthorized={props.setIsAuthorized} openSnackbar={props.openSnackbar} validateFetchResponse={props.validateFetchResponse} />
+            </div>
             <Boards project={project} setIsAuthorized={props.setIsAuthorized} openSnackbar={props.openSnackbar} validateFetchResponse={props.validateFetchResponse}/>
         </div>
     )
