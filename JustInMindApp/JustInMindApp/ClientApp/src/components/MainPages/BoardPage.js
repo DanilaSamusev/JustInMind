@@ -1,10 +1,14 @@
 ﻿import React, { useState, useEffect } from 'react';
 
+import { makeStyles } from '@material-ui/core/styles';
+
 import Boards from '../Task/Boards'
 import { ProjectToolsBar } from '../Project/ProjectToolsBar';
 import FetchHelper from '../../Helpers/FetchHelper';
 
 export default function BoardPage(props) {
+    const classes = useStyles();
+
     const [project, setProject] = useState(null);
 
     useEffect(() => {
@@ -43,3 +47,9 @@ export default function BoardPage(props) {
         </div>
     )
 }
+
+const useStyles = makeStyles((theme) => ({
+    projectToolsBar: {
+        marginTop: '1%',
+    }
+}));

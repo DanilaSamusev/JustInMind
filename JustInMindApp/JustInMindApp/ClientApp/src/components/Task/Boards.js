@@ -166,9 +166,6 @@ export default function Boards(props) {
 
     return (
         <div>
-            <div>
-                <h1 className={classes.projectName}>{props.project.name}</h1>
-            </div>
             <div className='tasksExplorer'>
                 {boards.map(board =>
                     <div className={classes.board}
@@ -223,10 +220,6 @@ export default function Boards(props) {
 }
 
 const useStyles = makeStyles((theme) => ({
-    projectName: {
-        textAlign: "center"
-    },
-
     board: {
         width: 300,
         height: 510,
@@ -238,7 +231,9 @@ const useStyles = makeStyles((theme) => ({
         alignItems: 'center',
         flexDirection: 'column',
     },
-
+    projectName: {
+        textAlign: "center"
+    },
     tasks: {
         overflow: 'auto',
         width: 250,
