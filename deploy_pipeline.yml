@@ -21,8 +21,11 @@ steps:
 
 - task: VSTest@2
   inputs:
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+    testSelector: 'testAssemblies'
+    testAssemblyVer2: '**\*test*.dll'
+    searchFolder: '$(System.DefaultWorkingDirectory)'
+    runInParallel: true
+    codeCoverageEnabled: true
 
 - task: DotNetCoreCLI@2
   inputs:
